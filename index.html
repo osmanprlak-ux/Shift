@@ -13,7 +13,7 @@
 --acc:#fbbf24;--g:#34d399;--r:#f87171;--s:#38bdf8;
 --bg:#0f0d1a;--bg2:#1a1726;--bg3:#231f33;--bg4:#2d2844;
 --card:#1a1726;--card2:#231f33;
---glass:rgba(26,23,38,.85);
+--glass:rgba(26,23,38,.88);
 --t1:#f1f0f5;--t2:#9893a7;--t3:#5e5875;
 --b1:#2d2844;--b2:#352f4a;
 --rad:14px;--rad2:20px;
@@ -25,8 +25,8 @@ html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--p2);border-radius:10px}
 
-#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;
-background:linear-gradient(160deg,#0a0812 0%,#1a1130 40%,#2d1b69 100%);position:relative;overflow:hidden}
+/* LOGIN */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a0812 0%,#1a1130 40%,#2d1b69 100%);position:relative;overflow:hidden}
 #loginScreen::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,.15),transparent 70%);top:-150px;right:-80px;border-radius:50%;animation:p1 8s ease-in-out infinite}
 #loginScreen::after{content:'';position:absolute;width:350px;height:350px;background:radial-gradient(circle,rgba(56,189,248,.1),transparent 70%);bottom:-80px;left:-40px;border-radius:50%;animation:p2 10s ease-in-out infinite}
 @keyframes p1{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.3);opacity:.8}}
@@ -44,6 +44,7 @@ background:linear-gradient(160deg,#0a0812 0%,#1a1130 40%,#2d1b69 100%);position:
 .login-card h3{font-size:15px;font-weight:700;margin-bottom:3px}
 .login-card span{font-size:11px;opacity:.4;font-weight:500}
 
+/* APP */
 #mainApp{display:none;min-height:100vh}
 .topbar{position:fixed;top:0;left:0;right:0;height:56px;background:var(--glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 20px;z-index:100}
 .topbar-brand{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:var(--p)}
@@ -55,13 +56,14 @@ background:linear-gradient(160deg,#0a0812 0%,#1a1130 40%,#2d1b69 100%);position:
 .topbar-logout{width:32px;height:32px;border-radius:8px;border:1px solid var(--b1);background:transparent;cursor:pointer;color:var(--t3);font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .topbar-logout:hover{background:rgba(248,113,113,.1);color:var(--r);border-color:rgba(248,113,113,.3)}
 
-.nav-tabs{position:fixed;top:56px;left:0;right:0;height:48px;background:var(--glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 20px;gap:3px;z-index:99;overflow-x:auto}
-.nav-tab{padding:6px 16px;border-radius:50px;border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:600;color:var(--t3);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+/* NAV - BÜYÜK BUTONLAR */
+.nav-tabs{position:fixed;top:56px;left:0;right:0;height:58px;background:var(--glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 16px;gap:6px;z-index:99;overflow-x:auto}
+.nav-tab{padding:10px 22px;border-radius:50px;border:none;background:transparent;font-family:inherit;font-size:14px;font-weight:700;color:var(--t3);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px;white-space:nowrap;letter-spacing:-.2px}
 .nav-tab:hover{background:var(--p4);color:var(--p)}
-.nav-tab.active{background:var(--p2);color:#fff;box-shadow:0 2px 10px rgba(139,92,246,.3)}
-.nav-tab i{font-size:12px}
+.nav-tab.active{background:var(--p2);color:#fff;box-shadow:0 2px 12px rgba(139,92,246,.35)}
+.nav-tab i{font-size:15px}
 
-.content{padding:120px 24px 36px;max-width:1200px;margin:0 auto}
+.content{padding:130px 24px 36px;max-width:1200px;margin:0 auto}
 .page{display:none;animation:pageIn .35s cubic-bezier(.16,1,.3,1)}
 .page.active{display:block}
 @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -125,27 +127,41 @@ background:linear-gradient(160deg,#0a0812 0%,#1a1130 40%,#2d1b69 100%);position:
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-dname{text-align:center;font-size:10px;font-weight:700;color:var(--t3);padding:8px 0;text-transform:uppercase;letter-spacing:.8px}
 
-/* Calendar cells - daha belirgin saat gösterimi */
-.cal-cell{min-height:80px;border-radius:10px;padding:6px 8px;cursor:pointer;border:1.5px solid transparent;transition:all .2s;background:var(--card2);position:relative}
+.cal-cell{min-height:82px;border-radius:10px;padding:6px 7px;cursor:pointer;border:1.5px solid transparent;transition:all .2s;background:var(--card2);position:relative}
 .cal-cell:hover{border-color:var(--p);box-shadow:var(--sh2);transform:translateY(-1px);z-index:2}
-.cal-cell.out{opacity:.15;pointer-events:none}
+.cal-cell.out{opacity:.12;pointer-events:none}
 .cal-cell.today{border-color:var(--p);background:rgba(139,92,246,.1)}
-.cal-cell.holiday{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.15)}
-.cal-cell.has-shift{background:rgba(52,211,153,.06);border-color:rgba(52,211,153,.12)}
-.cal-cell.has-leave{background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.12)}
-.cal-cell .num{font-size:12px;font-weight:800;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.cal-cell.holiday{background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.12)}
+.cal-cell.has-shift{background:rgba(52,211,153,.06);border-color:rgba(52,211,153,.1)}
+/* İzin türlerine göre farklı arka plan renkleri */
+.cal-cell.leave-annual{background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.2)}
+.cal-cell.leave-weekly{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.2)}
+.cal-cell.leave-sick{background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.2)}
+.cal-cell.leave-unpaid{background:rgba(148,163,184,.08);border-color:rgba(148,163,184,.2)}
+.cal-cell .num{font-size:12px;font-weight:800;display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
 .cal-cell .num small{font-weight:500;color:var(--t3);font-size:9px}
 
-/* Saat göstergesi - büyük ve belirgin */
+/* Saat göstergesi */
 .cal-cell .hrs-display{font-size:16px;font-weight:900;color:var(--g);line-height:1;margin:2px 0}
 .cal-cell .hrs-display.overtime{color:var(--acc)}
 .cal-cell .shift-time{font-size:9px;color:var(--t2);font-weight:600}
-.cal-cell .cell-tag{font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;display:inline-block;margin-top:2px}
-.tag-h{background:rgba(248,113,113,.15);color:var(--r)}
-.tag-l{background:rgba(251,191,36,.15);color:var(--acc)}
-.tag-s2{background:rgba(248,150,76,.15);color:#fb923c}
-.tag-w2{background:rgba(139,92,246,.15);color:var(--p)}
-.tag-u2{background:rgba(148,163,184,.15);color:#94a3b8}
+
+/* İzin göstergesi - belirgin */
+.cal-cell .leave-display{margin-top:2px;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:800;line-height:1.2}
+.cal-cell .leave-display i{font-size:12px}
+.cal-cell .leave-display.ld-annual{color:#60a5fa}
+.cal-cell .leave-display.ld-weekly{color:var(--p)}
+.cal-cell .leave-display.ld-sick{color:#fb923c}
+.cal-cell .leave-display.ld-unpaid{color:#94a3b8}
+
+.cal-cell .leave-label{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:1px}
+.cal-cell .leave-label.ll-annual{background:rgba(96,165,250,.15);color:#60a5fa}
+.cal-cell .leave-label.ll-weekly{background:rgba(139,92,246,.15);color:var(--p)}
+.cal-cell .leave-label.ll-sick{background:rgba(251,146,60,.15);color:#fb923c}
+.cal-cell .leave-label.ll-unpaid{background:rgba(148,163,184,.15);color:#94a3b8}
+
+/* Tatil etiketi */
+.cal-cell .hol-tag{font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(248,113,113,.15);color:var(--r);display:inline-block;margin-top:1px}
 
 .cal-legend{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}
 .cal-legend span{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--t2)}
@@ -153,65 +169,58 @@ background:linear-gradient(160deg,#0a0812 0%,#1a1130 40%,#2d1b69 100%);position:
 
 .copy-bar{background:var(--p4);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:var(--p3);animation:pageIn .3s ease}
 
-/* MODAL - KOMPAKT */
-.overlay{position:fixed;inset:0;background:rgba(10,8,18,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(10,8,18,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .overlay.show{display:flex}
 .modal{background:var(--bg2);border-radius:var(--rad2);width:400px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--sh3);border:1px solid var(--b1);animation:modalPop .3s cubic-bezier(.16,1,.3,1)}
 @keyframes modalPop{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:none}}
-.modal-top{padding:18px 20px 0;display:flex;justify-content:space-between;align-items:center}
+.modal-top{padding:16px 18px 0;display:flex;justify-content:space-between;align-items:center}
 .modal-top h3{font-size:16px;font-weight:800}
 .modal-top .date-badge{font-size:11px;color:var(--t2);font-weight:600;background:var(--bg3);padding:4px 10px;border-radius:6px}
 .modal-x{width:30px;height:30px;border-radius:8px;border:1px solid var(--b1);background:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;color:var(--t3);transition:all .2s}
 .modal-x:hover{background:rgba(248,113,113,.1);color:var(--r);border-color:rgba(248,113,113,.3)}
-.modal-body{padding:14px 20px}
-.modal-foot{padding:0 20px 18px;display:flex;gap:8px;justify-content:flex-end}
+.modal-body{padding:12px 18px}
+.modal-foot{padding:0 18px 16px;display:flex;gap:8px;justify-content:flex-end}
 
-.h-alert{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:12px;color:var(--r);font-weight:600}
-.h-alert i{font-size:16px;flex-shrink:0}
+.h-alert{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:11px;color:var(--r);font-weight:600}
+.h-alert i{font-size:14px;flex-shrink:0}
 
-/* Mode tabs - kompakt */
-.mode-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:14px}
+.mode-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:12px}
 .mode-tab{flex:1;padding:8px;border:none;background:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;color:var(--t3);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px}
 .mode-tab.active{background:var(--card2);color:var(--p);box-shadow:var(--sh1)}
 .mode-tab:hover:not(.active){color:var(--t1)}
 
-/* Presets - kompakt tek satır */
-.preset-row{display:flex;gap:6px;margin-bottom:14px}
-.preset{flex:1;padding:10px 6px;border-radius:10px;border:1.5px solid var(--b1);cursor:pointer;text-align:center;transition:all .2s;background:var(--card2)}
+.preset-row{display:flex;gap:5px;margin-bottom:12px}
+.preset{flex:1;padding:8px 4px;border-radius:8px;border:1.5px solid var(--b1);cursor:pointer;text-align:center;transition:all .2s;background:var(--card2)}
 .preset:hover{border-color:var(--p);background:var(--p4)}
 .preset.active{border-color:var(--p);background:var(--p4)}
-.preset .p-icon{font-size:18px;display:block;margin-bottom:3px}
-.preset .p-name{font-size:10px;font-weight:700;color:var(--t1);display:block}
-.preset .p-time{font-size:9px;color:var(--t3);font-weight:600;display:block;margin-top:1px}
+.preset .p-icon{font-size:16px;display:block;margin-bottom:2px}
+.preset .p-name{font-size:9px;font-weight:700;color:var(--t1);display:block}
+.preset .p-time{font-size:8px;color:var(--t3);font-weight:600;display:block;margin-top:1px}
 
-/* Time inputs - kompakt inline */
-.time-inputs{display:flex;gap:8px;margin-bottom:12px;align-items:end}
+.time-inputs{display:flex;gap:6px;margin-bottom:10px;align-items:end}
 .time-inputs .ti{flex:1}
-.time-inputs .ti label{display:block;font-size:10px;font-weight:700;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
-input[type="time"],input[type="text"],input[type="number"],input[type="date"],select{
-width:100%;padding:9px 10px;border:1.5px solid var(--b1);border-radius:8px;
-font-family:inherit;font-size:13px;font-weight:600;transition:all .2s;background:var(--bg3);color:var(--t1)}
+.time-inputs .ti label{display:block;font-size:9px;font-weight:700;color:var(--t3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+input[type="time"],input[type="text"],input[type="number"],input[type="date"],select{width:100%;padding:8px 8px;border:1.5px solid var(--b1);border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;transition:all .2s;background:var(--bg3);color:var(--t1)}
 input:focus,select:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
-input[type="time"]{font-size:15px;font-weight:800;text-align:center;padding:8px 6px}
+input[type="time"]{font-size:14px;font-weight:800;text-align:center;padding:7px 4px}
 
-/* Sonuç kutusu - kompakt */
-.result-box{background:var(--bg);border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:0;border:1px solid var(--b1)}
+.result-box{background:var(--bg);border-radius:10px;padding:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--b1)}
 .result-box .rb-item{text-align:center;flex:1}
-.result-box .rb-val{font-size:18px;font-weight:900;color:var(--p)}
+.result-box .rb-val{font-size:16px;font-weight:900;color:var(--p)}
 .result-box .rb-val.accent{color:var(--acc)}
 .result-box .rb-val.green{color:var(--g)}
-.result-box .rb-lbl{font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.2px;margin-top:2px}
-.result-box .rb-div{width:1px;height:30px;background:var(--b1)}
+.result-box .rb-lbl{font-size:8px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.2px;margin-top:1px}
+.result-box .rb-div{width:1px;height:28px;background:var(--b1)}
 
-/* Leave types - kompakt */
-.lt-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
-.lt-opt{padding:12px 8px;border-radius:10px;border:1.5px solid var(--b1);cursor:pointer;text-align:center;font-size:11px;font-weight:700;transition:all .2s;color:var(--t2);background:var(--card2)}
+.lt-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.lt-opt{padding:12px 6px;border-radius:10px;border:1.5px solid var(--b1);cursor:pointer;text-align:center;font-size:11px;font-weight:700;transition:all .2s;color:var(--t2);background:var(--card2)}
 .lt-opt:hover{border-color:var(--p);background:var(--p4)}
 .lt-opt.active{border-color:var(--p);background:var(--p4);color:var(--p)}
-.lt-opt i{display:block;font-size:20px;margin-bottom:5px}
-.lt-opt small{display:block;font-size:9px;color:var(--t3);font-weight:500;margin-top:2px}
-.fg{margin-bottom:12px}
-.fg label{display:block;font-size:10px;font-weight:700;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
+.lt-opt i{display:block;font-size:18px;margin-bottom:4px}
+.lt-opt small{display:block;font-size:8px;color:var(--t3);font-weight:500;margin-top:2px}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:9px;font-weight:700;color:var(--t3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
 
 /* LEAVES */
 .leave-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
@@ -227,8 +236,10 @@ th{text-align:left;padding:8px 12px;font-size:10px;font-weight:700;color:var(--t
 td{padding:10px 12px;font-size:12px;font-weight:500;border-bottom:1px solid var(--b1)}
 tr:hover td{background:var(--bg3)}
 .tag{padding:3px 8px;border-radius:20px;font-size:9px;font-weight:700}
-.tag-a{background:rgba(59,130,246,.15);color:#60a5fa}.tag-s{background:rgba(251,146,60,.15);color:#fb923c}
-.tag-w{background:rgba(139,92,246,.15);color:var(--p)}.tag-u{background:rgba(148,163,184,.15);color:#94a3b8}
+.tag-a{background:rgba(96,165,250,.15);color:#60a5fa}
+.tag-s{background:rgba(251,146,60,.15);color:#fb923c}
+.tag-w{background:rgba(139,92,246,.15);color:var(--p)}
+.tag-u{background:rgba(148,163,184,.15);color:#94a3b8}
 
 /* EARNINGS */
 .earn-hero{background:linear-gradient(135deg,#1a1036 0%,#2d1b69 50%,#4c1d95 100%);color:#fff;border-radius:var(--rad2);padding:28px;position:relative;overflow:hidden;border:1px solid rgba(139,92,246,.2)}
@@ -257,16 +268,13 @@ tr:hover td{background:var(--bg3)}
 .empty p{font-size:13px;font-weight:600}
 
 @media(max-width:768px){
-.content{padding:116px 12px 28px}.grid-2{grid-template-columns:1fr}
+.content{padding:126px 12px 28px}.grid-2{grid-template-columns:1fr}
 .stats{grid-template-columns:repeat(2,1fr)}
-.cal-cell{min-height:52px;padding:4px 5px}
-.cal-cell .shift-time{display:none}
-.cal-cell .cell-tag{display:none}
+.cal-cell{min-height:56px;padding:4px 5px}
+.cal-cell .shift-time,.cal-cell .leave-label,.cal-cell .hol-tag{display:none}
 .earn-hero .amt{font-size:24px}
-.nav-tab span{display:none}.nav-tab{padding:6px 12px}
+.nav-tab span{display:none}.nav-tab{padding:8px 14px}
 .login-cards{flex-direction:column;align-items:center}
-.preset-row{flex-wrap:wrap}
-.preset{min-width:calc(50% - 4px)}
 }
 @media(max-width:480px){
 .stats{grid-template-columns:1fr}
@@ -326,7 +334,9 @@ tr:hover td{background:var(--bg3)}
 <span><i class="fas fa-circle" style="color:var(--p)"></i>Bugün</span>
 <span><i class="fas fa-circle" style="color:var(--g)"></i>Vardiya</span>
 <span><i class="fas fa-circle" style="color:var(--r)"></i>Tatil</span>
-<span><i class="fas fa-circle" style="color:var(--acc)"></i>İzin</span>
+<span><i class="fas fa-circle" style="color:#60a5fa"></i>Y.İzin</span>
+<span><i class="fas fa-circle" style="color:#fb923c"></i>Rapor</span>
+<span><i class="fas fa-circle" style="color:var(--p)"></i>H.Tatil</span>
 </div></div></div>
 
 <div class="page" id="pg-leaves">
@@ -363,11 +373,11 @@ tr:hover td{background:var(--bg3)}
 </div>
 </main></div>
 
-<!-- MODAL - KOMPAKT -->
+<!-- MODAL -->
 <div class="overlay" id="modal">
 <div class="modal">
 <div class="modal-top">
-<div style="display:flex;align-items:center;gap:10px">
+<div style="display:flex;align-items:center;gap:8px">
 <h3 id="mTitle">16</h3>
 <span class="date-badge" id="mDate">Pazartesi</span>
 </div>
@@ -388,18 +398,12 @@ tr:hover td{background:var(--bg3)}
 <div class="preset" data-key="evening" onclick="applyPreset('evening',this)"><span class="p-icon">🌙</span><span class="p-name">Akşam</span><span class="p-time">16–00</span></div>
 <div class="preset" data-key="custom" onclick="applyPreset('custom',this)"><span class="p-icon">⚙️</span><span class="p-name">Özel</span><span class="p-time">Serbest</span></div>
 </div>
-
 <div class="time-inputs">
 <div class="ti"><label>Giriş</label><input type="time" id="iStart" value="08:00"></div>
 <div class="ti"><label>Çıkış</label><input type="time" id="iEnd" value="16:00"></div>
 <div class="ti"><label>Mola</label>
-<select id="iBreak">
-<option value="0">Yok</option><option value="15">15dk</option>
-<option value="30" selected>30dk</option><option value="45">45dk</option>
-<option value="60">1s</option><option value="90">1.5s</option>
-</select></div>
+<select id="iBreak"><option value="0">Yok</option><option value="15">15dk</option><option value="30" selected>30dk</option><option value="45">45dk</option><option value="60">1s</option><option value="90">1.5s</option></select></div>
 </div>
-
 <div class="result-box">
 <div class="rb-item"><div class="rb-val" id="rbGross">8s</div><div class="rb-lbl">Brüt</div></div>
 <div class="rb-div"></div>
@@ -418,7 +422,7 @@ tr:hover td{background:var(--bg3)}
 <div class="lt-opt" data-t="sick" onclick="selLT('sick',this)"><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor<small>Hastalık</small></div>
 <div class="lt-opt" data-t="unpaid" onclick="selLT('unpaid',this)"><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz<small>Kesinti</small></div>
 </div>
-<div class="fg"><label>Not</label><input type="text" id="iNote" placeholder="Opsiyonel açıklama..."></div>
+<div class="fg"><label>Not</label><input type="text" id="iNote" placeholder="Opsiyonel..."></div>
 </div>
 </div>
 <div class="modal-foot">
@@ -448,186 +452,681 @@ const RH={
 
 let S={cu:null,cm:new Date().getMonth(),cy:new Date().getFullYear(),em:new Date().getMonth(),ey:new Date().getFullYear(),sd:null,mt:'shift',lt:null,clipboard:null,
 u:{1:{name:'Kullanıcı 1',netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{}},
-2:{name:'Kullanıcı 2',netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{}}}};
+   2:{name:'Kullanıcı 2',netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{}}}};
 
-function init(){loadLS();updLogin();['iStart','iEnd','iBreak'].forEach(id=>document.getElementById(id).addEventListener('input',updResult))}
-function updLogin(){[1,2].forEach(i=>{const u=S.u[i];document.getElementById('ln'+i).textContent=u.name||'Kullanıcı '+i;document.getElementById('la'+i).textContent=(u.name||'K')[0].toUpperCase()})}
-function login(id){S.cu=id;document.getElementById('loginScreen').style.display='none';document.getElementById('mainApp').style.display='block';updTop();renderAll()}
-function logout(){S.cu=null;document.getElementById('mainApp').style.display='none';document.getElementById('loginScreen').style.display='flex';updLogin();document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelector('.nav-tab').classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-dashboard').classList.add('active')}
-function updTop(){const u=cu();document.getElementById('topName').textContent=u.name||'İsimsiz';document.getElementById('topAv').textContent=(u.name||'K')[0].toUpperCase()}
-function cu(){return S.u[S.cu]}
-function go(p,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('pg-'+p).classList.add('active');document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));if(btn)btn.classList.add('active');renderAll()}
-function renderAll(){renderDash();renderCal();renderLeaves();renderEarn();loadSet()}
-
-function getH(ds){const d=new Date(ds),y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate();for(const h of FH)if(h.m===m&&h.d===day)return h.n;const r=RH[y];if(r)for(const h of r)if(h.m===m&&h.d===day)return h.n;return null}
-function isH(ds){return getH(ds)!==null}
-function calcHr(s,e,b){const[sh,sm]=s.split(':').map(Number),[eh,em]=e.split(':').map(Number);let st=sh*60+sm,en=eh*60+em;if(en<=st)en+=1440;return Math.max(0,(en-st-b)/60)}
-function grossHr(s,e){const[sh,sm]=s.split(':').map(Number),[eh,em]=e.split(':').map(Number);let st=sh*60+sm,en=eh*60+em;if(en<=st)en+=1440;return Math.max(0,(en-st)/60)}
-function wkNum(d){const dt=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const dn=dt.getUTCDay()||7;dt.setUTCDate(dt.getUTCDate()+4-dn);const ys=new Date(Date.UTC(dt.getUTCFullYear(),0,1));return Math.ceil((((dt-ys)/864e5)+1)/7)}
-function dStr(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function fm(n){if(!n||isNaN(n))return'₺0';return'₺'+n.toLocaleString('tr-TR',{minimumFractionDigits:0,maximumFractionDigits:2})}
-
-function getMD(y,m){const u=cu();if(!u)return{};const dim=new Date(y,m+1,0).getDate();let th=0,rh=0,oh=0,hh=0,wd=0,hdw=0;const wh={};
-for(let d=1;d<=dim;d++){const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const sh=u.shifts[s];if(!sh)continue;const hrs=calcHr(sh.start,sh.end,sh.break);th+=hrs;wd++;const dt=new Date(y,m,d);const wk=`${y}-W${wkNum(dt)}`;wh[wk]=(wh[wk]||0)+hrs;if(isH(s)){hh+=hrs;hdw++}}
-Object.values(wh).forEach(w=>{if(w>45){oh+=w-45;rh+=45}else rh+=w});
-let au=0,sd2=0,wr=0,ud=0,yau=0,ysd=0;Object.entries(u.leaves).forEach(([k,v])=>{const ld=new Date(k);if(ld.getFullYear()===y){if(v.type==='annual'){yau++;if(ld.getMonth()===m)au++}if(v.type==='sick'){ysd++;if(ld.getMonth()===m)sd2++}}if(ld.getFullYear()===y&&ld.getMonth()===m){if(v.type==='weekly')wr++;if(v.type==='unpaid')ud++}});
-const hr=u.netSalary/MH,bs=u.netSalary,op=oh*hr*1.5,hp=hh*hr,upd=ud*(u.netSalary/30),te=bs+op+hp-upd;
-return{th,rh,oh,hh,wd,hdw,wh,au,sd:sd2,wr,ud,yau,ysd,hr,bs,op,hp,upd,te,dim}}
-
-function renderDash(){const u=cu();if(!u)return;const d=getMD(S.cy,S.cm);
-document.getElementById('dashSub').textContent=`${MTR[S.cm]} ${S.cy} — ${u.name}`;
-document.getElementById('statsEl').innerHTML=`
-<div class="stat c-violet"><div class="ribbon"></div><div class="ico"><i class="fas fa-clock"></i></div><div class="val">${d.th.toFixed(1)}</div><div class="lbl">Toplam Saat</div></div>
-<div class="stat c-amber"><div class="ribbon"></div><div class="ico"><i class="fas fa-fire"></i></div><div class="val">${d.oh.toFixed(1)}</div><div class="lbl">Fazla Mesai</div></div>
-<div class="stat c-green"><div class="ribbon"></div><div class="ico"><i class="fas fa-wallet"></i></div><div class="val">${u.netSalary?fm(d.te):'—'}</div><div class="lbl">Kazanç</div></div>
-<div class="stat c-red"><div class="ribbon"></div><div class="ico"><i class="fas fa-flag"></i></div><div class="val">${d.hdw}</div><div class="lbl">Tatil Çalışma</div></div>
-<div class="stat c-cyan"><div class="ribbon"></div><div class="ico"><i class="fas fa-calendar-check"></i></div><div class="val">${d.wd}</div><div class="lbl">Çalışılan Gün</div></div>`;
-const wks=Object.entries(d.wh).sort((a,b)=>a[0].localeCompare(b[0]));let wc='';
-if(!wks.length)wc='<div class="empty"><i class="fas fa-calendar-times"></i><p>Vardiya yok</p></div>';
-else wks.forEach(([,h],i)=>{const p=Math.min(100,h/60*100);wc+=`<div class="wk-row"><span class="label">${i+1}. Hafta</span><div class="track"><div class="fill ${h>45?'ot':'ok'}" style="width:${p}%">${h.toFixed(1)}s</div></div><span class="hrs" style="color:${h>45?'var(--acc)':'var(--t1)'}">${h.toFixed(1)}</span></div>`});
-document.getElementById('weekChart').innerHTML=wc;
-const al=u.annualLeave||14,ar=al-d.yau;let info='';
-if(!u.netSalary)info='<div class="hint" style="margin-bottom:8px"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';
-info+=`<div class="info-row"><span class="k"><i class="fas fa-umbrella-beach"></i>Kalan Y.İzin</span><span class="v ${ar<=3?'neg':''}">${ar}g</span></div>
-<div class="info-row"><span class="k"><i class="fas fa-notes-medical"></i>Rapor</span><span class="v">${d.ysd}g</span></div>
-<div class="info-row"><span class="k"><i class="fas fa-coins"></i>Saatlik</span><span class="v">${u.netSalary?fm(d.hr):'—'}</span></div>
-<div class="info-row"><span class="k"><i class="fas fa-fire"></i>FM Ücreti</span><span class="v pos">${u.netSalary?fm(d.op):'—'}</span></div>
-<div class="info-row"><span class="k"><i class="fas fa-flag"></i>Tatil Ücreti</span><span class="v pos">${u.netSalary?fm(d.hp):'—'}</span></div>`;
-document.getElementById('dashInfo').innerHTML=info}
-
-/* CALENDAR - saat belirgin gösterim */
-function renderCal(){const y=S.cy,m=S.cm;document.getElementById('calTitle').textContent=MTR[m]+' '+y;
-const g=document.getElementById('calGrid');g.innerHTML='';
-DTR.forEach(d=>{const e=document.createElement('div');e.className='cal-dname';e.textContent=d;g.appendChild(e)});
-const fd=new Date(y,m,1);let sd2=fd.getDay();sd2=sd2===0?6:sd2-1;
-const dim=new Date(y,m+1,0).getDate(),pip=new Date(y,m,0).getDate();
-const td=dStr(new Date()),u=cu();
-for(let i=sd2-1;i>=0;i--){const e=document.createElement('div');e.className='cal-cell out';e.innerHTML=`<div class="num">${pip-i}</div>`;g.appendChild(e)}
-for(let d=1;d<=dim;d++){const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-const e=document.createElement('div');let c='cal-cell';if(s===td)c+=' today';
-const hol=getH(s),sh=u.shifts[s],lv=u.leaves[s];
-if(hol&&!sh&&!lv)c+=' holiday';if(sh)c+=' has-shift';if(lv)c+=' has-leave';
-const dow=new Date(y,m,d).getDay();const dn=DTR[dow===0?6:dow-1];
-let inner=`<div class="num"><span>${d}</span><small>${dn}</small></div>`;
-
-if(sh){
-  const h=calcHr(sh.start,sh.end,sh.break);
-  inner+=`<div class="hrs-display ${h>7.5?'overtime':''}">${h.toFixed(1)}s</div>`;
-  inner+=`<div class="shift-time">${sh.start}–${sh.end}</div>`;
+function init(){
+  loadLS();
+  updLogin();
+  document.getElementById('iStart').addEventListener('input',updResult);
+  document.getElementById('iEnd').addEventListener('input',updResult);
+  document.getElementById('iBreak').addEventListener('change',updResult);
 }
-if(hol&&!sh){inner+=`<div class="cell-tag tag-h">${hol}</div>`}
-if(hol&&sh){inner+=`<div class="cell-tag tag-h">🏛️</div>`}
-if(lv){const lb={annual:'Y.İzin',weekly:'H.Tatil',sick:'Rapor',unpaid:'Ü.İzin'};
-const tc2={annual:'l',weekly:'w2',sick:'s2',unpaid:'u2'};
-inner+=`<div class="cell-tag tag-${tc2[lv.type]}">${lb[lv.type]}</div>`}
 
-e.className=c;e.innerHTML=inner;e.onclick=()=>openM(s);g.appendChild(e)}
-const tot=sd2+dim,rem=tot%7===0?0:7-tot%7;
-for(let i=1;i<=rem;i++){const e=document.createElement('div');e.className='cal-cell out';e.innerHTML=`<div class="num">${i}</div>`;g.appendChild(e)}
-renderCopyBar()}
-function chgM(d){S.cm+=d;if(S.cm>11){S.cm=0;S.cy++}if(S.cm<0){S.cm=11;S.cy--}renderCal();renderDash()}
-function goToday(){S.cm=new Date().getMonth();S.cy=new Date().getFullYear();renderCal();renderDash()}
+function updLogin(){
+  [1,2].forEach(i=>{
+    const u=S.u[i];
+    document.getElementById('ln'+i).textContent=u.name||'Kullanıcı '+i;
+    document.getElementById('la'+i).textContent=(u.name||'K')[0].toUpperCase();
+  });
+}
 
-function copyShift(){const u=cu(),sh=u.shifts[S.sd];if(sh){S.clipboard={...sh};renderCopyBar();closeM()}}
-function pasteShift(ds){if(!S.clipboard)return;cu().shifts[ds]={...S.clipboard};delete cu().leaves[ds];saveLS();renderAll()}
-function clearClipboard(){S.clipboard=null;renderCopyBar()}
-function renderCopyBar(){const el=document.getElementById('copyBar');
-if(S.clipboard){const h=calcHr(S.clipboard.start,S.clipboard.end,S.clipboard.break);
-el.innerHTML=`<div class="copy-bar"><span><i class="fas fa-clipboard"></i> ${S.clipboard.start}–${S.clipboard.end} (${h.toFixed(1)}s) — Güne tıklayın</span><button class="btn btn-soft btn-xs" onclick="clearClipboard()"><i class="fas fa-times"></i></button></div>`}
-else el.innerHTML=''}
+function login(id){
+  S.cu=id;
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+  updTop();
+  renderAll();
+}
 
-/* MODAL */
+function logout(){
+  S.cu=null;
+  document.getElementById('mainApp').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  updLogin();
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.nav-tab').classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-dashboard').classList.add('active');
+}
+
+function updTop(){
+  const u=cu();
+  document.getElementById('topName').textContent=u.name||'İsimsiz';
+  document.getElementById('topAv').textContent=(u.name||'K')[0].toUpperCase();
+}
+
+function cu(){return S.u[S.cu];}
+
+function go(p,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('pg-'+p).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderAll();
+}
+
+function renderAll(){
+  renderDash();
+  renderCal();
+  renderLeaves();
+  renderEarn();
+  loadSet();
+}
+
+// === HOLIDAYS ===
+function getH(ds){
+  const d=new Date(ds);
+  const y=d.getFullYear(), m=d.getMonth()+1, day=d.getDate();
+  for(const h of FH){
+    if(h.m===m && h.d===day) return h.n;
+  }
+  const r=RH[y];
+  if(r){
+    for(const h of r){
+      if(h.m===m && h.d===day) return h.n;
+    }
+  }
+  return null;
+}
+function isH(ds){return getH(ds)!==null;}
+
+// === CALCULATIONS ===
+function calcHr(s,e,b){
+  const[sh,sm]=s.split(':').map(Number);
+  const[eh,em]=e.split(':').map(Number);
+  let st=sh*60+sm, en=eh*60+em;
+  if(en<=st) en+=1440;
+  return Math.max(0,(en-st-b)/60);
+}
+
+function grossHr(s,e){
+  const[sh,sm]=s.split(':').map(Number);
+  const[eh,em]=e.split(':').map(Number);
+  let st=sh*60+sm, en=eh*60+em;
+  if(en<=st) en+=1440;
+  return Math.max(0,(en-st)/60);
+}
+
+function getISOWeek(d){
+  const dt=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+  const dn=dt.getUTCDay()||7;
+  dt.setUTCDate(dt.getUTCDate()+4-dn);
+  const ys=new Date(Date.UTC(dt.getUTCFullYear(),0,1));
+  return dt.getUTCFullYear()+'-W'+String(Math.ceil((((dt-ys)/864e5)+1)/7)).padStart(2,'0');
+}
+
+function dStr(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function fm(n){
+  if(n===undefined||n===null||isNaN(n)||n===0) return '₺0';
+  return '₺'+n.toLocaleString('tr-TR',{minimumFractionDigits:0,maximumFractionDigits:2});
+}
+
+// === MONTH DATA ===
+function getMD(y,m){
+  const u=cu();
+  if(!u) return {};
+  const dim=new Date(y,m+1,0).getDate();
+  let th=0, oh=0, hh=0, wd=0, hdw=0;
+  const wh={};
+
+  for(let d=1; d<=dim; d++){
+    const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const sh=u.shifts[s];
+    if(!sh) continue;
+    const hrs=calcHr(sh.start,sh.end,sh.break);
+    if(hrs<=0) continue;
+    th+=hrs;
+    wd++;
+    const dt=new Date(y,m,d);
+    const wk=getISOWeek(dt);
+    if(!wh[wk]) wh[wk]=0;
+    wh[wk]+=hrs;
+    if(isH(s)){hh+=hrs;hdw++;}
+  }
+
+  // Fazla mesai: haftalık 45 saat üzeri
+  let rh=0;
+  oh=0;
+  Object.values(wh).forEach(w=>{
+    if(w>45){oh+=w-45;rh+=45;}
+    else rh+=w;
+  });
+
+  // İzinler
+  let yau=0, ysd=0, wr=0, ud=0;
+  Object.entries(u.leaves).forEach(([k,v])=>{
+    const ld=new Date(k);
+    if(ld.getFullYear()===y){
+      if(v.type==='annual') yau++;
+      if(v.type==='sick') ysd++;
+    }
+    if(ld.getFullYear()===y && ld.getMonth()===m){
+      if(v.type==='weekly') wr++;
+      if(v.type==='unpaid') ud++;
+    }
+  });
+
+  const hr=u.netSalary>0 ? u.netSalary/MH : 0;
+  const bs=u.netSalary;
+  const op=oh*hr*1.5;
+  const hp=hh*hr;
+  const upd=ud*(u.netSalary/30);
+  const te=bs+op+hp-upd;
+
+  return {th,rh,oh,hh,wd,hdw,wh,wr,ud,yau,ysd,hr,bs,op,hp,upd,te,dim};
+}
+
+// === DASHBOARD ===
+function renderDash(){
+  const u=cu();
+  if(!u) return;
+  const d=getMD(S.cy,S.cm);
+  document.getElementById('dashSub').textContent=`${MTR[S.cm]} ${S.cy} — ${u.name}`;
+
+  document.getElementById('statsEl').innerHTML=`
+    <div class="stat c-violet"><div class="ribbon"></div><div class="ico"><i class="fas fa-clock"></i></div><div class="val">${d.th.toFixed(1)}</div><div class="lbl">Toplam Saat</div></div>
+    <div class="stat c-amber"><div class="ribbon"></div><div class="ico"><i class="fas fa-fire"></i></div><div class="val">${d.oh.toFixed(1)}</div><div class="lbl">Fazla Mesai</div></div>
+    <div class="stat c-green"><div class="ribbon"></div><div class="ico"><i class="fas fa-wallet"></i></div><div class="val">${u.netSalary?fm(d.te):'—'}</div><div class="lbl">Kazanç</div></div>
+    <div class="stat c-red"><div class="ribbon"></div><div class="ico"><i class="fas fa-flag"></i></div><div class="val">${d.hdw}</div><div class="lbl">Tatil Çalışma</div></div>
+    <div class="stat c-cyan"><div class="ribbon"></div><div class="ico"><i class="fas fa-calendar-check"></i></div><div class="val">${d.wd}</div><div class="lbl">Çalışılan Gün</div></div>`;
+
+  const wks=Object.entries(d.wh).sort((a,b)=>a[0].localeCompare(b[0]));
+  let wc='';
+  if(!wks.length){
+    wc='<div class="empty"><i class="fas fa-calendar-times"></i><p>Vardiya yok</p></div>';
+  } else {
+    wks.forEach(([,h],i)=>{
+      const p=Math.min(100,h/60*100);
+      wc+=`<div class="wk-row"><span class="label">${i+1}. Hafta</span><div class="track"><div class="fill ${h>45?'ot':'ok'}" style="width:${p}%">${h.toFixed(1)}s</div></div><span class="hrs" style="color:${h>45?'var(--acc)':'var(--t1)'}">${h.toFixed(1)}</span></div>`;
+    });
+  }
+  document.getElementById('weekChart').innerHTML=wc;
+
+  const al=u.annualLeave||14, ar=al-d.yau;
+  let info='';
+  if(!u.netSalary) info='<div class="hint" style="margin-bottom:8px"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';
+  info+=`
+    <div class="info-row"><span class="k"><i class="fas fa-umbrella-beach"></i>Kalan Y.İzin</span><span class="v ${ar<=3?'neg':''}">${ar}g</span></div>
+    <div class="info-row"><span class="k"><i class="fas fa-notes-medical"></i>Rapor</span><span class="v">${d.ysd}g</span></div>
+    <div class="info-row"><span class="k"><i class="fas fa-coins"></i>Saatlik</span><span class="v">${u.netSalary?fm(d.hr):'—'}</span></div>
+    <div class="info-row"><span class="k"><i class="fas fa-fire"></i>FM Ücreti</span><span class="v pos">${u.netSalary?fm(d.op):'—'}</span></div>
+    <div class="info-row"><span class="k"><i class="fas fa-flag"></i>Tatil Ücreti</span><span class="v pos">${u.netSalary?fm(d.hp):'—'}</span></div>`;
+  document.getElementById('dashInfo').innerHTML=info;
+}
+
+// === CALENDAR ===
+function renderCal(){
+  const y=S.cy, m=S.cm;
+  document.getElementById('calTitle').textContent=MTR[m]+' '+y;
+  const g=document.getElementById('calGrid');
+  g.innerHTML='';
+
+  DTR.forEach(d=>{
+    const e=document.createElement('div');
+    e.className='cal-dname';
+    e.textContent=d;
+    g.appendChild(e);
+  });
+
+  const fd=new Date(y,m,1);
+  let sd2=fd.getDay();
+  sd2=sd2===0?6:sd2-1;
+  const dim=new Date(y,m+1,0).getDate();
+  const pip=new Date(y,m,0).getDate();
+  const td=dStr(new Date());
+  const u=cu();
+
+  // Önceki ay
+  for(let i=sd2-1;i>=0;i--){
+    const e=document.createElement('div');
+    e.className='cal-cell out';
+    e.innerHTML=`<div class="num">${pip-i}</div>`;
+    g.appendChild(e);
+  }
+
+  // Bu ay
+  for(let d=1;d<=dim;d++){
+    const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const e=document.createElement('div');
+    let c='cal-cell';
+    if(s===td) c+=' today';
+
+    const hol=getH(s);
+    const sh=u.shifts[s];
+    const lv=u.leaves[s];
+    const dow=new Date(y,m,d).getDay();
+    const dn=DTR[dow===0?6:dow-1];
+
+    // Renklendirme öncelik: shift > leave > holiday
+    if(sh){
+      c+=' has-shift';
+    } else if(lv){
+      c+=' leave-'+lv.type;
+    } else if(hol){
+      c+=' holiday';
+    }
+
+    let inner=`<div class="num"><span>${d}</span><small>${dn}</small></div>`;
+
+    // Vardiya girişi varsa: saat göster
+    if(sh){
+      const h=calcHr(sh.start,sh.end,sh.break);
+      inner+=`<div class="hrs-display ${h>7.5?'overtime':''}">${h.toFixed(1)}s</div>`;
+      inner+=`<div class="shift-time">${sh.start}–${sh.end}</div>`;
+      if(hol){
+        inner+=`<span class="hol-tag">🏛️ Tatil</span>`;
+      }
+    }
+    // İzin girişi varsa: ikon + yazı + renk
+    else if(lv){
+      const icons={annual:'fa-umbrella-beach',weekly:'fa-couch',sick:'fa-notes-medical',unpaid:'fa-ban'};
+      const labels={annual:'Yıllık İzin',weekly:'Hafta Tatili',sick:'Rapor',unpaid:'Ücretsiz İzin'};
+      inner+=`<div class="leave-display ld-${lv.type}"><i class="fas ${icons[lv.type]}"></i>${labels[lv.type].split(' ')[0]}</div>`;
+      inner+=`<span class="leave-label ll-${lv.type}">${labels[lv.type]}</span>`;
+      if(hol){
+        inner+=`<span class="hol-tag">${hol}</span>`;
+      }
+    }
+    // Sadece tatil
+    else if(hol){
+      inner+=`<span class="hol-tag">${hol}</span>`;
+    }
+
+    e.className=c;
+    e.innerHTML=inner;
+    e.onclick=()=>openM(s);
+    g.appendChild(e);
+  }
+
+  // Sonraki ay
+  const tot=sd2+dim;
+  const rem=tot%7===0?0:7-(tot%7);
+  for(let i=1;i<=rem;i++){
+    const e=document.createElement('div');
+    e.className='cal-cell out';
+    e.innerHTML=`<div class="num">${i}</div>`;
+    g.appendChild(e);
+  }
+  renderCopyBar();
+}
+
+function chgM(d){
+  S.cm+=d;
+  if(S.cm>11){S.cm=0;S.cy++;}
+  if(S.cm<0){S.cm=11;S.cy--;}
+  renderCal();
+  renderDash();
+}
+
+function goToday(){
+  S.cm=new Date().getMonth();
+  S.cy=new Date().getFullYear();
+  renderCal();
+  renderDash();
+}
+
+// === COPY/PASTE ===
+function copyShift(){
+  const sh=cu().shifts[S.sd];
+  if(sh){S.clipboard={...sh};renderCopyBar();closeM();}
+}
+
+function pasteShift(ds){
+  if(!S.clipboard) return;
+  const u=cu();
+  u.shifts[ds]={...S.clipboard};
+  delete u.leaves[ds];
+  saveLS();
+  renderAll();
+}
+
+function clearClipboard(){S.clipboard=null;renderCopyBar();}
+
+function renderCopyBar(){
+  const el=document.getElementById('copyBar');
+  if(S.clipboard){
+    const h=calcHr(S.clipboard.start,S.clipboard.end,S.clipboard.break);
+    el.innerHTML=`<div class="copy-bar"><span><i class="fas fa-clipboard"></i> ${S.clipboard.start}–${S.clipboard.end} (${h.toFixed(1)}s) — Güne tıklayın</span><button class="btn btn-soft btn-xs" onclick="clearClipboard()"><i class="fas fa-times"></i></button></div>`;
+  } else {
+    el.innerHTML='';
+  }
+}
+
+// === MODAL ===
 function openM(ds){
-if(S.clipboard){pasteShift(ds);return}
-S.sd=ds;const d=new Date(ds),dow=d.getDay(),dn=DFL[dow===0?6:dow-1];
-document.getElementById('mTitle').textContent=d.getDate()+' '+MTR[d.getMonth()];
-document.getElementById('mDate').textContent=dn;
-const hol=getH(ds),al=document.getElementById('mAlert');
-if(hol){al.style.display='flex';document.getElementById('mAlertTx').textContent=`${hol} — Ek ücret hesaplanır`}else al.style.display='none';
-const u=cu(),sh=u.shifts[ds],lv=u.leaves[ds];
-mMode('shift',document.querySelectorAll('.mode-tab')[0]);
-S.lt=null;document.querySelectorAll('.lt-opt').forEach(o=>o.classList.remove('active'));
-document.getElementById('iNote').value='';document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));
-if(sh){document.getElementById('iStart').value=sh.start;document.getElementById('iEnd').value=sh.end;document.getElementById('iBreak').value=sh.break;
-document.getElementById('mDel').style.display='inline-flex';document.getElementById('mCopy').style.display='inline-flex';hlPreset(sh)}
-else if(lv){mMode('leave',document.querySelectorAll('.mode-tab')[1]);
-const el=document.querySelector(`.lt-opt[data-t="${lv.type}"]`);if(el)selLT(lv.type,el);
-document.getElementById('iNote').value=lv.note||'';document.getElementById('mDel').style.display='inline-flex';document.getElementById('mCopy').style.display='none'}
-else{document.getElementById('iStart').value='08:00';document.getElementById('iEnd').value='16:00';document.getElementById('iBreak').value='30';
-document.getElementById('mDel').style.display='none';document.getElementById('mCopy').style.display='none';
-applyPreset('morning',document.querySelector('.preset[data-key="morning"]'))}
-updResult();document.getElementById('modal').classList.add('show')}
+  if(S.clipboard){pasteShift(ds);return;}
 
-function hlPreset(sh){document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));
-for(const[k,v]of Object.entries(PRESETS)){if(!v)continue;if(v.start===sh.start&&v.end===sh.end&&v.break===sh.break){const el=document.querySelector(`.preset[data-key="${k}"]`);if(el)el.classList.add('active');return}}
-document.querySelector('.preset[data-key="custom"]').classList.add('active')}
-function closeM(){document.getElementById('modal').classList.remove('show')}
-function mMode(t,btn){S.mt=t;document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');document.getElementById('mShift').style.display=t==='shift'?'block':'none';document.getElementById('mLeave').style.display=t==='leave'?'block':'none'}
-function selLT(t,el){S.lt=t;document.querySelectorAll('.lt-opt').forEach(o=>o.classList.remove('active'));if(el)el.classList.add('active')}
-function applyPreset(key,el){document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));if(el)el.classList.add('active');if(key!=='custom'&&PRESETS[key]){document.getElementById('iStart').value=PRESETS[key].start;document.getElementById('iEnd').value=PRESETS[key].end;document.getElementById('iBreak').value=PRESETS[key].break}updResult()}
+  S.sd=ds;
+  const d=new Date(ds);
+  const dow=d.getDay();
+  const dn=DFL[dow===0?6:dow-1];
 
-function updResult(){const s=document.getElementById('iStart').value,e=document.getElementById('iEnd').value,b=+document.getElementById('iBreak').value;
-if(!s||!e)return;const net=calcHr(s,e,b),gross=grossHr(s,e),h=Math.floor(net),mn=Math.round((net-h)*60);
-document.getElementById('rbGross').textContent=gross.toFixed(1)+'s';
-document.getElementById('rbBreak').textContent=b+'dk';
-document.getElementById('rbNet').textContent=net.toFixed(1)+'s';
-const ot=net>7.5?net-7.5:0;
-document.getElementById('rbOT').textContent=ot>0?'+'+ot.toFixed(1)+'s':'—';
-document.getElementById('rbOT').style.color=ot>0?'var(--acc)':'var(--t3)'}
+  document.getElementById('mTitle').textContent=d.getDate()+' '+MTR[d.getMonth()];
+  document.getElementById('mDate').textContent=dn;
 
-function saveEntry(){const u=cu(),s=S.sd;
-if(S.mt==='shift'){const st=document.getElementById('iStart').value,en=document.getElementById('iEnd').value,br=+document.getElementById('iBreak').value;
-if(!st||!en)return alert('Saatleri girin.');u.shifts[s]={start:st,end:en,break:br};delete u.leaves[s]}
-else{if(!S.lt)return alert('İzin türü seçin.');u.leaves[s]={type:S.lt,note:document.getElementById('iNote').value};delete u.shifts[s]}
-saveLS();closeM();renderAll()}
-function delEntry(){cu().shifts[S.sd]&&delete cu().shifts[S.sd];cu().leaves[S.sd]&&delete cu().leaves[S.sd];saveLS();closeM();renderAll()}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeM()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+  const hol=getH(ds);
+  const al=document.getElementById('mAlert');
+  if(hol){
+    al.style.display='flex';
+    document.getElementById('mAlertTx').textContent=`${hol} — Ek ücret hesaplanır`;
+  } else {
+    al.style.display='none';
+  }
 
-function renderLeaves(){const u=cu(),y=S.cy,d=getMD(y,S.cm),at=u.annualLeave||14,ar=at-d.yau;
-document.getElementById('leaveYr').textContent=y;
-document.getElementById('leaveCards').innerHTML=`
-<div class="card leave-c"><h4><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Yıllık İzin</h4><div class="big" style="color:#60a5fa">${ar} <small>/ ${at}g</small></div><div class="pbar"><div class="pf" style="width:${(d.yau/at)*100}%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div><div class="meta"><span>Kullanılan: ${d.yau}</span><span>Kalan: ${ar}</span></div></div>
-<div class="card leave-c"><h4><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor</h4><div class="big" style="color:#fb923c">${d.ysd} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ysd/20*100)}%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div><div class="meta"><span>Bu yıl</span><span>${d.ysd}g</span></div></div>
-<div class="card leave-c"><h4><i class="fas fa-couch" style="color:var(--p)"></i>Hafta Tatili</h4><div class="big" style="color:var(--p)">${d.wr} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.wr/5*100)}%;background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></div></div><div class="meta"><span>${MTR[S.cm]}</span><span>${d.wr}g</span></div></div>
-<div class="card leave-c"><h4><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz</h4><div class="big" style="color:var(--r)">${d.ud} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ud/5*100)}%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div><div class="meta"><span>Kesinti</span><span>${u.netSalary?fm(d.upd):'—'}</span></div></div>`;
-const all=Object.entries(u.leaves).filter(([k])=>new Date(k).getFullYear()===y).sort((a,b)=>b[0].localeCompare(a[0]));
-if(!all.length){document.getElementById('leaveTable').innerHTML='<div class="empty"><i class="fas fa-check-circle"></i><p>Kayıt yok</p></div>';return}
-const tl={annual:'Yıllık',weekly:'H.Tatil',sick:'Rapor',unpaid:'Ücretsiz'},tc={annual:'a',weekly:'w',sick:'s',unpaid:'u'};
-let t='<table><thead><tr><th>Tarih</th><th>Gün</th><th>Tür</th><th>Not</th><th></th></tr></thead><tbody>';
-all.forEach(([k,v])=>{const d=new Date(k),dow=d.getDay();t+=`<tr><td>${d.getDate()} ${MTR[d.getMonth()]}</td><td>${DFL[dow===0?6:dow-1]}</td><td><span class="tag tag-${tc[v.type]}">${tl[v.type]}</span></td><td>${v.note||'—'}</td><td><button class="btn btn-danger btn-xs" onclick="delLv('${k}')"><i class="fas fa-trash"></i></button></td></tr>`});
-t+='</tbody></table>';document.getElementById('leaveTable').innerHTML=t}
-function delLv(k){if(confirm('Sil?')){delete cu().leaves[k];saveLS();renderAll()}}
+  const u=cu();
+  const sh=u.shifts[ds];
+  const lv=u.leaves[ds];
 
-function renderEarn(){const u=cu(),y=S.ey,m=S.em;document.getElementById('earnTitle').textContent=MTR[m]+' '+y;const d=getMD(y,m);
-if(!u.netSalary){document.getElementById('earnContent').innerHTML='<div class="hint"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';return}
-document.getElementById('earnContent').innerHTML=`
-<div class="earn-hero"><div class="sub">TAHMİNİ KAZANÇ</div><div class="amt">${fm(d.te)}</div><div class="info">${MTR[m]} ${y} • ${d.wd}g • ${d.th.toFixed(1)}s</div></div>
-<div class="card" style="margin-top:16px"><div class="card-head"><h3><i class="fas fa-receipt"></i>Detay</h3></div>
-<div class="earn-row"><span class="k"><i class="fas fa-money-bill" style="color:var(--p)"></i>Baz Maaş</span><span class="v">${fm(d.bs)}</span></div>
-<div class="earn-row"><span class="k"><i class="fas fa-fire" style="color:var(--acc)"></i>FM (${d.oh.toFixed(1)}s×${fm(d.hr)}×1.5)</span><span class="v plus">+${fm(d.op)}</span></div>
-<div class="earn-row"><span class="k"><i class="fas fa-flag" style="color:var(--r)"></i>Tatil (${d.hh.toFixed(1)}s ek)</span><span class="v plus">+${fm(d.hp)}</span></div>
-<div class="earn-row"><span class="k"><i class="fas fa-minus-circle" style="color:var(--r)"></i>Ü.İzin (${d.ud}g)</span><span class="v minus">-${fm(d.upd)}</span></div>
-<div class="earn-row"><span class="k"><i class="fas fa-calculator" style="color:var(--p)"></i><b>TOPLAM</b></span><span class="v" style="font-size:16px;color:var(--p)">${fm(d.te)}</span></div></div>
-<div class="card" style="margin-top:16px"><div class="card-head"><h3><i class="fas fa-chart-pie"></i>Saatler</h3></div>
-<div class="info-list">
-<div class="info-row"><span class="k">Toplam</span><span class="v">${d.th.toFixed(1)}s</span></div>
-<div class="info-row"><span class="k">Normal</span><span class="v">${d.rh.toFixed(1)}s</span></div>
-<div class="info-row"><span class="k">Fazla Mesai</span><span class="v warn">${d.oh.toFixed(1)}s</span></div>
-<div class="info-row"><span class="k">Tatil</span><span class="v">${d.hh.toFixed(1)}s</span></div></div></div>`}
-function chgE(d){S.em+=d;if(S.em>11){S.em=0;S.ey++}if(S.em<0){S.em=11;S.ey--}renderEarn()}
+  // Reset
+  mMode('shift',document.querySelectorAll('.mode-tab')[0]);
+  S.lt=null;
+  document.querySelectorAll('.lt-opt').forEach(o=>o.classList.remove('active'));
+  document.getElementById('iNote').value='';
+  document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));
 
-function loadSet(){const u=cu();if(!u)return;document.getElementById('sName').value=u.name||'';document.getElementById('sSalary').value=u.netSalary||'';document.getElementById('sStart').value=u.startDate||'';document.getElementById('sLeave').value=u.annualLeave||14;updSal()}
-function sSet(k,v){const u=cu();if(k==='netSalary')v=parseFloat(v)||0;if(k==='annualLeave')v=parseInt(v)||14;u[k]=v;
-if(k==='startDate'&&v){const s=new Date(v),n=new Date(),yr=(n-s)/(365.25*864e5);let l=14;if(yr>=15)l=26;else if(yr>=5)l=20;u.annualLeave=l;document.getElementById('sLeave').value=l}
-saveLS();updTop();updSal();renderAll()}
-function updSal(){const u=cu(),el=document.getElementById('salPrev');if(u.netSalary>0){el.style.display='block';document.getElementById('salAmt').textContent=fm(u.netSalary);document.getElementById('salDet').textContent=`Saatlik: ${fm(u.netSalary/MH)} | Günlük: ${fm(u.netSalary/30)}`}else el.style.display='none'}
+  if(sh){
+    document.getElementById('iStart').value=sh.start;
+    document.getElementById('iEnd').value=sh.end;
+    document.getElementById('iBreak').value=String(sh.break);
+    document.getElementById('mDel').style.display='inline-flex';
+    document.getElementById('mCopy').style.display='inline-flex';
+    hlPreset(sh);
+  } else if(lv){
+    mMode('leave',document.querySelectorAll('.mode-tab')[1]);
+    const el=document.querySelector(`.lt-opt[data-t="${lv.type}"]`);
+    if(el) selLT(lv.type,el);
+    document.getElementById('iNote').value=lv.note||'';
+    document.getElementById('mDel').style.display='inline-flex';
+    document.getElementById('mCopy').style.display='none';
+  } else {
+    document.getElementById('iStart').value='08:00';
+    document.getElementById('iEnd').value='16:00';
+    document.getElementById('iBreak').value='30';
+    document.getElementById('mDel').style.display='none';
+    document.getElementById('mCopy').style.display='none';
+    applyPreset('morning',document.querySelector('.preset[data-key="morning"]'));
+  }
 
-function saveLS(){localStorage.setItem('st_data',JSON.stringify(S.u))}
-function loadLS(){const s=localStorage.getItem('st_data');if(s)try{const p=JSON.parse(s);S.u[1]={...S.u[1],...p[1]};S.u[2]={...S.u[2],...p[2]}}catch(e){}}
-function exportD(){const b=new Blob([JSON.stringify(S.u,null,2)],{type:'application/json'});const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=`shifttrack_${dStr(new Date())}.json`;a.click();URL.revokeObjectURL(u)}
-function importD(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){try{const p=JSON.parse(ev.target.result);S.u[1]={...S.u[1],...p[1]};S.u[2]={...S.u[2],...p[2]};saveLS();renderAll();updTop();alert('OK')}catch{alert('Hata')}};r.readAsText(f);e.target.value=''}
-function clearD(){if(confirm('Tüm veriler silinecek?')){S.u[S.cu]={name:'Kullanıcı '+S.cu,netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{}};saveLS();renderAll();updTop();loadSet()}}
+  updResult();
+  document.getElementById('modal').classList.add('show');
+}
+
+function hlPreset(sh){
+  document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));
+  for(const[k,v]of Object.entries(PRESETS)){
+    if(!v) continue;
+    if(v.start===sh.start && v.end===sh.end && v.break===sh.break){
+      const el=document.querySelector(`.preset[data-key="${k}"]`);
+      if(el) el.classList.add('active');
+      return;
+    }
+  }
+  document.querySelector('.preset[data-key="custom"]').classList.add('active');
+}
+
+function closeM(){document.getElementById('modal').classList.remove('show');}
+
+function mMode(t,btn){
+  S.mt=t;
+  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('mShift').style.display=t==='shift'?'block':'none';
+  document.getElementById('mLeave').style.display=t==='leave'?'block':'none';
+}
+
+function selLT(t,el){
+  S.lt=t;
+  document.querySelectorAll('.lt-opt').forEach(o=>o.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+function applyPreset(key,el){
+  document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(key!=='custom' && PRESETS[key]){
+    document.getElementById('iStart').value=PRESETS[key].start;
+    document.getElementById('iEnd').value=PRESETS[key].end;
+    document.getElementById('iBreak').value=String(PRESETS[key].break);
+  }
+  updResult();
+}
+
+function updResult(){
+  const s=document.getElementById('iStart').value;
+  const e=document.getElementById('iEnd').value;
+  const b=parseInt(document.getElementById('iBreak').value)||0;
+  if(!s||!e) return;
+
+  const net=calcHr(s,e,b);
+  const gross=grossHr(s,e);
+
+  document.getElementById('rbGross').textContent=gross.toFixed(1)+'s';
+  document.getElementById('rbBreak').textContent=b+'dk';
+  document.getElementById('rbNet').textContent=net.toFixed(1)+'s';
+
+  const ot=net>7.5?net-7.5:0;
+  document.getElementById('rbOT').textContent=ot>0?'+'+ot.toFixed(1)+'s':'—';
+  document.getElementById('rbOT').style.color=ot>0?'var(--acc)':'var(--t3)';
+}
+
+function saveEntry(){
+  const u=cu();
+  const s=S.sd;
+
+  if(S.mt==='shift'){
+    const st=document.getElementById('iStart').value;
+    const en=document.getElementById('iEnd').value;
+    const br=parseInt(document.getElementById('iBreak').value)||0;
+    if(!st||!en){alert('Saatleri girin.');return;}
+    const hrs=calcHr(st,en,br);
+    if(hrs<=0){alert('Geçersiz saat aralığı.');return;}
+    u.shifts[s]={start:st,end:en,break:br};
+    delete u.leaves[s];
+  } else {
+    if(!S.lt){alert('İzin türü seçin.');return;}
+    u.leaves[s]={type:S.lt,note:document.getElementById('iNote').value};
+    delete u.shifts[s];
+  }
+
+  saveLS();
+  closeM();
+  renderAll();
+}
+
+function delEntry(){
+  const u=cu();
+  if(u.shifts[S.sd]) delete u.shifts[S.sd];
+  if(u.leaves[S.sd]) delete u.leaves[S.sd];
+  saveLS();
+  closeM();
+  renderAll();
+}
+
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeM();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
+
+// === LEAVES ===
+function renderLeaves(){
+  const u=cu();
+  const y=S.cy;
+  const d=getMD(y,S.cm);
+  const at=u.annualLeave||14;
+  const ar=at-d.yau;
+
+  document.getElementById('leaveYr').textContent=y;
+
+  document.getElementById('leaveCards').innerHTML=`
+    <div class="card leave-c"><h4><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Yıllık İzin</h4><div class="big" style="color:#60a5fa">${ar} <small>/ ${at}g</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,(d.yau/Math.max(at,1))*100)}%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div><div class="meta"><span>Kullanılan: ${d.yau}</span><span>Kalan: ${ar}</span></div></div>
+    <div class="card leave-c"><h4><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor</h4><div class="big" style="color:#fb923c">${d.ysd} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ysd/20*100)}%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div><div class="meta"><span>Bu yıl</span><span>${d.ysd}g</span></div></div>
+    <div class="card leave-c"><h4><i class="fas fa-couch" style="color:var(--p)"></i>Hafta Tatili</h4><div class="big" style="color:var(--p)">${d.wr} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.wr/5*100)}%;background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></div></div><div class="meta"><span>${MTR[S.cm]}</span><span>${d.wr}g</span></div></div>
+    <div class="card leave-c"><h4><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz</h4><div class="big" style="color:var(--r)">${d.ud} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ud/5*100)}%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div><div class="meta"><span>Kesinti</span><span>${u.netSalary?fm(d.upd):'—'}</span></div></div>`;
+
+  const all=Object.entries(u.leaves).filter(([k])=>new Date(k).getFullYear()===y).sort((a,b)=>b[0].localeCompare(a[0]));
+  if(!all.length){
+    document.getElementById('leaveTable').innerHTML='<div class="empty"><i class="fas fa-check-circle"></i><p>Kayıt yok</p></div>';
+    return;
+  }
+
+  const tl={annual:'Yıllık',weekly:'H.Tatil',sick:'Rapor',unpaid:'Ücretsiz'};
+  const tc={annual:'a',weekly:'w',sick:'s',unpaid:'u'};
+  let t='<table><thead><tr><th>Tarih</th><th>Gün</th><th>Tür</th><th>Not</th><th></th></tr></thead><tbody>';
+  all.forEach(([k,v])=>{
+    const dd=new Date(k);
+    const dow=dd.getDay();
+    t+=`<tr><td>${dd.getDate()} ${MTR[dd.getMonth()]}</td><td>${DFL[dow===0?6:dow-1]}</td><td><span class="tag tag-${tc[v.type]}">${tl[v.type]}</span></td><td>${v.note||'—'}</td><td><button class="btn btn-danger btn-xs" onclick="delLv('${k}')"><i class="fas fa-trash"></i></button></td></tr>`;
+  });
+  t+='</tbody></table>';
+  document.getElementById('leaveTable').innerHTML=t;
+}
+
+function delLv(k){
+  if(confirm('Sil?')){
+    delete cu().leaves[k];
+    saveLS();
+    renderAll();
+  }
+}
+
+// === EARNINGS ===
+function renderEarn(){
+  const u=cu();
+  const y=S.ey, m=S.em;
+  document.getElementById('earnTitle').textContent=MTR[m]+' '+y;
+  const d=getMD(y,m);
+
+  if(!u.netSalary){
+    document.getElementById('earnContent').innerHTML='<div class="hint"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';
+    return;
+  }
+
+  document.getElementById('earnContent').innerHTML=`
+    <div class="earn-hero"><div class="sub">TAHMİNİ KAZANÇ</div><div class="amt">${fm(d.te)}</div><div class="info">${MTR[m]} ${y} • ${d.wd}g • ${d.th.toFixed(1)}s</div></div>
+    <div class="card" style="margin-top:16px"><div class="card-head"><h3><i class="fas fa-receipt"></i>Detay</h3></div>
+    <div class="earn-row"><span class="k"><i class="fas fa-money-bill" style="color:var(--p)"></i>Baz Maaş</span><span class="v">${fm(d.bs)}</span></div>
+    <div class="earn-row"><span class="k"><i class="fas fa-fire" style="color:var(--acc)"></i>FM (${d.oh.toFixed(1)}s × ${fm(d.hr)} × 1.5)</span><span class="v plus">+${fm(d.op)}</span></div>
+    <div class="earn-row"><span class="k"><i class="fas fa-flag" style="color:var(--r)"></i>Tatil (${d.hh.toFixed(1)}s ek)</span><span class="v plus">+${fm(d.hp)}</span></div>
+    <div class="earn-row"><span class="k"><i class="fas fa-minus-circle" style="color:var(--r)"></i>Ü.İzin (${d.ud}g)</span><span class="v minus">-${fm(d.upd)}</span></div>
+    <div class="earn-row"><span class="k"><i class="fas fa-calculator" style="color:var(--p)"></i><b>TOPLAM</b></span><span class="v" style="font-size:16px;color:var(--p)">${fm(d.te)}</span></div></div>
+    <div class="card" style="margin-top:16px"><div class="card-head"><h3><i class="fas fa-chart-pie"></i>Saatler</h3></div>
+    <div class="info-list">
+    <div class="info-row"><span class="k">Toplam</span><span class="v">${d.th.toFixed(1)}s</span></div>
+    <div class="info-row"><span class="k">Normal</span><span class="v">${d.rh.toFixed(1)}s</span></div>
+    <div class="info-row"><span class="k">Fazla Mesai</span><span class="v warn">${d.oh.toFixed(1)}s</span></div>
+    <div class="info-row"><span class="k">Tatil</span><span class="v">${d.hh.toFixed(1)}s (${d.hdw}g)</span></div></div></div>`;
+}
+
+function chgE(d){
+  S.em+=d;
+  if(S.em>11){S.em=0;S.ey++;}
+  if(S.em<0){S.em=11;S.ey--;}
+  renderEarn();
+}
+
+// === SETTINGS ===
+function loadSet(){
+  const u=cu();
+  if(!u) return;
+  document.getElementById('sName').value=u.name||'';
+  document.getElementById('sSalary').value=u.netSalary||'';
+  document.getElementById('sStart').value=u.startDate||'';
+  document.getElementById('sLeave').value=u.annualLeave||14;
+  updSal();
+}
+
+function sSet(k,v){
+  const u=cu();
+  if(k==='netSalary') v=parseFloat(v)||0;
+  if(k==='annualLeave') v=parseInt(v)||14;
+  u[k]=v;
+
+  if(k==='startDate' && v){
+    const s=new Date(v);
+    const n=new Date();
+    const yr=(n-s)/(365.25*864e5);
+    let l=14;
+    if(yr>=15) l=26;
+    else if(yr>=5) l=20;
+    u.annualLeave=l;
+    document.getElementById('sLeave').value=l;
+  }
+
+  saveLS();
+  updTop();
+  updSal();
+  renderAll();
+}
+
+function updSal(){
+  const u=cu();
+  const el=document.getElementById('salPrev');
+  if(u.netSalary>0){
+    el.style.display='block';
+    document.getElementById('salAmt').textContent=fm(u.netSalary);
+    document.getElementById('salDet').textContent=`Saatlik: ${fm(u.netSalary/MH)} | Günlük: ${fm(u.netSalary/30)}`;
+  } else {
+    el.style.display='none';
+  }
+}
+
+// === DATA ===
+function saveLS(){localStorage.setItem('st_data',JSON.stringify(S.u));}
+
+function loadLS(){
+  const s=localStorage.getItem('st_data');
+  if(s){
+    try{
+      const p=JSON.parse(s);
+      if(p[1]) S.u[1]={...S.u[1],...p[1]};
+      if(p[2]) S.u[2]={...S.u[2],...p[2]};
+    } catch(e){
+      console.error('Veri yükleme hatası:',e);
+    }
+  }
+}
+
+function exportD(){
+  const b=new Blob([JSON.stringify(S.u,null,2)],{type:'application/json'});
+  const u=URL.createObjectURL(b);
+  const a=document.createElement('a');
+  a.href=u;
+  a.download=`shifttrack_${dStr(new Date())}.json`;
+  a.click();
+  URL.revokeObjectURL(u);
+}
+
+function importD(e){
+  const f=e.target.files[0];
+  if(!f) return;
+  const r=new FileReader();
+  r.onload=function(ev){
+    try{
+      const p=JSON.parse(ev.target.result);
+      if(p[1]) S.u[1]={...S.u[1],...p[1]};
+      if(p[2]) S.u[2]={...S.u[2],...p[2]};
+      saveLS();
+      renderAll();
+      updTop();
+      alert('Yüklendi!');
+    } catch(err){
+      alert('Geçersiz dosya.');
+    }
+  };
+  r.readAsText(f);
+  e.target.value='';
+}
+
+function clearD(){
+  if(confirm('Tüm veriler silinecek?')){
+    S.u[S.cu]={name:'Kullanıcı '+S.cu,netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{}};
+    saveLS();
+    renderAll();
+    updTop();
+    loadSet();
+  }
+}
 
 init();
 </script>
