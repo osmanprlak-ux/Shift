@@ -81,7 +81,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .modal-body{padding:12px 18px}.modal-foot{padding:0 18px 16px;display:flex;gap:8px;justify-content:flex-end}
 .h-alert{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:11px;color:var(--r);font-weight:600}.h-alert i{font-size:14px;flex-shrink:0}
 .mode-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:12px}.mode-tab{flex:1;padding:8px;border:none;background:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;color:var(--t3);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px}.mode-tab.active{background:var(--card2);color:var(--p);box-shadow:var(--sh1)}.mode-tab:hover:not(.active){color:var(--t1)}
-.preset-row{display:flex;gap:5px;margin-bottom:12px}.preset{flex:1;padding:8px 4px;border-radius:8px;border:1.5px solid var(--b1);cursor:pointer;text-align:center;transition:all .2s;background:var(--card2)}.preset:hover{border-color:var(--p);background:var(--p4)}.preset.active{border-color:var(--p);background:var(--p4)}.preset .p-icon{font-size:16px;display:block;margin-bottom:2px}.preset .p-name{font-size:9px;font-weight:700;color:var(--t1);display:block}.preset .p-time{font-size:8px;color:var(--t3);font-weight:600;display:block;margin-top:1px}
+.preset-row{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap}.preset{flex:1;min-width:60px;padding:8px 4px;border-radius:8px;border:1.5px solid var(--b1);cursor:pointer;text-align:center;transition:all .2s;background:var(--card2)}.preset:hover{border-color:var(--p);background:var(--p4)}.preset.active{border-color:var(--p);background:var(--p4)}.preset .p-icon{font-size:16px;display:block;margin-bottom:2px}.preset .p-name{font-size:9px;font-weight:700;color:var(--t1);display:block}.preset .p-time{font-size:8px;color:var(--t3);font-weight:600;display:block;margin-top:1px}
 .time-inputs{display:flex;gap:6px;margin-bottom:10px;align-items:end}.time-inputs .ti{flex:1}.time-inputs .ti label{display:block;font-size:9px;font-weight:700;color:var(--t3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
 input[type="time"],input[type="text"],input[type="number"],input[type="date"],select{width:100%;padding:8px;border:1.5px solid var(--b1);border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;transition:all .2s;background:var(--bg3);color:var(--t1)}input:focus,select:focus{outline:none;border-color:var(--p);box-shadow:0 0 0 3px var(--p4)}input[type="time"]{font-size:14px;font-weight:800;text-align:center;padding:7px 4px}
 .result-box{background:var(--bg);border-radius:10px;padding:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--b1)}.result-box .rb-item{text-align:center;flex:1}.result-box .rb-val{font-size:16px;font-weight:900;color:var(--p)}.result-box .rb-val.accent{color:var(--acc)}.result-box .rb-val.green{color:var(--g)}.result-box .rb-lbl{font-size:8px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.2px;margin-top:1px}.result-box .rb-div{width:1px;height:28px;background:var(--b1)}
@@ -104,6 +104,7 @@ table{width:100%;border-collapse:separate;border-spacing:0}th{text-align:left;pa
 .year-overview{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-bottom:20px}.year-month{padding:8px 4px;border-radius:8px;text-align:center;background:var(--card2);border:1px solid var(--b1);cursor:pointer;transition:all .2s;font-size:10px;font-weight:700}.year-month:hover{border-color:var(--p);background:var(--p4)}.year-month.active{border-color:var(--p);background:var(--p4)}.year-month .ym-hrs{font-size:14px;font-weight:900;display:block;margin-top:2px;color:var(--p)}.year-month .ym-name{color:var(--t3);font-size:9px;display:block;margin-bottom:2px}
 .cal-cell.selecting{border-color:var(--s)!important;background:rgba(56,189,248,.1)!important}
 .kbd{display:inline-block;padding:2px 6px;border-radius:4px;background:var(--bg3);border:1px solid var(--b1);font-size:10px;font-weight:700;color:var(--t3);font-family:monospace}
+.future-indicator{font-size:8px;color:var(--t3);font-style:italic;margin-top:2px}
 @media(max-width:768px){.content{padding:122px 12px 28px}.grid-2,.grid-3{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.cal-cell{min-height:56px;padding:4px 5px}.cal-cell .shift-time,.cal-cell .leave-label,.cal-cell .hol-tag{display:none}.earn-hero .amt{font-size:24px}.nav-tab span{display:none}.nav-tab{padding:10px 12px;border-radius:10px}.nav-tab i{font-size:18px}.login-cards{flex-direction:column;align-items:center}.year-overview{grid-template-columns:repeat(6,1fr)}.page-head{flex-direction:column;align-items:flex-start}.esb .esb-grid{grid-template-columns:1fr 1fr}.cal-earn-bar{flex-direction:column;align-items:flex-start}}
 @media(max-width:480px){.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.esb .esb-grid{grid-template-columns:1fr}}
 </style>
@@ -111,7 +112,7 @@ table{width:100%;border-collapse:separate;border-spacing:0}th{text-align:left;pa
 <body>
 <div class="toast-container" id="toastContainer"></div>
 <div class="confirm-overlay" id="confirmOverlay"><div class="confirm-box"><div class="confirm-icon ci-danger" id="confirmIcon"><i class="fas fa-exclamation-triangle"></i></div><h4 id="confirmTitle">Emin misiniz?</h4><p id="confirmMsg"></p><div class="confirm-btns"><button class="btn btn-ghost btn-sm" onclick="confirmCancel()">İptal</button><button class="btn btn-danger btn-sm" onclick="confirmOk()"><i class="fas fa-check"></i>Onayla</button></div></div></div>
-<div id="loginScreen"><div class="login-container"><div class="login-brand"><div class="icon"><i class="fas fa-clock"></i></div><h1>ShiftTrack Pro</h1><p>Akıllı Vardiya & Kazanç Yönetimi</p><span class="version">v2.4</span></div><div class="login-cards"><div class="login-card" onclick="login(1)"><div class="avatar" id="la1">1</div><h3 id="ln1">Kullanıcı 1</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti1"></div><span class="last-login" id="ll1"></span></div><div class="login-card" onclick="login(2)"><div class="avatar" id="la2">2</div><h3 id="ln2">Kullanıcı 2</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti2"></div><span class="last-login" id="ll2"></span></div></div></div></div>
+<div id="loginScreen"><div class="login-container"><div class="login-brand"><div class="icon"><i class="fas fa-clock"></i></div><h1>ShiftTrack Pro</h1><p>Akıllı Vardiya & Kazanç Yönetimi</p><span class="version">v2.5</span></div><div class="login-cards"><div class="login-card" onclick="login(1)"><div class="avatar" id="la1">1</div><h3 id="ln1">Kullanıcı 1</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti1"></div><span class="last-login" id="ll1"></span></div><div class="login-card" onclick="login(2)"><div class="avatar" id="la2">2</div><h3 id="ln2">Kullanıcı 2</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti2"></div><span class="last-login" id="ll2"></span></div></div></div></div>
 <div id="mainApp">
 <header class="topbar"><div class="topbar-brand"><div class="ico"><i class="fas fa-clock"></i></div>ShiftTrack</div><div class="topbar-right"><div class="topbar-user" onclick="go('settings',document.querySelectorAll('.nav-tab')[4])"><div class="av" id="topAv">U</div><span id="topName">Kullanıcı</span></div><button class="topbar-logout" onclick="logout()" title="Çıkış"><i class="fas fa-sign-out-alt"></i></button></div></header>
 <nav class="nav-tabs"><button class="nav-tab active" onclick="go('dashboard',this)"><i class="fas fa-th-large"></i><span>Panel</span></button><button class="nav-tab" onclick="go('calendar',this)"><i class="fas fa-calendar-alt"></i><span>Takvim</span></button><button class="nav-tab" onclick="go('leaves',this)"><i class="fas fa-umbrella-beach"></i><span>İzinler</span></button><button class="nav-tab" onclick="go('earnings',this)"><i class="fas fa-wallet"></i><span>Kazanç</span></button><button class="nav-tab" onclick="go('settings',this)"><i class="fas fa-cog"></i><span>Ayarlar</span></button></nav>
@@ -141,7 +142,10 @@ function login(id){S.cu=id;cu().lastLogin=new Date().toISOString();applyTheme(cu
 function logout(){S.cu=null;S.multiSelect=false;S.selectedDates=[];S.clipboard=null;applyTheme('default');document.getElementById('mainApp').style.display='none';document.getElementById('loginScreen').style.display='flex';updLogin();document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelector('.nav-tab').classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('pg-dashboard').classList.add('active')}
 function updTop(){const u=cu();document.getElementById('topName').textContent=u.name||'İsimsiz';document.getElementById('topAv').textContent=(u.name||'K')[0].toUpperCase()}
 function cu(){return S.u[S.cu]}
-function go(p,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('pg-'+p).classList.add('active');document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));if(btn)btn.classList.add('active');renderAll()}
+function go(p,btn){
+/* FIX #7: Clear multi-select when switching pages */
+if(p!=='calendar'&&S.multiSelect){S.multiSelect=false;S.selectedDates=[];const mb=document.getElementById('multiSelBtn');if(mb){mb.className='btn btn-outline btn-sm';mb.innerHTML='<i class="fas fa-object-group"></i>Çoklu Seç'}}
+document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('pg-'+p).classList.add('active');document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));if(btn)btn.classList.add('active');renderAll()}
 function renderAll(){renderDash();renderCal();renderLeaves();renderEarn();loadSet();renderYearOverview();renderShiftDist()}
 function setTheme(t){if(!S.cu)return;cu().theme=t;applyTheme(t);saveLS();toast(`${THEME_NAMES[t]} teması`,'info')}
 function applyTheme(t){document.body.className=t==='default'?'':'theme-'+t;document.querySelectorAll('.theme-dot').forEach(d=>d.classList.toggle('active',d.dataset.t===t))}
@@ -154,81 +158,34 @@ function dStr(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'
 function fm(n){if(!n||isNaN(n))return'₺0';return'₺'+n.toLocaleString('tr-TR',{minimumFractionDigits:0,maximumFractionDigits:2})}
 function getStreak(){const u=cu();if(!u)return 0;let s=0,d=new Date();while(true){const ds=dStr(d);if(u.shifts[ds]||u.leaves[ds]){s++;d.setDate(d.getDate()-1)}else{const dw=d.getDay();if(dw===0||dw===6){d.setDate(d.getDate()-1);continue}break}}return s}
 
-/* === ÇEKIRDEK HESAPLAMA — DOKUNULMADI === */
-function getMD(y,m){const u=cu();if(!u)return{};const dim=new Date(y,m+1,0).getDate();let th=0,oh=0,hh=0,wd=0,hdw=0;const wh={};for(let d=1;d<=dim;d++){const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const sh=u.shifts[s];if(!sh)continue;const hrs=calcHr(sh.start,sh.end,sh.break);if(hrs<=0)continue;th+=hrs;wd++;const dt=new Date(y,m,d);const wk=getISOWeek(dt);if(!wh[wk])wh[wk]=0;wh[wk]+=hrs;if(isH(s)){hh+=hrs;hdw++}}oh=0;let rh=0;Object.values(wh).forEach(w=>{if(w>45){oh+=w-45;rh+=45}else rh+=w});let yau=0,ysd=0,wr=0,ud=0;Object.entries(u.leaves).forEach(([k,v])=>{const ld=new Date(k);if(ld.getFullYear()===y){if(v.type==='annual')yau++;if(v.type==='sick')ysd++}if(ld.getFullYear()===y&&ld.getMonth()===m){if(v.type==='weekly')wr++;if(v.type==='unpaid')ud++}});const hr=u.netSalary>0?u.netSalary/MH:0;const bs=u.netSalary,op=oh*hr*1.5,hp=hh*hr,upd=ud*(u.netSalary/30),te=bs+op+hp-upd;return{th,rh,oh,hh,wd,hdw,wh,wr,ud,yau,ysd,hr,bs,op,hp,upd,te,dim}}
+/* === CORE DATA FUNCTION — Returns raw monthly data ===
+   FIX #2/#4: Now returns BOTH yearly AND monthly leave counts separately */
+function getMD(y,m){const u=cu();if(!u)return{};const dim=new Date(y,m+1,0).getDate();let th=0,oh=0,hh=0,wd=0,hdw=0;const wh={};for(let d=1;d<=dim;d++){const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const sh=u.shifts[s];if(!sh)continue;const hrs=calcHr(sh.start,sh.end,sh.break);if(hrs<=0)continue;th+=hrs;wd++;const dt=new Date(y,m,d);const wk=getISOWeek(dt);if(!wh[wk])wh[wk]=0;wh[wk]+=hrs;if(isH(s)){hh+=hrs;hdw++}}
+oh=0;let rh=0;Object.values(wh).forEach(w=>{if(w>45){oh+=w-45;rh+=45}else rh+=w});
+/* Count leaves: yearly totals AND monthly totals */
+let yau=0,ysd=0,mau=0,msd=0,wr=0,ud=0;
+Object.entries(u.leaves).forEach(([k,v])=>{const ld=new Date(k);
+if(ld.getFullYear()===y){if(v.type==='annual')yau++;if(v.type==='sick')ysd++}
+if(ld.getFullYear()===y&&ld.getMonth()===m){if(v.type==='annual')mau++;if(v.type==='sick')msd++;if(v.type==='weekly')wr++;if(v.type==='unpaid')ud++}});
+const hr=u.netSalary>0?u.netSalary/MH:0;const bs=u.netSalary,op=oh*hr*1.5,hp=hh*hr,upd=ud*(u.netSalary/30),te=bs+op+hp-upd;
+return{th,rh,oh,hh,wd,hdw,wh,wr,ud,yau,ysd,mau,msd,hr,bs,op,hp,upd,te,dim}}
+
 function getPrevMD(){let pm=S.cm-1,py=S.cy;if(pm<0){pm=11;py--}return getMD(py,pm)}
 
 /* =============================================================
-   KAZANÇ HESAPLAMA — Tam ay = net maaş mantığı
+   EARNING CALCULATION — Fixed version
    
-   Mantık:
-   - Çalışan aylık net maaşa anlaşmıştır
-   - Tam ay çalışırsa (hafta tatilleri dahil) → net maaşını alır
-   - Ay kaç gün çekerse çeksin (28, 30, 31) fark etmez
-   - Eksik gün varsa (ücretsiz izin, devamsızlık) → günlük kesinti
-   - FM ve tatil çalışma → ek olarak eklenir
+   FIX #3: Don't count future dates as "missing" for current month
+   FIX #4: Use month-specific leave counts (mau, msd) not yearly
+   FIX #5: Holiday hours handling clarified — holiday work = bonus on top
    
-   Formül:
-   Kazanç = NetMaaş - (eksikGün × günlükÜcret) + FM + TatilÇalışma
-   
-   Eksik gün = Ayın gün sayısı - (çalışılan + yıllık izin + rapor + hafta tatili)
-   Günlük ücret = NetMaaş / ayın gerçek gün sayısı
+   Logic:
+   - Employee has agreed monthly net salary
+   - Full month work (including paid leaves) = full salary
+   - Missing days (unpaid leave + unlogged past days) = daily deduction
+   - Overtime and holiday work = extra on top
+   - Future days in current month are NOT counted as missing
    ============================================================= */
-function calcDayBasedEarning(d, netSalary){
-    if(!netSalary || netSalary<=0) return null;
-
-    const daysInMonth  = d.dim;                    // Ayın gerçek gün sayısı (28/29/30/31)
-    const dailyRate    = netSalary / daysInMonth;   // Günlük ücret = maaş / ayın gün sayısı
-    const hourlyRate   = netSalary / MH;
-
-    // Ücretli günler = Çalışılan gün + Hafta tatili + Yıllık izin + Rapor
-    // (bu ayın yıllık izin ve raporunu hesapla)
-    const u = cu();
-    let monthAnnual = 0, monthSick = 0;
-    const y = (d === getMD(S.ey, S.em)) ? S.ey : S.cy;
-    const m = (d === getMD(S.ey, S.em)) ? S.em : S.cm;
-    // Ay bazında yıllık izin ve rapor sayısını bul
-    Object.entries(u.leaves).forEach(([k, v]) => {
-        const ld = new Date(k);
-        if(ld.getFullYear() === y && ld.getMonth() === m){
-            if(v.type === 'annual') monthAnnual++;
-            if(v.type === 'sick') monthSick++;
-        }
-    });
-
-    const paidDays     = d.wd + d.wr + monthAnnual + monthSick;  // Ücretli günler
-    const missingDays  = Math.max(0, daysInMonth - paidDays - d.ud);  // Giriş yapılmamış günler
-    const totalAbsent  = d.ud + missingDays;       // Toplam eksik (ücretsiz + devamsız)
-
-    // Tam ay çalışmışsa tam maaş, eksik varsa kesinti
-    const basePay      = netSalary - (totalAbsent * dailyRate);
-    const overtimePay  = d.oh * hourlyRate * 1.5;
-    const holidayPay   = d.hh * hourlyRate;
-    const totalEarning = Math.max(0, basePay + overtimePay + holidayPay);
-    const workRatio    = paidDays / daysInMonth;
-
-    return {
-        dailyRate, basePay, overtimePay, holidayPay,
-        unpaidDed: totalAbsent * dailyRate,
-        totalEarning,
-        paidDays,
-        workedDays: d.wd,
-        weeklyDays: d.wr,
-        annualDays: monthAnnual,
-        sickDays: monthSick,
-        unpaidDays: d.ud,
-        missingDays,
-        totalAbsent,
-        daysInMonth,
-        totalHours: d.th,
-        overtimeHours: d.oh,
-        holidayHours: d.hh,
-        workRatio,
-        isFullMonth: totalAbsent === 0
-    };
-}
-
-/* Bağlam-bağımsız versiyon: yıl ve ay parametresi alır */
 function calcEarningForMonth(y, m, netSalary){
     const d = getMD(y, m);
     if(!netSalary || netSalary<=0) return null;
@@ -237,22 +194,34 @@ function calcEarningForMonth(y, m, netSalary){
     const dailyRate    = netSalary / daysInMonth;
     const hourlyRate   = netSalary / MH;
 
-    const u = cu();
-    let monthAnnual = 0, monthSick = 0;
-    Object.entries(u.leaves).forEach(([k, v]) => {
-        const ld = new Date(k);
-        if(ld.getFullYear() === y && ld.getMonth() === m){
-            if(v.type === 'annual') monthAnnual++;
-            if(v.type === 'sick') monthSick++;
-        }
-    });
+    /* FIX #4: Use month-specific counts from getMD */
+    const monthAnnual = d.mau;
+    const monthSick   = d.msd;
 
-    const paidDays     = d.wd + d.wr + monthAnnual + monthSick;
-    const missingDays  = Math.max(0, daysInMonth - paidDays - d.ud);
+    const paidDays = d.wd + d.wr + monthAnnual + monthSick;
+
+    /* FIX #3: For current/future months, only count past days without entries as missing */
+    const today = new Date();
+    const isCurrentMonth = (y === today.getFullYear() && m === today.getMonth());
+    const isFutureMonth  = (y > today.getFullYear() || (y === today.getFullYear() && m > today.getMonth()));
+    
+    let countableDays; // How many days should have entries by now
+    if(isFutureMonth){
+        countableDays = 0; // Future month — no missing days
+    } else if(isCurrentMonth){
+        countableDays = today.getDate(); // Only count up to today
+    } else {
+        countableDays = daysInMonth; // Past month — all days countable
+    }
+    
+    const missingDays  = Math.max(0, countableDays - paidDays - d.ud);
     const totalAbsent  = d.ud + missingDays;
 
     const basePay      = netSalary - (totalAbsent * dailyRate);
     const overtimePay  = d.oh * hourlyRate * 1.5;
+    /* FIX #5: Holiday pay is the EXTRA bonus for working on a holiday.
+       The regular pay for those hours is already included in basePay via worked days.
+       So holiday bonus = hours × hourly rate × 1.0 (the extra multiplier) */
     const holidayPay   = d.hh * hourlyRate;
     const totalEarning = Math.max(0, basePay + overtimePay + holidayPay);
     const workRatio    = paidDays / daysInMonth;
@@ -266,8 +235,9 @@ function calcEarningForMonth(y, m, netSalary){
         unpaidDays: d.ud, missingDays, totalAbsent,
         daysInMonth, totalHours: d.th,
         overtimeHours: d.oh, holidayHours: d.hh,
-        workRatio, isFullMonth: totalAbsent === 0,
-        // getMD çıktısını da taşı
+        workRatio,
+        isFullMonth: totalAbsent === 0,
+        isCurrentMonth, isFutureMonth, countableDays,
         _md: d
     };
 }
@@ -280,12 +250,14 @@ function renderYearOverview(){const el=document.getElementById('yearOverview');l
 function renderDash(){const u=cu();if(!u)return;const d=getMD(S.cy,S.cm),prev=getPrevMD();document.getElementById('dashSub').textContent=`${MTR[S.cm]} ${S.cy} — ${u.name}`;const streak=getStreak();document.getElementById('dashStreak').innerHTML=streak>0?`<div class="streak-badge"><i class="fas fa-fire"></i>${streak} gün seri</div>`:'';
 const e=u.netSalary?calcEarningForMonth(S.cy,S.cm,u.netSalary):null;
 function cmp(c,p){if(!p)return'<span class="change neutral">—</span>';const df=c-p,pc=p?((df/p)*100).toFixed(0):0;if(df>0)return`<span class="change up"><i class="fas fa-arrow-up"></i>${pc}%</span>`;if(df<0)return`<span class="change down"><i class="fas fa-arrow-down"></i>${Math.abs(pc)}%</span>`;return'<span class="change neutral">→ 0%</span>'}
-document.getElementById('statsEl').innerHTML=`<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-clock"></i></div><div class="val">${d.th.toFixed(1)}</div><div class="lbl">Toplam Saat</div>${cmp(d.th,prev.th)}</div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-fire"></i></div><div class="val">${d.oh.toFixed(1)}</div><div class="lbl">Fazla Mesai</div>${cmp(d.oh,prev.oh)}</div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-wallet"></i></div><div class="val">${e?fm(e.totalEarning):'—'}</div><div class="lbl">Kazanç</div></div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-flag"></i></div><div class="val">${d.hdw}</div><div class="lbl">Tatil Çalışma</div></div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-calendar-check"></i></div><div class="val">${d.wd}/${d.dim}</div><div class="lbl">Çalışma Günü</div></div>`;
+document.getElementById('statsEl').innerHTML=`<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-clock"></i></div><div class="val">${d.th.toFixed(1)}</div><div class="lbl">Toplam Saat</div>${cmp(d.th,prev.th)}</div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-fire"></i></div><div class="val">${d.oh.toFixed(1)}</div><div class="lbl">Fazla Mesai</div>${cmp(d.oh,prev.oh)}</div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-wallet"></i></div><div class="val">${e?fm(e.totalEarning):'—'}</div><div class="lbl">Kazanç${e&&e.isCurrentMonth?' (tahmini)':''}</div></div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-flag"></i></div><div class="val">${d.hdw}</div><div class="lbl">Tatil Çalışma</div></div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-calendar-check"></i></div><div class="val">${d.wd}/${d.dim}</div><div class="lbl">Çalışma Günü</div></div>`;
 const wks=Object.entries(d.wh).sort((a,b)=>a[0].localeCompare(b[0]));let wc='';if(!wks.length)wc='<div class="empty"><i class="fas fa-calendar-times"></i><p>Bu ay vardiya yok</p><div class="empty-action"><button class="btn btn-soft btn-sm" onclick="go(\'calendar\',document.querySelectorAll(\'.nav-tab\')[1])"><i class="fas fa-plus"></i>Vardiya Ekle</button></div></div>';else wks.forEach(([,h],i)=>{const p=Math.min(100,h/60*100);wc+=`<div class="wk-row"><span class="label">${i+1}. Hafta</span><div class="track"><div class="limit-line" style="left:${45/60*100}%"></div><div class="fill ${h>45?'ot':'ok'}" style="width:${p}%">${h.toFixed(1)}s</div></div><span class="hrs ${h>45?'overtime':''}">${h.toFixed(1)}</span></div>`});document.getElementById('weekChart').innerHTML=wc;
-const al=u.annualLeave||14,ar=al-d.yau;let info='';if(!u.netSalary)info='<div class="hint" style="margin-bottom:8px"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';info+=`<div class="info-row"><span class="k"><i class="fas fa-umbrella-beach"></i>Kalan Y.İzin</span><span class="v ${ar<=3?'neg':''}">${ar}g</span></div><div class="info-row"><span class="k"><i class="fas fa-notes-medical"></i>Rapor</span><span class="v">${d.ysd}g</span></div><div class="info-row"><span class="k"><i class="fas fa-couch"></i>Hafta Tatili (ücretli)</span><span class="v">${d.wr}g</span></div><div class="info-row"><span class="k"><i class="fas fa-coins"></i>Saatlik</span><span class="v">${u.netSalary?fm(d.hr):'—'}</span></div><div class="info-row"><span class="k"><i class="fas fa-fire"></i>FM Ücreti</span><span class="v pos">${u.netSalary?fm(d.op):'—'}</span></div><div class="info-row"><span class="k"><i class="fas fa-chart-line"></i>Günlük Ort.</span><span class="v">${d.wd>0?(d.th/d.wd).toFixed(1)+'s':'—'}</span></div>`;document.getElementById('dashInfo').innerHTML=info;
+const al=u.annualLeave||14,ar=al-d.yau;let info='';if(!u.netSalary)info='<div class="hint" style="margin-bottom:8px"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';info+=`<div class="info-row"><span class="k"><i class="fas fa-umbrella-beach"></i>Kalan Y.İzin</span><span class="v ${ar<=3?'neg':''}">${ar}g</span></div><div class="info-row"><span class="k"><i class="fas fa-notes-medical"></i>Rapor (yıllık)</span><span class="v">${d.ysd}g</span></div><div class="info-row"><span class="k"><i class="fas fa-couch"></i>Hafta Tatili (ay)</span><span class="v">${d.wr}g</span></div><div class="info-row"><span class="k"><i class="fas fa-coins"></i>Saatlik</span><span class="v">${u.netSalary?fm(d.hr):'—'}</span></div><div class="info-row"><span class="k"><i class="fas fa-fire"></i>FM Ücreti</span><span class="v pos">${u.netSalary?fm(d.op):'—'}</span></div><div class="info-row"><span class="k"><i class="fas fa-chart-line"></i>Günlük Ort.</span><span class="v">${d.wd>0?(d.th/d.wd).toFixed(1)+'s':'—'}</span></div>`;document.getElementById('dashInfo').innerHTML=info;
 const deb=document.getElementById('dashEarnSummary');
 if(e&&(d.wd>0||d.wr>0)){
-deb.innerHTML=`<div class="esb" style="margin-top:16px"><div class="esb-title"><i class="fas fa-calculator"></i>${MTR[S.cm]} Kazanç Özeti (${e.daysInMonth} günlük ay)</div><div class="esb-grid"><div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.paidDays}<small style="font-size:11px;color:var(--t3)">g</small></div><div class="esb-lbl">Ücretli Gün</div></div><div class="esb-item"><div class="esb-val" style="color:${e.isFullMonth?'var(--g)':'var(--acc)'}"><small style="font-size:11px">${e.isFullMonth?'✓':'−'+e.totalAbsent+'g'}</small></div><div class="esb-lbl">${e.isFullMonth?'Tam Ay':'Eksik'}</div></div><div class="esb-item"><div class="esb-val" style="color:var(--g)">${fm(e.basePay)}</div><div class="esb-lbl">Maaş</div></div><div class="esb-item"><div class="esb-val" style="color:var(--acc)">${fm(e.totalEarning)}</div><div class="esb-lbl">Toplam</div></div></div><div class="esb-progress"><div class="esb-pbar"><div class="esb-pfill" style="width:${Math.min(100,e.workRatio*100)}%;background:var(--pg)"></div></div><div class="esb-pmeta"><span>${e.paidDays}/${e.daysInMonth} ücretli gün${e.isFullMonth?' — Tam maaş':''}</span><span>%${Math.round(e.workRatio*100)}</span></div></div></div>`}else deb.innerHTML=''}
+const statusLabel=e.isCurrentMonth?'Devam ediyor':e.isFullMonth?'Tam Ay':'−'+e.totalAbsent+'g';
+const statusColor=e.isCurrentMonth?'var(--s)':e.isFullMonth?'var(--g)':'var(--acc)';
+deb.innerHTML=`<div class="esb" style="margin-top:16px"><div class="esb-title"><i class="fas fa-calculator"></i>${MTR[S.cm]} Kazanç Özeti (${e.daysInMonth} günlük ay)${e.isCurrentMonth?' — <span style="color:var(--s)">devam ediyor</span>':''}</div><div class="esb-grid"><div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.paidDays}<small style="font-size:11px;color:var(--t3)">g</small></div><div class="esb-lbl">Ücretli Gün</div></div><div class="esb-item"><div class="esb-val" style="color:${statusColor}"><small style="font-size:11px">${statusLabel}</small></div><div class="esb-lbl">${e.isCurrentMonth?'Durum':e.isFullMonth?'Tam Ay':'Eksik'}</div></div><div class="esb-item"><div class="esb-val" style="color:var(--g)">${fm(e.basePay)}</div><div class="esb-lbl">Maaş</div></div><div class="esb-item"><div class="esb-val" style="color:var(--acc)">${fm(e.totalEarning)}</div><div class="esb-lbl">Toplam</div></div></div><div class="esb-progress"><div class="esb-pbar"><div class="esb-pfill" style="width:${Math.min(100,e.workRatio*100)}%;background:var(--pg)"></div></div><div class="esb-pmeta"><span>${e.paidDays}/${e.isCurrentMonth?e.countableDays:e.daysInMonth} ücretli gün${e.isFullMonth&&!e.isCurrentMonth?' — Tam maaş':''}</span><span>%${Math.round(e.workRatio*100)}</span></div></div></div>`}else deb.innerHTML=''}
 
 function toggleMultiSelect(){S.multiSelect=!S.multiSelect;S.selectedDates=[];const btn=document.getElementById('multiSelBtn');if(S.multiSelect){btn.className='btn btn-primary btn-sm';btn.innerHTML='<i class="fas fa-check"></i>Bitir';toast('Çoklu seçim açık','info')}else{btn.className='btn btn-outline btn-sm';btn.innerHTML='<i class="fas fa-object-group"></i>Çoklu Seç'}renderCal()}
 function renderMultiBar(){const el=document.getElementById('multiBar');if(!S.multiSelect||!S.selectedDates.length){el.innerHTML='';return}el.innerHTML=`<div class="multi-select-bar"><span><i class="fas fa-check-circle"></i> ${S.selectedDates.length} gün</span><div class="actions"><button class="btn btn-soft btn-xs" onclick="multiApplyShift()"><i class="fas fa-clock"></i>Vardiya</button><button class="btn btn-xs" style="background:rgba(96,165,250,.15);color:#60a5fa" onclick="multiApplyLeave('annual')">Y.İzin</button><button class="btn btn-xs" style="background:var(--p4);color:var(--p)" onclick="multiApplyLeave('weekly')">H.Tatil</button><button class="btn btn-danger btn-xs" onclick="multiClear()"><i class="fas fa-times"></i></button></div></div>`}
@@ -299,7 +271,9 @@ for(let d=1;d<=dim;d++){const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d)
 const tot=sd2+dim,rem=tot%7===0?0:7-(tot%7);for(let i=1;i<=rem;i++){const e=document.createElement('div');e.className='cal-cell out';e.innerHTML=`<div class="num">${i}</div>`;g.appendChild(e)}
 document.getElementById('calSummary').textContent=mD>0?`${mD}g • ${mH.toFixed(1)}s`:'';
 const ceb=document.getElementById('calEarnBar');const md=getMD(y,m);
-if(u.netSalary>0&&(md.wd>0||md.wr>0)){const e=calcEarningForMonth(y,m,u.netSalary);ceb.innerHTML=`<div class="cal-earn-bar"><div class="ceb"><i class="fas fa-calendar"></i>${e.daysInMonth} günlük ay</div><div class="ceb"><i class="fas fa-calendar-check"></i>Ücretli: <b>${e.paidDays}g</b> ${e.isFullMonth?'<span style="color:var(--g)">✓ Tam</span>':'<span style="color:var(--acc)">−'+e.totalAbsent+'g</span>'}</div><div class="ceb"><i class="fas fa-money-bill"></i>Maaş: <b>${fm(e.basePay)}</b></div>${e.overtimePay>0?`<div class="ceb"><i class="fas fa-fire"></i>FM: <b style="color:var(--acc)">+${fm(e.overtimePay)}</b></div>`:''}${e.holidayPay>0?`<div class="ceb"><i class="fas fa-flag"></i>Tatil: <b style="color:var(--g)">+${fm(e.holidayPay)}</b></div>`:''}<div class="ceb"><i class="fas fa-wallet"></i>Toplam: <b class="accent">${fm(e.totalEarning)}</b></div></div>`}else ceb.innerHTML='';
+if(u.netSalary>0&&(md.wd>0||md.wr>0)){const e=calcEarningForMonth(y,m,u.netSalary);
+const statusNote=e.isCurrentMonth?' (devam ediyor)':e.isFutureMonth?' (gelecek)':'';
+ceb.innerHTML=`<div class="cal-earn-bar"><div class="ceb"><i class="fas fa-calendar"></i>${e.daysInMonth} günlük ay${statusNote}</div><div class="ceb"><i class="fas fa-calendar-check"></i>Ücretli: <b>${e.paidDays}g</b> ${e.isCurrentMonth?'<span style="color:var(--s)">devam</span>':e.isFullMonth?'<span style="color:var(--g)">✓ Tam</span>':'<span style="color:var(--acc)">−'+e.totalAbsent+'g</span>'}</div><div class="ceb"><i class="fas fa-money-bill"></i>Maaş: <b>${fm(e.basePay)}</b></div>${e.overtimePay>0?`<div class="ceb"><i class="fas fa-fire"></i>FM: <b style="color:var(--acc)">+${fm(e.overtimePay)}</b></div>`:''}${e.holidayPay>0?`<div class="ceb"><i class="fas fa-flag"></i>Tatil: <b style="color:var(--g)">+${fm(e.holidayPay)}</b></div>`:''}<div class="ceb"><i class="fas fa-wallet"></i>Toplam: <b class="accent">${fm(e.totalEarning)}</b></div></div>`}else ceb.innerHTML='';
 renderCopyBar();renderMultiBar()}
 function chgM(d){S.cm+=d;if(S.cm>11){S.cm=0;S.cy++}if(S.cm<0){S.cm=11;S.cy--}renderCal();renderDash();renderYearOverview();renderShiftDist()}
 function goToday(){S.cm=new Date().getMonth();S.cy=new Date().getFullYear();renderCal();renderDash();renderYearOverview();renderShiftDist()}
@@ -315,7 +289,7 @@ function mMode(t,btn){S.mt=t;document.querySelectorAll('.mode-tab').forEach(b=>b
 function selLT(t,el){S.lt=t;document.querySelectorAll('.lt-opt').forEach(o=>o.classList.remove('active'));if(el)el.classList.add('active')}
 function applyPreset(key,el){document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));if(el)el.classList.add('active');if(key!=='custom'&&PRESETS[key]){document.getElementById('iStart').value=PRESETS[key].start;document.getElementById('iEnd').value=PRESETS[key].end;document.getElementById('iBreak').value=String(PRESETS[key].break)}updResult()}
 function updResult(){const s=document.getElementById('iStart').value,e=document.getElementById('iEnd').value,b=parseInt(document.getElementById('iBreak').value)||0;if(!s||!e)return;const net=calcHr(s,e,b),gross=grossHr(s,e);document.getElementById('rbGross').textContent=gross.toFixed(1)+'s';document.getElementById('rbBreak').textContent=b+'dk';document.getElementById('rbNet').textContent=net.toFixed(1)+'s';const ot=net>7.5?net-7.5:0;document.getElementById('rbOT').textContent=ot>0?'+'+ot.toFixed(1)+'s':'—';document.getElementById('rbOT').style.color=ot>0?'var(--acc)':'var(--t3)';const u=cu(),ep=document.getElementById('mEarningPreview');if(u.netSalary>0&&net>0){const hr=u.netSalary/MH,isHol=isH(S.sd);let earn=0;if(isHol)earn=net*hr;if(ot>0)earn+=ot*hr*0.5;ep.textContent=earn>0?`💰 Ek kazanç: ~${fm(earn)}`:'Ek kazanç yok'}else ep.textContent=''}
-function saveEntry(){const u=cu(),s=S.sd;if(S.mt==='shift'){const st=document.getElementById('iStart').value,en=document.getElementById('iEnd').value,br=parseInt(document.getElementById('iBreak').value)||0;if(!st||!en){toast('Saatleri girin','error');return}const hrs=calcHr(st,en,br);if(hrs<=0){toast('Geçersiz aralık','error');return}if(hrs>16){toast('16s sınırı','warning');return}u.shifts[s]={start:st,end:en,break:br};delete u.leaves[s];toast(`${hrs.toFixed(1)}s kaydedildi`,'success')}else{if(!S.lt){toast('Tür seçin','error');return}const lb={annual:'Yıllık İzin',weekly:'Hafta Tatili',sick:'Rapor',unpaid:'Ücretsiz İzin'};if(S.lt==='annual'){const al=u.annualLeave||14,d=getMD(S.cy,S.cm);if(d.yau>=al&&!u.leaves[s]){toast('İzin hakkı doldu!','error');return}}u.leaves[s]={type:S.lt,note:document.getElementById('iNote').value};delete u.shifts[s];toast(`${lb[S.lt]} kaydedildi`,'success')}saveLS();closeM();renderAll()}
+function saveEntry(){const u=cu(),s=S.sd;if(S.mt==='shift'){const st=document.getElementById('iStart').value,en=document.getElementById('iEnd').value,br=parseInt(document.getElementById('iBreak').value)||0;if(!st||!en){toast('Saatleri girin','error');return}const hrs=calcHr(st,en,br);if(hrs<=0){toast('Geçersiz aralık','error');return}if(hrs>16){toast('16s sınırı','warning');return}u.shifts[s]={start:st,end:en,break:br};delete u.leaves[s];toast(`${hrs.toFixed(1)}s kaydedildi`,'success')}else{if(!S.lt){toast('Tür seçin','error');return}const lb={annual:'Yıllık İzin',weekly:'Hafta Tatili',sick:'Rapor',unpaid:'Ücretsiz İzin'};if(S.lt==='annual'){const al=u.annualLeave||14;/* FIX: Use yearly count from getMD for the selected date's year */const selY=new Date(s).getFullYear();let totalUsed=0;Object.entries(u.leaves).forEach(([k,v])=>{if(new Date(k).getFullYear()===selY&&v.type==='annual')totalUsed++});if(totalUsed>=al&&!u.leaves[s]){toast('İzin hakkı doldu!','error');return}}u.leaves[s]={type:S.lt,note:document.getElementById('iNote').value};delete u.shifts[s];toast(`${lb[S.lt]} kaydedildi`,'success')}saveLS();closeM();renderAll()}
 function delEntry(){showConfirm('Sil','Bu girdiyi silmek istiyor musunuz?',()=>{delete cu().shifts[S.sd];delete cu().leaves[S.sd];saveLS();closeM();renderAll();toast('Silindi','success')})}
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeM()});
 function renderLeaves(){const u=cu(),y=S.cy,d=getMD(y,S.cm),at=u.annualLeave||14,ar=at-d.yau;document.getElementById('leaveYr').textContent=y;document.getElementById('leaveCards').innerHTML=`<div class="card leave-c"><h4><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Yıllık İzin</h4><div class="big" style="color:#60a5fa">${ar} <small>/ ${at}g</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,(d.yau/Math.max(at,1))*100)}%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div><div class="meta"><span>Kullanılan: ${d.yau}</span><span>Kalan: ${ar}</span></div></div><div class="card leave-c"><h4><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor</h4><div class="big" style="color:#fb923c">${d.ysd} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ysd/20*100)}%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div><div class="meta"><span>Bu yıl</span><span>${d.ysd}g</span></div></div><div class="card leave-c"><h4><i class="fas fa-couch" style="color:var(--p)"></i>Hafta Tatili</h4><div class="big" style="color:var(--p)">${d.wr} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.wr/5*100)}%;background:var(--pg)"></div></div><div class="meta"><span>${MTR[S.cm]} (ücretli)</span><span>${d.wr}g</span></div></div><div class="card leave-c"><h4><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz</h4><div class="big" style="color:var(--r)">${d.ud} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ud/5*100)}%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div><div class="meta"><span>Kesinti</span><span>${u.netSalary?fm(d.ud*(u.netSalary/d.dim)):'—'}</span></div></div>`;
@@ -327,33 +301,38 @@ if(!u.netSalary){document.getElementById('earnContent').innerHTML='<div class="h
 if(d.wd===0&&d.wr===0){document.getElementById('earnContent').innerHTML='<div class="empty"><i class="fas fa-calendar-times"></i><p>Bu ay veri yok</p></div>';return}
 const e=calcEarningForMonth(y,m,u.netSalary);
 
-let pm=m-1,py=y;if(pm<0){pm=11;py--}const prevE=calcEarningForMonth(py,pm,u.netSalary);const diff=prevE&&prevE.totalEarning>0?e.totalEarning-prevE.totalEarning:0;
+/* FIX #8: Previous month comparison with proper year handling */
+let pm=m-1,py=y;if(pm<0){pm=11;py--}
+const prevE=calcEarningForMonth(py,pm,u.netSalary);
+const diff=prevE&&prevE.totalEarning>0?e.totalEarning-prevE.totalEarning:0;
+
+const statusText=e.isCurrentMonth?'Ay devam ediyor — şu ana kadarki hesaplama':e.isFutureMonth?'Gelecek ay':e.isFullMonth?'Tam ay çalışma — Net maaş + ekler':'Eksik gün var — '+e.totalAbsent+'g kesinti';
 
 document.getElementById('earnContent').innerHTML=`
-<div class="earn-hero"><div class="sub">KAZANÇ — ${MTR[m].toUpperCase()} ${y} (${e.daysInMonth} GÜN)</div><div class="amt">${fm(e.totalEarning)}</div><div class="info">${e.isFullMonth?'Tam ay çalışma — Net maaş + ekler':'Eksik gün var — '+e.totalAbsent+'g kesinti'} • ${e.totalHours.toFixed(1)} saat</div>${prevE&&prevE.totalEarning>0?`<div class="comparison"><span>${diff>=0?'↑':'↓'} Önceki aya göre ${fm(Math.abs(diff))}</span></div>`:''}</div>
+<div class="earn-hero"><div class="sub">KAZANÇ — ${MTR[m].toUpperCase()} ${y} (${e.daysInMonth} GÜN)${e.isCurrentMonth?' — DEVAM EDİYOR':''}</div><div class="amt">${fm(e.totalEarning)}${e.isCurrentMonth?' <small style="font-size:14px;opacity:.6">tahmini</small>':''}</div><div class="info">${statusText} • ${e.totalHours.toFixed(1)} saat</div>${prevE&&prevE.totalEarning>0&&!prevE.isFutureMonth?`<div class="comparison"><span>${diff>=0?'↑':'↓'} Önceki aya göre ${fm(Math.abs(diff))}</span></div>`:''}</div>
 
 <div class="esb">
-<div class="esb-title"><i class="fas fa-calculator"></i>Kazanç Detayı — ${e.daysInMonth} Günlük Ay</div>
+<div class="esb-title"><i class="fas fa-calculator"></i>Kazanç Detayı — ${e.daysInMonth} Günlük Ay${e.isCurrentMonth?' ('+e.countableDays+'. güne kadar)':''}</div>
 <div class="esb-grid">
 <div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.workedDays}<small style="font-size:11px;color:var(--t3)">g</small></div><div class="esb-lbl">Çalışılan</div></div>
 <div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.weeklyDays+e.annualDays+e.sickDays}<small style="font-size:11px;color:var(--t3)">g</small></div><div class="esb-lbl">Ücretli İzin</div></div>
-<div class="esb-item"><div class="esb-val" style="color:${e.isFullMonth?'var(--g)':'var(--acc)'}"><small style="font-size:11px">${e.isFullMonth?'✓ TAM':'−'+e.totalAbsent+'g'}</small></div><div class="esb-lbl">${e.isFullMonth?'Tam Ay':'Eksik'}</div></div>
+<div class="esb-item"><div class="esb-val" style="color:${e.isCurrentMonth?'var(--s)':e.isFullMonth?'var(--g)':'var(--acc)'}"><small style="font-size:11px">${e.isCurrentMonth?'⏳ '+e.countableDays+'/'+e.daysInMonth:e.isFullMonth?'✓ TAM':'−'+e.totalAbsent+'g'}</small></div><div class="esb-lbl">${e.isCurrentMonth?'Devam':e.isFullMonth?'Tam Ay':'Eksik'}</div></div>
 <div class="esb-item"><div class="esb-val" style="color:var(--t1)">${fm(e.dailyRate)}</div><div class="esb-lbl">Günlük (/${e.daysInMonth})</div></div>
 </div>
-<div class="esb-progress"><div class="esb-pbar"><div class="esb-pfill" style="width:${Math.min(100,e.workRatio*100)}%;background:${e.isFullMonth?'var(--pg)':'linear-gradient(90deg,var(--acc),#fbbf24)'}"></div></div><div class="esb-pmeta"><span>${e.paidDays}/${e.daysInMonth} ücretli gün${e.isFullMonth?' — Tam maaş':''}</span><span>%${Math.round(e.workRatio*100)}</span></div></div>
+<div class="esb-progress"><div class="esb-pbar"><div class="esb-pfill" style="width:${Math.min(100,(e.isCurrentMonth?e.paidDays/e.countableDays:e.workRatio)*100)}%;background:${e.isFullMonth||e.isCurrentMonth?'var(--pg)':'linear-gradient(90deg,var(--acc),#fbbf24)'}"></div></div><div class="esb-pmeta"><span>${e.paidDays}/${e.isCurrentMonth?e.countableDays+' (bugüne kadar)':e.daysInMonth} ücretli gün${e.isFullMonth&&!e.isCurrentMonth?' — Tam maaş':''}</span><span>%${Math.round((e.isCurrentMonth&&e.countableDays>0?e.paidDays/e.countableDays:e.workRatio)*100)}</span></div></div>
 <div class="esb-detail">
 <div class="esd"><span class="ek"><i class="fas fa-money-bill"></i>Net Maaş (anlaşılan)</span><span class="ev">${fm(u.netSalary)}</span></div>
 ${e.totalAbsent>0?`<div class="esd"><span class="ek"><i class="fas fa-minus-circle"></i>Eksik Gün Kesintisi (${e.totalAbsent}g × ${fm(e.dailyRate)})</span><span class="ev neg">-${fm(e.totalAbsent*e.dailyRate)}</span></div>`:''}
-${e.totalAbsent>0?`<div class="esd"><span class="ek" style="padding-left:22px;font-size:10px;color:var(--t3)">↳ ${e.unpaidDays>0?e.unpaidDays+'g ücretsiz izin':''} ${e.missingDays>0?(e.unpaidDays>0?' + ':'')+e.missingDays+'g giriş yapılmamış':''}</span><span class="ev" style="font-size:10px;color:var(--t3)"></span></div>`:''}
+${e.totalAbsent>0?`<div class="esd"><span class="ek" style="padding-left:22px;font-size:10px;color:var(--t3)">↳ ${e.unpaidDays>0?e.unpaidDays+'g ücretsiz izin':''}${e.missingDays>0?(e.unpaidDays>0?' + ':'')+e.missingDays+'g giriş yapılmamış':''}</span><span class="ev" style="font-size:10px;color:var(--t3)"></span></div>`:''}
 <div class="esd"><span class="ek"><i class="fas fa-equals"></i>Ay Maaşı</span><span class="ev">${fm(e.basePay)}</span></div>
 <div class="esd"><span class="ek"><i class="fas fa-fire"></i>Fazla Mesai (${e.overtimeHours.toFixed(1)}s × ${fm(d.hr)} × 1.5)</span><span class="ev pos">+${fm(e.overtimePay)}</span></div>
-<div class="esd"><span class="ek"><i class="fas fa-flag"></i>Tatil Çalışma (${e.holidayHours.toFixed(1)}s × ${fm(d.hr)})</span><span class="ev pos">+${fm(e.holidayPay)}</span></div>
+<div class="esd"><span class="ek"><i class="fas fa-flag"></i>Tatil Çalışma Bonusu (${e.holidayHours.toFixed(1)}s × ${fm(d.hr)})</span><span class="ev pos">+${fm(e.holidayPay)}</span></div>
 <div class="esd total"><span class="ek"><i class="fas fa-wallet"></i><b>TOPLAM KAZANÇ</b></span><span class="ev">${fm(e.totalEarning)}</span></div>
 </div>
 </div>
 
 <div style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:10px;border:1px solid var(--b1)">
-<div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px"><i class="fas fa-list" style="color:var(--p);margin-right:4px"></i>Gün Dağılımı</div>
+<div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px"><i class="fas fa-list" style="color:var(--p);margin-right:4px"></i>Gün Dağılımı${e.isCurrentMonth?' (bugüne kadar)':''}</div>
 <div style="display:flex;gap:6px;flex-wrap:wrap">
 <span style="padding:4px 10px;border-radius:6px;background:rgba(52,211,153,.1);color:var(--g);font-size:11px;font-weight:700">Çalışma: ${e.workedDays}g</span>
 ${e.weeklyDays>0?`<span style="padding:4px 10px;border-radius:6px;background:var(--p4);color:var(--p);font-size:11px;font-weight:700">H.Tatil: ${e.weeklyDays}g</span>`:''}
@@ -361,6 +340,7 @@ ${e.annualDays>0?`<span style="padding:4px 10px;border-radius:6px;background:rgb
 ${e.sickDays>0?`<span style="padding:4px 10px;border-radius:6px;background:rgba(251,146,60,.15);color:#fb923c;font-size:11px;font-weight:700">Rapor: ${e.sickDays}g</span>`:''}
 ${e.unpaidDays>0?`<span style="padding:4px 10px;border-radius:6px;background:rgba(248,113,113,.1);color:var(--r);font-size:11px;font-weight:700">Ücretsiz: ${e.unpaidDays}g</span>`:''}
 ${e.missingDays>0?`<span style="padding:4px 10px;border-radius:6px;background:rgba(148,163,184,.1);color:#94a3b8;font-size:11px;font-weight:700">Boş: ${e.missingDays}g</span>`:''}
+${e.isCurrentMonth&&(e.daysInMonth-e.countableDays)>0?`<span style="padding:4px 10px;border-radius:6px;background:rgba(56,189,248,.1);color:var(--s);font-size:11px;font-weight:700">Kalan: ${e.daysInMonth-e.countableDays}g</span>`:''}
 </div>
 </div>
 
