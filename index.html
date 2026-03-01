@@ -67,7 +67,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .cal-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}.cal-nav{display:flex;align-items:center;gap:6px}.cal-nav-btn{width:36px;height:36px;border-radius:10px;border:1px solid var(--b1);background:var(--card);cursor:pointer;font-size:13px;color:var(--t1);transition:all .2s;display:flex;align-items:center;justify-content:center}.cal-nav-btn:hover{background:var(--p2);color:#fff}.cal-month-title{font-size:18px;font-weight:800;min-width:180px;text-align:center}
 .btn{padding:8px 16px;border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .25s;display:inline-flex;align-items:center;gap:6px}.btn:active{transform:scale(.96)}.btn-primary{background:var(--p2);color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.3)}.btn-primary:hover{background:var(--p)}.btn-soft{background:var(--p4);color:var(--p)}.btn-outline{background:transparent;border:1.5px solid var(--b1);color:var(--t2)}.btn-outline:hover{border-color:var(--p);color:var(--p)}.btn-danger{background:transparent;border:1.5px solid rgba(248,113,113,.3);color:var(--r)}.btn-danger:hover{background:var(--r);color:#fff}.btn-ghost{background:none;border:1.5px solid var(--b1);color:var(--t2)}.btn-ghost:hover{background:var(--bg3)}.btn-sm{padding:5px 12px;font-size:11px;border-radius:7px}.btn-xs{padding:3px 8px;font-size:10px;border-radius:5px}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.cal-dname{text-align:center;font-size:10px;font-weight:700;color:var(--t3);padding:8px 0;text-transform:uppercase;letter-spacing:.8px}
-.cal-cell{min-height:82px;border-radius:10px;padding:6px 7px;cursor:pointer;border:1.5px solid transparent;transition:all .2s;background:var(--card2);position:relative}.cal-cell:hover{border-color:var(--p);box-shadow:var(--sh2);transform:translateY(-1px);z-index:2}.cal-cell.out{opacity:.12;pointer-events:none}.cal-cell.today{border-color:var(--p);background:var(--p4)}.cal-cell.today::after{content:'';position:absolute;top:4px;right:4px;width:6px;height:6px;border-radius:50%;background:var(--p);animation:todayPulse 2s ease-in-out infinite}@keyframes todayPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}.cal-cell.holiday{background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.12)}.cal-cell.has-shift{background:rgba(52,211,153,.06);border-color:rgba(52,211,153,.1)}.cal-cell.leave-annual{background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.2)}.cal-cell.leave-weekly{background:var(--p4);border-color:rgba(255,255,255,.06)}.cal-cell.leave-sick{background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.2)}.cal-cell.leave-unpaid{background:rgba(148,163,184,.08);border-color:rgba(148,163,184,.2)}.cal-cell .num{font-size:12px;font-weight:800;display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}.cal-cell .num small{font-weight:500;color:var(--t3);font-size:9px}.cal-cell .hrs-display{font-size:16px;font-weight:900;color:var(--g);line-height:1;margin:2px 0}.cal-cell .hrs-display.overtime{color:var(--acc)}.cal-cell .shift-time{font-size:9px;color:var(--t2)}.cal-cell .leave-display{margin-top:2px;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:800}.cal-cell .leave-display i{font-size:12px}.cal-cell .leave-display.ld-annual{color:#60a5fa}.cal-cell .leave-display.ld-weekly{color:var(--p)}.cal-cell .leave-display.ld-sick{color:#fb923c}.cal-cell .leave-display.ld-unpaid{color:#94a3b8}.cal-cell .leave-label{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:1px}.cal-cell .leave-label.ll-annual{background:rgba(96,165,250,.15);color:#60a5fa}.cal-cell .leave-label.ll-weekly{background:var(--p4);color:var(--p)}.cal-cell .leave-label.ll-sick{background:rgba(251,146,60,.15);color:#fb923c}.cal-cell .leave-label.ll-unpaid{background:rgba(148,163,184,.15);color:#94a3b8}.cal-cell .hol-tag{font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(248,113,113,.15);color:var(--r);display:inline-block;margin-top:1px}
+.cal-cell{min-height:82px;border-radius:10px;padding:6px 7px;cursor:pointer;border:1.5px solid transparent;transition:all .2s;background:var(--card2);position:relative}.cal-cell:hover{border-color:var(--p);box-shadow:var(--sh2);transform:translateY(-1px);z-index:2}.cal-cell:focus{outline:2px solid var(--p);outline-offset:2px}.cal-cell.out{opacity:.12;pointer-events:none}.cal-cell.today{border-color:var(--p);background:var(--p4)}.cal-cell.today::after{content:'';position:absolute;top:4px;right:4px;width:6px;height:6px;border-radius:50%;background:var(--p);animation:todayPulse 2s ease-in-out infinite}@keyframes todayPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}.cal-cell.holiday{background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.12)}.cal-cell.has-shift{background:rgba(52,211,153,.06);border-color:rgba(52,211,153,.1)}.cal-cell.leave-annual{background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.2)}.cal-cell.leave-weekly{background:var(--p4);border-color:rgba(255,255,255,.06)}.cal-cell.leave-sick{background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.2)}.cal-cell.leave-unpaid{background:rgba(148,163,184,.08);border-color:rgba(148,163,184,.2)}.cal-cell .num{font-size:12px;font-weight:800;display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}.cal-cell .num small{font-weight:500;color:var(--t3);font-size:9px}.cal-cell .hrs-display{font-size:16px;font-weight:900;color:var(--g);line-height:1;margin:2px 0}.cal-cell .hrs-display.overtime{color:var(--acc)}.cal-cell .shift-time{font-size:9px;color:var(--t2)}.cal-cell .leave-display{margin-top:2px;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:800}.cal-cell .leave-display i{font-size:12px}.cal-cell .leave-display.ld-annual{color:#60a5fa}.cal-cell .leave-display.ld-weekly{color:var(--p)}.cal-cell .leave-display.ld-sick{color:#fb923c}.cal-cell .leave-display.ld-unpaid{color:#94a3b8}.cal-cell .leave-label{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:1px}.cal-cell .leave-label.ll-annual{background:rgba(96,165,250,.15);color:#60a5fa}.cal-cell .leave-label.ll-weekly{background:var(--p4);color:var(--p)}.cal-cell .leave-label.ll-sick{background:rgba(251,146,60,.15);color:#fb923c}.cal-cell .leave-label.ll-unpaid{background:rgba(148,163,184,.15);color:#94a3b8}.cal-cell .hol-tag{font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(248,113,113,.15);color:var(--r);display:inline-block;margin-top:1px}
 .cal-legend{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}.cal-legend span{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--t2)}.cal-legend span i{font-size:8px}
 .copy-bar{background:var(--p4);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:var(--p3);animation:pageIn .3s ease}
 .multi-select-bar{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:var(--g);gap:8px}.multi-select-bar .actions{display:flex;gap:6px}
@@ -106,18 +106,26 @@ table{width:100%;border-collapse:separate;border-spacing:0}th{text-align:left;pa
 <body>
 <div class="toast-container" id="toastContainer"></div>
 <div class="confirm-overlay" id="confirmOverlay"><div class="confirm-box"><div class="confirm-icon ci-danger" id="confirmIcon"><i class="fas fa-exclamation-triangle"></i></div><h4 id="confirmTitle">Emin misiniz?</h4><p id="confirmMsg"></p><div class="confirm-btns"><button class="btn btn-ghost btn-sm" onclick="confirmCancel()">İptal</button><button class="btn btn-danger btn-sm" onclick="confirmOk()"><i class="fas fa-check"></i>Onayla</button></div></div></div>
-<div id="loginScreen"><div class="login-container"><div class="login-brand"><div class="icon"><i class="fas fa-clock"></i></div><h1>ShiftTrack Pro</h1><p>Akıllı Vardiya & Kazanç Yönetimi</p><span class="version">v3.1</span></div><div class="login-cards"><div class="login-card" onclick="login(1)"><div class="avatar" id="la1">1</div><h3 id="ln1">Kullanıcı 1</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti1"></div><span class="last-login" id="ll1"></span></div><div class="login-card" onclick="login(2)"><div class="avatar" id="la2">2</div><h3 id="ln2">Kullanıcı 2</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti2"></div><span class="last-login" id="ll2"></span></div></div></div></div>
+
+<div id="loginScreen"><div class="login-container"><div class="login-brand"><div class="icon"><i class="fas fa-clock"></i></div><h1>ShiftTrack Pro</h1><p>Akıllı Vardiya & Kazanç Yönetimi</p><span class="version">v3.2</span></div><div class="login-cards"><div class="login-card" onclick="login(1)"><div class="avatar" id="la1">1</div><h3 id="ln1">Kullanıcı 1</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti1"></div><span class="last-login" id="ll1"></span></div><div class="login-card" onclick="login(2)"><div class="avatar" id="la2">2</div><h3 id="ln2">Kullanıcı 2</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti2"></div><span class="last-login" id="ll2"></span></div></div></div></div>
+
 <div id="mainApp">
 <header class="topbar"><div class="topbar-brand"><div class="ico"><i class="fas fa-clock"></i></div>ShiftTrack</div><div class="topbar-right"><div class="topbar-user" onclick="go('settings',document.querySelectorAll('.nav-tab')[4])"><div class="av" id="topAv">U</div><span id="topName">Kullanıcı</span></div><button class="topbar-logout" onclick="logout()" title="Çıkış"><i class="fas fa-sign-out-alt"></i></button></div></header>
 <nav class="nav-tabs"><button class="nav-tab active" onclick="go('dashboard',this)"><i class="fas fa-th-large"></i><span>Panel</span></button><button class="nav-tab" onclick="go('calendar',this)"><i class="fas fa-calendar-alt"></i><span>Takvim</span></button><button class="nav-tab" onclick="go('leaves',this)"><i class="fas fa-umbrella-beach"></i><span>İzinler</span></button><button class="nav-tab" onclick="go('earnings',this)"><i class="fas fa-wallet"></i><span>Kazanç</span></button><button class="nav-tab" onclick="go('settings',this)"><i class="fas fa-cog"></i><span>Ayarlar</span></button></nav>
 <main class="content">
 <div class="page active" id="pg-dashboard"><div class="page-head"><div><h1>Kontrol Paneli</h1><p id="dashSub"></p></div><div id="dashStreak"></div></div><div class="stats" id="statsEl"></div><div class="year-overview" id="yearOverview"></div><div class="grid-2"><div class="card"><div class="card-head"><h3><i class="fas fa-chart-bar"></i>Haftalık Saatler</h3><span style="font-size:10px;color:var(--t3)">Limit: 45s</span></div><div class="week-chart" id="weekChart"></div></div><div class="card"><div class="card-head"><h3><i class="fas fa-info-circle"></i>Özet</h3></div><div class="info-list" id="dashInfo"></div></div></div><div id="dashEarnSummary"></div><div class="grid-3" id="shiftDistGrid" style="display:none"><div class="card" style="grid-column:1/3"><div class="card-head"><h3><i class="fas fa-layer-group"></i>Vardiya Dağılımı</h3><span style="font-size:10px;color:var(--t3)" id="sdMonthLabel"></span></div><div id="shiftDistList" style="display:flex;flex-direction:column;gap:12px"></div></div><div class="card"><div class="card-head"><h3><i class="fas fa-chart-pie"></i>Oran</h3></div><div id="shiftDistDonut"></div><div class="sd-summary" id="shiftDistChips"></div></div></div></div>
+
 <div class="page" id="pg-calendar"><div class="page-head"><div><h1>Vardiya Takvimi</h1><p>Güne tıklayarak giriş yapın</p></div><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="toggleMultiSelect()" id="multiSelBtn"><i class="fas fa-object-group"></i>Çoklu Seç</button><button class="btn btn-soft btn-sm" onclick="goToday()"><i class="fas fa-crosshairs"></i>Bugün</button></div></div><div id="copyBar"></div><div id="multiBar"></div><div class="card"><div class="cal-controls"><div class="cal-nav"><button class="cal-nav-btn" onclick="chgM(-1)"><i class="fas fa-chevron-left"></i></button><span class="cal-month-title" id="calTitle"></span><button class="cal-nav-btn" onclick="chgM(1)"><i class="fas fa-chevron-right"></i></button></div><div><span style="font-size:11px;color:var(--t3);font-weight:600" id="calSummary"></span></div></div><div class="cal-grid" id="calGrid"></div><div id="calEarnBar"></div><div class="cal-legend"><span><i class="fas fa-circle" style="color:var(--p)"></i>Bugün</span><span><i class="fas fa-circle" style="color:var(--g)"></i>Vardiya</span><span><i class="fas fa-circle" style="color:var(--r)"></i>Tatil</span><span><i class="fas fa-circle" style="color:#60a5fa"></i>Y.İzin</span><span><i class="fas fa-circle" style="color:#fb923c"></i>Rapor</span><span><i class="fas fa-circle" style="color:var(--p)"></i>H.Tatil</span></div></div></div>
+
 <div class="page" id="pg-leaves"><div class="page-head"><div><h1>İzin Yönetimi</h1><p>İzin haklarınız</p></div></div><div class="leave-cards" id="leaveCards"></div><div class="card"><div class="card-head"><h3><i class="fas fa-history"></i>Geçmiş — <span id="leaveYr"></span></h3><select id="leaveFilter" onchange="renderLeaves()" style="padding:4px 8px;font-size:11px;width:auto"><option value="all">Tümü</option><option value="annual">Yıllık İzin</option><option value="sick">Rapor</option><option value="weekly">H.Tatil</option><option value="unpaid">Ücretsiz</option></select></div><div id="leaveTable"></div></div></div>
+
 <div class="page" id="pg-earnings"><div class="page-head"><div><h1>Kazanç Raporu</h1><p>Aylık gelir detayları</p></div></div><div class="cal-controls" style="margin-bottom:16px"><div class="cal-nav"><button class="cal-nav-btn" onclick="chgE(-1)"><i class="fas fa-chevron-left"></i></button><span class="cal-month-title" id="earnTitle"></span><button class="cal-nav-btn" onclick="chgE(1)"><i class="fas fa-chevron-right"></i></button></div></div><div id="earnContent"></div></div>
+
 <div class="page" id="pg-settings"><div class="page-head"><div><h1>Ayarlar</h1><p>Kişisel bilgiler ve görünüm</p></div></div><div class="card s-card"><h3><i class="fas fa-palette"></i>Tema</h3><div class="theme-picker" id="themePicker"><div class="theme-dot" data-t="default" onclick="setTheme('default')"></div><div class="theme-dot" data-t="ocean" onclick="setTheme('ocean')"></div><div class="theme-dot" data-t="forest" onclick="setTheme('forest')"></div><div class="theme-dot" data-t="sunset" onclick="setTheme('sunset')"></div><div class="theme-dot" data-t="rose" onclick="setTheme('rose')"></div><div class="theme-dot" data-t="gold" onclick="setTheme('gold')"></div></div></div><div class="card s-card"><h3><i class="fas fa-user"></i>Kişisel Bilgiler</h3><div class="fg"><label>Ad Soyad</label><input type="text" id="sName" placeholder="Adınız" onchange="sSet('name',this.value)"></div><div class="fg"><label>İşe Başlama</label><input type="date" id="sStart" onchange="sSet('startDate',this.value)"></div><div id="seniorityInfo"></div></div><div class="card s-card"><h3><i class="fas fa-money-bill-wave"></i>Maaş</h3><div class="hint"><i class="fas fa-lightbulb"></i><span>Net maaş girin. Günlük=maaş÷30 (İş Kanunu m.49). Tam ay çalışınca tam maaş. Eksik gün olursa kesinti.</span></div><div class="fg"><label>Aylık Net (₺)</label><input type="number" id="sSalary" placeholder="25000" min="0" step="100" onchange="sSet('netSalary',this.value)"></div><div class="salary-preview" id="salPrev" style="display:none"><div class="amt" id="salAmt">₺0</div><div class="det" id="salDet"></div></div></div><div class="card s-card"><h3><i class="fas fa-calendar-check"></i>Yıllık İzin</h3><div class="fg"><label>İzin Hakkı (gün)</label><input type="number" id="sLeave" placeholder="14" min="0" max="40" onchange="sSet('annualLeave',this.value)"></div></div><div class="card s-card"><h3><i class="fas fa-clock"></i>Vardiya Şablonları</h3><div id="customPresets"></div><button class="btn btn-soft btn-sm" onclick="addCustomPreset()" style="margin-top:8px"><i class="fas fa-plus"></i>Ekle</button></div><div class="card s-card"><h3><i class="fas fa-database"></i>Veri</h3><div class="data-btns"><button class="btn btn-outline" onclick="exportD()"><i class="fas fa-download"></i>Yedekle</button><button class="btn btn-outline" onclick="document.getElementById('impF').click()"><i class="fas fa-upload"></i>Yükle</button><input type="file" id="impF" style="display:none" accept=".json" onchange="importD(event)"><button class="btn btn-danger" onclick="clearD()"><i class="fas fa-trash"></i>Sıfırla</button></div></div></div>
 </main></div>
-<div class="overlay" id="modal"><div class="modal"><div class="modal-top"><div style="display:flex;align-items:center;gap:8px"><h3 id="mTitle">16</h3><span class="date-badge" id="mDate">Pzt</span></div><button class="modal-x" onclick="closeM()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div id="mAlert" class="h-alert" style="display:none"><i class="fas fa-flag"></i><span id="mAlertTx"></span></div><div class="mode-tabs"><button class="mode-tab active" onclick="mMode('shift',this)"><i class="fas fa-clock"></i>Vardiya</button><button class="mode-tab" onclick="mMode('leave',this)"><i class="fas fa-umbrella-beach"></i>İzin</button></div><div id="mShift"><div class="preset-row" id="presetRow"></div><div class="time-inputs"><div class="ti"><label>Giriş</label><input type="time" id="iStart" value="08:00"></div><div class="ti"><label>Çıkış</label><input type="time" id="iEnd" value="16:00"></div><div class="ti"><label>Mola</label><select id="iBreak"><option value="0">Yok</option><option value="15">15dk</option><option value="30" selected>30dk</option><option value="45">45dk</option><option value="60">1s</option><option value="90">1.5s</option></select></div></div><div class="result-box"><div class="rb-item"><div class="rb-val" id="rbGross">8s</div><div class="rb-lbl">Brüt</div></div><div class="rb-div"></div><div class="rb-item"><div class="rb-val accent" id="rbBreak">30dk</div><div class="rb-lbl">Mola</div></div><div class="rb-div"></div><div class="rb-item"><div class="rb-val green" id="rbNet">7.5s</div><div class="rb-lbl">Net</div></div><div class="rb-div"></div><div class="rb-item"><div class="rb-val" id="rbOT" style="color:var(--t3)">—</div><div class="rb-lbl">F.Mesai</div></div></div><div id="mEarningPreview" style="margin-top:8px;text-align:center;font-size:11px;color:var(--t2);font-weight:600"></div></div><div id="mLeave" style="display:none"><div class="lt-row"><div class="lt-opt" data-t="annual" onclick="selLT('annual',this)"><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Yıllık İzin<small>Ücretli</small></div><div class="lt-opt" data-t="weekly" onclick="selLT('weekly',this)"><i class="fas fa-couch" style="color:var(--p)"></i>Hafta Tatili<small>Ücretli</small></div><div class="lt-opt" data-t="sick" onclick="selLT('sick',this)"><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor<small>Hastalık</small></div><div class="lt-opt" data-t="unpaid" onclick="selLT('unpaid',this)"><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz<small>Kesinti</small></div></div><div class="fg"><label>Not</label><input type="text" id="iNote" placeholder="Opsiyonel..."></div></div></div><div class="modal-foot"><button class="btn btn-outline btn-sm" id="mCopy" onclick="copyShift()" style="display:none;margin-right:auto"><i class="fas fa-copy"></i></button><button class="btn btn-danger btn-sm" id="mDel" onclick="delEntry()" style="display:none"><i class="fas fa-trash"></i>Sil</button><button class="btn btn-ghost btn-sm" onclick="closeM()">İptal</button><button class="btn btn-primary btn-sm" onclick="saveEntry()"><i class="fas fa-check"></i>Kaydet</button></div></div></div>
+
+<div class="overlay" id="modal"><div class="modal"><div class="modal-top"><div style="display:flex;align-items:center;gap:8px"><h3 id="mTitle">16</h3><span class="date-badge" id="mDate">Pzt</span></div><button class="modal-x" onclick="closeM()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div id="mAlert" class="h-alert" style="display:none"><i class="fas fa-flag"></i><span id="mAlertTx"></span></div><div class="mode-tabs"><button class="mode-tab active" onclick="mMode('shift',this)"><i class="fas fa-clock"></i>Vardiya</button><button class="mode-tab" onclick="mMode('leave',this)"><i class="fas fa-umbrella-beach"></i>İzin</button></div><div id="mShift"><div class="preset-row" id="presetRow"></div><div class="time-inputs"><div class="ti"><label>Giriş</label><input type="time" id="iStart" value="08:00"></div><div class="ti"><label>Çıkış</label><input type="time" id="iEnd" value="16:00"></div><div class="ti"><label>Mola</label><select id="iBreak"><option value="0">Yok</option><option value="15">15dk</option><option value="30" selected>30dk</option><option value="45">45dk</option><option value="60">1s</option><option value="90">1.5s</option></select></div></div><div class="result-box"><div class="rb-item"><div class="rb-val" id="rbGross">8s</div><div class="rb-lbl">Brüt</div></div><div class="rb-div"></div><div class="rb-item"><div class="rb-val accent" id="rbBreak">30dk</div><div class="rb-lbl">Mola</div></div><div class="rb-div"></div><div class="rb-item"><div class="rb-val green" id="rbNet">7.5s</div><div class="rb-lbl">Net</div></div><div class="rb-div"></div><div class="rb-item"><div class="rb-val" id="rbOT" style="color:var(--t3)">—</div><div class="rb-lbl">F.Mesai</div></div></div><div id="mEarningPreview" style="margin-top:8px;text-align:center;font-size:11px;color:var(--t2);font-weight:600"></div></div><div id="mLeave" style="display:none"><div class="lt-row"><div class="lt-opt" data-t="annual" onclick="selLT('annual',this)"><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Yıllık İzin<small>Ücretli</small></div><div class="lt-opt" data-t="weekly" onclick="selLT('weekly',this)"><i class="fas fa-couch" style="color:var(--p)"></i>Hafta Tatili<small>Ücretli</small></div><div class="lt-opt" data-t="sick" onclick="selLT('sick',this)"><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor<small>Hastalık</small></div><div class="lt-opt" data-t="unpaid" onclick="selLT('unpaid',this)"><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz<small>Kesinti</small></div></div><div class="fg"><label>Not</label><input type="text" id="iNote" placeholder="Opsiyonel..."></div></div></div><div class="modal-foot"><button class="btn btn-outline btn-sm" id="mPaste" onclick="pasteAndClose()" style="display:none;margin-right:auto"><i class="fas fa-paste"></i>Yapıştır</button><button class="btn btn-outline btn-sm" id="mCopy" onclick="copyShift()" style="display:none"><i class="fas fa-copy"></i></button><button class="btn btn-danger btn-sm" id="mDel" onclick="delEntry()" style="display:none"><i class="fas fa-trash"></i>Sil</button><button class="btn btn-ghost btn-sm" onclick="closeM()">İptal</button><button class="btn btn-primary btn-sm" onclick="saveEntry()"><i class="fas fa-check"></i>Kaydet</button></div></div></div>
+
 <script>
 const MTR=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
       DTR=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'],
@@ -138,11 +146,16 @@ const THEME_COLORS={default:'linear-gradient(135deg,#7c3aed,#8b5cf6)',ocean:'lin
 let S={cu:null,cm:new Date().getMonth(),cy:new Date().getFullYear(),em:new Date().getMonth(),ey:new Date().getFullYear(),sd:null,mt:'shift',lt:null,clipboard:null,multiSelect:false,selectedDates:[],u:{1:{name:'Kullanıcı 1',netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{},customPresets:[],lastLogin:null,theme:'default'},2:{name:'Kullanıcı 2',netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{},customPresets:[],lastLogin:null,theme:'default'}}};
 let confirmCallback=null;
 
-/* FIX #6: Timezone-safe date string parsing — never use new Date(string) */
-function parseDS(ds){const p=ds.split('-');return{y:+p[0],m:+p[1]-1,d:+p[2]}}
+// ===== YARDIMCI FONKSİYONLAR =====
+
+function parseDS(ds){
+  if(!ds||typeof ds!=='string')return{y:0,m:0,d:0};
+  const p=ds.split('-');
+  if(p.length!==3)return{y:0,m:0,d:0};
+  return{y:+p[0],m:+p[1]-1,d:+p[2]};
+}
 function dsToDate(ds){const p=parseDS(ds);return new Date(p.y,p.m,p.d)}
 
-/* FIX #14: Toast uses explicit timeout for removal instead of animation-delay */
 function toast(msg,type='info'){
   const c=document.getElementById('toastContainer');
   const ic={success:'fa-check-circle',error:'fa-times-circle',info:'fa-info-circle',warning:'fa-exclamation-triangle'};
@@ -150,7 +163,7 @@ function toast(msg,type='info'){
   t.className=`toast t-${type}`;
   t.innerHTML=`<i class="fas ${ic[type]}"></i><span>${msg}</span>`;
   c.appendChild(t);
-  setTimeout(()=>{t.classList.add('toast-out');setTimeout(()=>t.remove(),350)},2500);
+  setTimeout(()=>{t.classList.add('toast-out');setTimeout(()=>{if(t.parentNode)t.remove()},350)},2500);
 }
 
 function showConfirm(t,m,cb){document.getElementById('confirmTitle').textContent=t;document.getElementById('confirmMsg').textContent=m;confirmCallback=cb;document.getElementById('confirmOverlay').classList.add('show')}
@@ -206,7 +219,6 @@ function logout(){
 function updTop(){const u=cu();document.getElementById('topName').textContent=u.name||'İsimsiz';document.getElementById('topAv').textContent=(u.name||'K')[0].toUpperCase()}
 function cu(){return S.u[S.cu]}
 
-/* FIX #8: Clear multi-select when switching away from calendar */
 function go(p,btn){
   if(p!=='calendar'&&S.multiSelect){
     S.multiSelect=false;S.selectedDates=[];
@@ -222,27 +234,31 @@ function go(p,btn){
 }
 
 function renderAll(){renderDash();renderCal();renderLeaves();renderEarn();loadSet();renderYearOverview();renderShiftDist()}
-
 function setTheme(t){if(!S.cu)return;cu().theme=t;applyTheme(t);saveLS();toast(`${THEME_NAMES[t]} teması`,'info')}
 function applyTheme(t){document.body.className=t==='default'?'':'theme-'+t;document.querySelectorAll('.theme-dot').forEach(d=>d.classList.toggle('active',d.dataset.t===t))}
 
+// ===== TATİL FONKSİYONLARI =====
+
 function getH(ds){
-  const p=parseDS(ds),y=p.y,m=p.m+1,day=p.d;
+  const p=parseDS(ds);
+  if(!p.y)return null;
+  const y=p.y,m=p.m+1,day=p.d;
   for(const h of FH)if(h.m===m&&h.d===day)return h.n;
   const r=RH[y];if(r)for(const h of r)if(h.m===m&&h.d===day)return h.n;
   return null;
 }
 function isH(ds){return getH(ds)!==null}
 
-/* FIX #4/#10: Consistent 0 for same start/end, cap at 16h */
+// ===== SAAT HESAPLAMA =====
+
 function calcHr(s,e,b){
-  if(s===e)return 0;
+  if(!s||!e||s===e)return 0;
   const[sh,sm]=s.split(':').map(Number),[eh,em]=e.split(':').map(Number);
   let st=sh*60+sm,en=eh*60+em;if(en<=st)en+=1440;
   return Math.min(Math.max(0,(en-st-b)/60),16);
 }
 function grossHr(s,e){
-  if(s===e)return 0;
+  if(!s||!e||s===e)return 0;
   const[sh,sm]=s.split(':').map(Number),[eh,em]=e.split(':').map(Number);
   let st=sh*60+sm,en=eh*60+em;if(en<=st)en+=1440;
   return Math.max(0,(en-st)/60);
@@ -257,9 +273,10 @@ function getISOWeek(d){
 }
 
 function dStr(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function fm(n){if(!n||isNaN(n))return'₺0';return'₺'+n.toLocaleString('tr-TR',{minimumFractionDigits:0,maximumFractionDigits:2})}
+function fm(n){if(n===null||n===undefined||isNaN(n))return'₺0';return'₺'+n.toLocaleString('tr-TR',{minimumFractionDigits:0,maximumFractionDigits:2})}
 
-/* FIX #1: Streak with proper guard and weekend handling */
+// ===== SERİ HESAPLAMA =====
+
 function getStreak(){
   const u=cu();if(!u)return 0;
   let s=0,d=new Date(),guard=0;
@@ -276,12 +293,13 @@ function getStreak(){
   return s;
 }
 
-/* FIX #2: getMD — core data, single call per (y,m) pair */
+// ===== ANA VERİ FONKSİYONU =====
+
 function getMD(y,m){
   const u=cu();
   if(!u)return{th:0,rh:0,oh:0,hh:0,wd:0,hdw:0,wh:{},wr:0,ud:0,yau:0,ysd:0,mau:0,msd:0,hr:0,dim:30};
   const dim=new Date(y,m+1,0).getDate();
-  let th=0,oh=0,hh=0,wd=0,hdw=0;
+  let th=0,hh=0,wd=0,hdw=0;
   const wh={};
   for(let d=1;d<=dim;d++){
     const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
@@ -292,7 +310,7 @@ function getMD(y,m){
     if(!wh[wk])wh[wk]=0;wh[wk]+=hrs;
     if(isH(s)){hh+=hrs;hdw++}
   }
-  oh=0;let rh=0;
+  let oh=0,rh=0;
   Object.values(wh).forEach(w=>{if(w>45){oh+=w-45;rh+=45}else rh+=w});
   let yau=0,ysd=0,mau=0,msd=0,wr=0,ud=0;
   Object.entries(u.leaves).forEach(([k,v])=>{
@@ -306,53 +324,56 @@ function getMD(y,m){
 
 function getPrevMD(){let pm=S.cm-1,py=S.cy;if(pm<0){pm=11;py--}return getMD(py,pm)}
 
-/* =============================================================
-   KAZANÇ — v3.1 DOĞRULANMIŞ
-   İş Kanunu m.49: Günlük = Maaş ÷ 30 (SABİT)
-   FIX #3: Bugün hariç (henüz gün bitmedi)
-   FIX #15: Negative salary guard
-   ============================================================= */
-function calcEarningForMonth(y, m, netSalary){
-    const d = getMD(y, m);
-    if(!netSalary || netSalary<=0) return null;
+// ===== KAZANÇ HESAPLAMA (v3.2 — Hafta sonu & Resmi tatil düzeltmesi) =====
 
-    const dim = d.dim;
-    const dailyRate  = netSalary / 30;
-    const hourlyRate = netSalary / MH;
+function calcEarningForMonth(y,m,netSalary){
+  const d=getMD(y,m);
+  if(!netSalary||netSalary<=0)return null;
+  const dim=d.dim;
+  const dailyRate=netSalary/30;
+  const hourlyRate=netSalary/MH;
+  const today=new Date();
+  const todayY=today.getFullYear(),todayM=today.getMonth(),todayD=today.getDate();
+  const isCurrentMonth=(y===todayY&&m===todayM);
+  const isFutureMonth=(y>todayY||(y===todayY&&m>todayM));
 
-    const today = new Date();
-    const todayY = today.getFullYear(), todayM = today.getMonth(), todayD = today.getDate();
-    const isCurrentMonth = (y === todayY && m === todayM);
-    const isFutureMonth  = (y > todayY || (y === todayY && m > todayM));
+  let evaluableDays;
+  if(isFutureMonth)evaluableDays=0;
+  else if(isCurrentMonth)evaluableDays=Math.max(0,todayD-1);
+  else evaluableDays=dim;
 
-    let evaluableDays;
-    if(isFutureMonth) evaluableDays = 0;
-    else if(isCurrentMonth) evaluableDays = Math.max(0, todayD - 1);
-    else evaluableDays = dim;
+  // Hafta sonu ve resmi tatilleri say (giriş yapılmamış olanlar)
+  const u=cu();
+  let freePassDays=0;
+  for(let day=1;day<=evaluableDays;day++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    if(u.shifts[ds]||u.leaves[ds])continue;
+    const dt=new Date(y,m,day);
+    const dow=dt.getDay();
+    if(dow===0||dow===6||isH(ds))freePassDays++;
+  }
 
-    const paidDays = d.wd + d.wr + d.mau + d.msd;
-    const loggedDays  = paidDays + d.ud;
-    const missingDays = Math.max(0, evaluableDays - loggedDays);
-    const absentDays  = d.ud + missingDays;
+  const paidDays=d.wd+d.wr+d.mau+d.msd;
+  const loggedDays=paidDays+d.ud;
+  const missingDays=Math.max(0,evaluableDays-loggedDays-freePassDays);
+  const absentDays=d.ud+missingDays;
 
-    const basePay      = Math.max(0, netSalary - (absentDays * dailyRate));
-    const overtimePay  = d.oh * hourlyRate * 1.5;
-    const holidayPay   = d.hh * hourlyRate;
-    const totalEarning = Math.max(0, basePay + overtimePay + holidayPay);
+  const basePay=Math.max(0,netSalary-(absentDays*dailyRate));
+  const overtimePay=d.oh*hourlyRate*1.5;
+  const holidayPay=d.hh*hourlyRate;
+  const totalEarning=Math.max(0,basePay+overtimePay+holidayPay);
 
-    return {
-        dailyRate, hourlyRate, basePay, overtimePay, holidayPay,
-        totalEarning, paidDays,
-        workedDays: d.wd, weeklyDays: d.wr,
-        annualDays: d.mau, sickDays: d.msd,
-        unpaidDays: d.ud, missingDays, absentDays,
-        dim, totalHours: d.th,
-        overtimeHours: d.oh, holidayHours: d.hh,
-        isFullMonth: absentDays === 0 && !isCurrentMonth && !isFutureMonth,
-        isCurrentMonth, isFutureMonth, evaluableDays,
-        _md: d
-    };
+  return{
+    dailyRate,hourlyRate,basePay,overtimePay,holidayPay,totalEarning,paidDays,
+    workedDays:d.wd,weeklyDays:d.wr,annualDays:d.mau,sickDays:d.msd,
+    unpaidDays:d.ud,missingDays,absentDays,freePassDays,
+    dim,totalHours:d.th,overtimeHours:d.oh,holidayHours:d.hh,
+    isFullMonth:absentDays===0&&!isCurrentMonth&&!isFutureMonth,
+    isCurrentMonth,isFutureMonth,evaluableDays,_md:d
+  };
 }
+
+// ===== VARDİYA DAĞILIMI =====
 
 function classifyShift(sh){const h=parseInt(sh.start.split(':')[0]);if(h>=5&&h<11)return'morning';if(h>=11&&h<15)return'afternoon';if(h>=15&&h<21)return'evening';return'night'}
 
@@ -393,6 +414,8 @@ function renderShiftDist(){
   document.getElementById('shiftDistChips').innerHTML=cH;
 }
 
+// ===== YIL GENEL GÖRÜNÜMÜ =====
+
 function renderYearOverview(){
   const el=document.getElementById('yearOverview');let h='';
   for(let m=0;m<12;m++){
@@ -401,6 +424,8 @@ function renderYearOverview(){
   }
   el.innerHTML=h;
 }
+
+// ===== DASHBOARD =====
 
 function renderDash(){
   const u=cu();if(!u)return;
@@ -419,7 +444,6 @@ function renderDash(){
     <div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-flag"></i></div><div class="val">${d.hdw}</div><div class="lbl">Tatil Çalışma</div></div>
     <div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-calendar-check"></i></div><div class="val">${d.wd}/${d.dim}</div><div class="lbl">Çalışma Günü</div></div>`;
 
-  /* FIX #20: Dynamic max for week chart */
   const wks=Object.entries(d.wh).sort((a,b)=>a[0].localeCompare(b[0]));
   const maxWk=wks.length?Math.max(60,...wks.map(([,h])=>h)):60;
   let wc='';
@@ -431,7 +455,7 @@ function renderDash(){
   });
   document.getElementById('weekChart').innerHTML=wc;
 
-  const al=u.annualLeave||14,ar=al-d.yau,dr=u.netSalary?u.netSalary/30:0;
+  const al=u.annualLeave||14,ar=Math.max(0,al-d.yau),dr=u.netSalary?u.netSalary/30:0;
   let info='';
   if(!u.netSalary)info='<div class="hint" style="margin-bottom:8px"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';
   info+=`
@@ -448,8 +472,10 @@ function renderDash(){
     const sl=e.isCurrentMonth?'Devam':e.isFullMonth?'Tam':'−'+e.absentDays+'g';
     const sc=e.isCurrentMonth?'var(--s)':e.isFullMonth?'var(--g)':'var(--acc)';
     deb.innerHTML=`<div class="esb" style="margin-top:16px"><div class="esb-title"><i class="fas fa-calculator"></i>${MTR[S.cm]} Kazanç${e.isCurrentMonth?' — <span style="color:var(--s)">devam</span>':''}</div><div class="esb-grid"><div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.paidDays}<small style="font-size:11px;color:var(--t3)">g</small></div><div class="esb-lbl">Ücretli</div></div><div class="esb-item"><div class="esb-val" style="color:${sc}"><small style="font-size:11px">${sl}</small></div><div class="esb-lbl">Durum</div></div><div class="esb-item"><div class="esb-val" style="color:var(--g)">${fm(e.basePay)}</div><div class="esb-lbl">Maaş</div></div><div class="esb-item"><div class="esb-val" style="color:var(--acc)">${fm(e.totalEarning)}</div><div class="esb-lbl">Toplam</div></div></div></div>`;
-  } else deb.innerHTML='';
+  }else deb.innerHTML='';
 }
+
+// ===== TAKVİM =====
 
 function toggleMultiSelect(){
   S.multiSelect=!S.multiSelect;S.selectedDates=[];
@@ -512,14 +538,12 @@ function renderCal(){
       if(hol)inner+=`<span class="hol-tag">${hol}</span>`;
     }else if(hol)inner+=`<span class="hol-tag">${hol}</span>`;
     e.className=c;e.innerHTML=inner;
-    /* FIX #13: tabindex for keyboard access */
     e.setAttribute('tabindex','0');
     e.setAttribute('role','button');
     e.setAttribute('aria-label',`${d} ${MTR[m]} ${y}`);
     const dateStr=s;
     e.onclick=()=>{
       if(S.multiSelect){const idx=S.selectedDates.indexOf(dateStr);if(idx>-1)S.selectedDates.splice(idx,1);else S.selectedDates.push(dateStr);renderCal();return}
-      if(S.clipboard){pasteShift(dateStr);return}
       openM(dateStr);
     };
     e.onkeydown=(ev)=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();e.click()}};
@@ -530,15 +554,15 @@ function renderCal(){
   for(let i=1;i<=rem;i++){const e=document.createElement('div');e.className='cal-cell out';e.innerHTML=`<div class="num">${i}</div>`;g.appendChild(e)}
   document.getElementById('calSummary').textContent=mD>0?`${mD}g • ${mH.toFixed(1)}s`:'';
 
-  /* FIX #7: Reuse cached data for earning bar */
   const ceb=document.getElementById('calEarnBar');
   if(u.netSalary>0){
     const md=getMD(y,m);
     if(md.wd>0||md.wr>0){
       const e=calcEarningForMonth(y,m,u.netSalary);
-      ceb.innerHTML=`<div class="cal-earn-bar"><div class="ceb"><i class="fas fa-calendar-day"></i>Günlük: <b>${fm(e.dailyRate)}</b></div><div class="ceb"><i class="fas fa-calendar-check"></i>Ücretli: <b>${e.paidDays}g</b>${e.isFullMonth?' <span style="color:var(--g)">✓</span>':e.isCurrentMonth?' <span style="color:var(--s)">⏳</span>':''}</div>${e.absentDays>0?`<div class="ceb"><i class="fas fa-minus-circle"></i>Eksik: <b style="color:var(--r)">${e.absentDays}g</b></div>`:''}<div class="ceb"><i class="fas fa-wallet"></i><b class="accent">${fm(e.totalEarning)}</b></div></div>`;
-    } else ceb.innerHTML='';
-  } else ceb.innerHTML='';
+      if(e)ceb.innerHTML=`<div class="cal-earn-bar"><div class="ceb"><i class="fas fa-calendar-day"></i>Günlük: <b>${fm(e.dailyRate)}</b></div><div class="ceb"><i class="fas fa-calendar-check"></i>Ücretli: <b>${e.paidDays}g</b>${e.isFullMonth?' <span style="color:var(--g)">✓</span>':e.isCurrentMonth?' <span style="color:var(--s)">⏳</span>':''}</div>${e.absentDays>0?`<div class="ceb"><i class="fas fa-minus-circle"></i>Eksik: <b style="color:var(--r)">${e.absentDays}g</b></div>`:''}<div class="ceb"><i class="fas fa-wallet"></i><b class="accent">${fm(e.totalEarning)}</b></div></div>`;
+      else ceb.innerHTML='';
+    }else ceb.innerHTML='';
+  }else ceb.innerHTML='';
 
   renderCopyBar();renderMultiBar();
 }
@@ -548,12 +572,12 @@ function goToday(){S.cm=new Date().getMonth();S.cy=new Date().getFullYear();rend
 
 function copyShift(){const sh=cu().shifts[S.sd];if(sh){S.clipboard={...sh};renderCopyBar();closeM();toast('Kopyalandı','info')}}
 function pasteShift(ds){if(!S.clipboard)return;cu().shifts[ds]={...S.clipboard};delete cu().leaves[ds];saveLS();renderAll();toast('Yapıştırıldı','success')}
+function pasteAndClose(){if(!S.clipboard)return;pasteShift(S.sd);closeM()}
 function clearClipboard(){S.clipboard=null;renderCopyBar()}
-function renderCopyBar(){const el=document.getElementById('copyBar');if(S.clipboard){const h=calcHr(S.clipboard.start,S.clipboard.end,S.clipboard.break);el.innerHTML=`<div class="copy-bar"><span><i class="fas fa-clipboard"></i> ${S.clipboard.start}–${S.clipboard.end} (${h.toFixed(1)}s)</span><button class="btn btn-soft btn-xs" onclick="clearClipboard()"><i class="fas fa-times"></i></button></div>`}else el.innerHTML=''}
+function renderCopyBar(){const el=document.getElementById('copyBar');if(S.clipboard){const h=calcHr(S.clipboard.start,S.clipboard.end,S.clipboard.break);el.innerHTML=`<div class="copy-bar"><span><i class="fas fa-clipboard"></i> ${S.clipboard.start}–${S.clipboard.end} (${h.toFixed(1)}s) — güne tıklayın veya modalden yapıştırın</span><button class="btn btn-soft btn-xs" onclick="clearClipboard()"><i class="fas fa-times"></i></button></div>`}else el.innerHTML=''}
 
-/* FIX #9/#13: Build presets fresh, never mutate PRESETS_BASE */
 function getAllPresets(){
-  const ps=Object.assign({},PRESETS_BASE);
+  const ps={...PRESETS_BASE};
   const u=cu();
   if(u.customPresets?.length){
     u.customPresets.forEach((cp,i)=>{
@@ -563,8 +587,9 @@ function getAllPresets(){
   return ps;
 }
 
+// ===== MODAL =====
+
 function openM(ds){
-  if(S.clipboard){pasteShift(ds);return}
   S.sd=ds;const d=dsToDate(ds),dow=d.getDay(),dn=DFL[dow===0?6:dow-1];
   document.getElementById('mTitle').textContent=d.getDate()+' '+MTR[d.getMonth()];
   document.getElementById('mDate').textContent=dn;
@@ -576,6 +601,10 @@ function openM(ds){
   document.querySelectorAll('.lt-opt').forEach(o=>o.classList.remove('active'));
   document.getElementById('iNote').value='';
   renderModalPresets();
+
+  // Yapıştır butonu
+  document.getElementById('mPaste').style.display=S.clipboard?'inline-flex':'none';
+
   if(sh){
     document.getElementById('iStart').value=sh.start;
     document.getElementById('iEnd').value=sh.end;
@@ -614,7 +643,6 @@ function renderModalPresets(){
   row.innerHTML=h;
 }
 
-/* FIX #10: Preset highlight correctly matches custom presets */
 function hlPreset(sh){
   const ps=getAllPresets();
   document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));
@@ -652,7 +680,6 @@ function applyPreset(key,el){
   updResult();
 }
 
-/* FIX #11: Show both daily and weekly overtime context */
 function updResult(){
   const s=document.getElementById('iStart').value,e=document.getElementById('iEnd').value,b=parseInt(document.getElementById('iBreak').value)||0;
   if(!s||!e)return;
@@ -706,8 +733,10 @@ function delEntry(){
 
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeM()});
 
+// ===== İZİNLER =====
+
 function renderLeaves(){
-  const u=cu(),y=S.cy,d=getMD(y,S.cm),at=u.annualLeave||14,ar=at-d.yau,dr=u.netSalary?u.netSalary/30:0;
+  const u=cu(),y=S.cy,d=getMD(y,S.cm),at=u.annualLeave||14,ar=Math.max(0,at-d.yau),dr=u.netSalary?u.netSalary/30:0;
   document.getElementById('leaveYr').textContent=y;
   document.getElementById('leaveCards').innerHTML=`
     <div class="card leave-c"><h4><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Yıllık İzin</h4><div class="big" style="color:#60a5fa">${ar} <small>/ ${at}g</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,(d.yau/Math.max(at,1))*100)}%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div><div class="meta"><span>Kullanılan: ${d.yau}</span><span>Kalan: ${ar}</span></div></div>
@@ -715,11 +744,9 @@ function renderLeaves(){
     <div class="card leave-c"><h4><i class="fas fa-couch" style="color:var(--p)"></i>Hafta Tatili</h4><div class="big" style="color:var(--p)">${d.wr} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.wr/5*100)}%;background:var(--pg)"></div></div><div class="meta"><span>${MTR[S.cm]}</span><span>${d.wr}g</span></div></div>
     <div class="card leave-c"><h4><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz</h4><div class="big" style="color:var(--r)">${d.ud} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ud/5*100)}%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div><div class="meta"><span>Kesinti</span><span>${u.netSalary?fm(d.ud*dr):'—'}</span></div></div>`;
 
-  /* FIX #5: Filter by year correctly */
   const filter=document.getElementById('leaveFilter')?.value||'all';
   const all=Object.entries(u.leaves).filter(([k,v])=>{
-    const p=parseDS(k);
-    if(p.y!==y)return false;
+    const p=parseDS(k);if(p.y!==y)return false;
     return filter==='all'||v.type===filter;
   }).sort((a,b)=>b[0].localeCompare(a[0]));
 
@@ -734,12 +761,13 @@ function renderLeaves(){
   document.getElementById('leaveTable').innerHTML=t;
 }
 
-/* FIX #16: Leave deletion triggers full re-render for consistency */
 function delLv(k){
   showConfirm('Sil','İzni silmek istiyor musunuz?',()=>{
     delete cu().leaves[k];saveLS();renderAll();toast('Silindi','success');
   });
 }
+
+// ===== KAZANÇ SAYFASI =====
 
 function renderEarn(){
   const u=cu(),y=S.ey,m=S.em;
@@ -749,17 +777,19 @@ function renderEarn(){
   if(!u.netSalary||u.netSalary<=0){
     document.getElementById('earnContent').innerHTML='<div class="hint"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';return;
   }
-  if(d.wd===0&&d.wr===0&&d.mau===0&&d.msd===0){
+  // Ücretsiz izin de dahil: veri var mı kontrolü
+  if(d.wd===0&&d.wr===0&&d.mau===0&&d.msd===0&&d.ud===0){
     document.getElementById('earnContent').innerHTML='<div class="empty"><i class="fas fa-calendar-times"></i><p>Bu ay veri yok</p></div>';return;
   }
 
   const e=calcEarningForMonth(y,m,u.netSalary);
+  if(!e){document.getElementById('earnContent').innerHTML='';return}
   let pm=m-1,py=y;if(pm<0){pm=11;py--}
   const prevE=calcEarningForMonth(py,pm,u.netSalary);
   const diff=prevE&&prevE.totalEarning>0&&!prevE.isFutureMonth?e.totalEarning-prevE.totalEarning:0;
 
   document.getElementById('earnContent').innerHTML=`
-<div class="earn-hero"><div class="sub">KAZANÇ — ${MTR[m].toUpperCase()} ${y} (${e.dim} takvim günü)${e.isCurrentMonth?' — DEVAM EDİYOR':''}</div><div class="amt">${fm(e.totalEarning)}${e.isCurrentMonth?' <small style="font-size:14px;opacity:.6">tahmini</small>':''}</div><div class="info">${e.isFullMonth?'Tam ay — tam maaş + ekler':e.isCurrentMonth?'Devam — düne kadar hesaplama':e.absentDays+'g eksik — kesinti var'} • ${e.totalHours.toFixed(1)}s</div>${prevE&&prevE.totalEarning>0&&!prevE.isFutureMonth?`<div class="comparison"><span>${diff>=0?'↑':'↓'} ${fm(Math.abs(diff))}</span></div>`:''}</div>
+<div class="earn-hero"><div class="sub">KAZANÇ — ${MTR[m].toUpperCase()} ${y} (${e.dim} takvim günü)${e.isCurrentMonth?' — DEVAM EDİYOR':''}</div><div class="amt">${fm(e.totalEarning)}${e.isCurrentMonth?' <small style="font-size:14px;opacity:.6">tahmini</small>':''}</div><div class="info">${e.isFullMonth?'Tam ay — tam maaş + ekler':e.isCurrentMonth?'Devam — düne kadar hesaplama':e.absentDays>0?e.absentDays+'g eksik — kesinti var':'Tam'} • ${e.totalHours.toFixed(1)}s</div>${prevE&&prevE.totalEarning>0&&!prevE.isFutureMonth?`<div class="comparison"><span>${diff>=0?'↑':'↓'} ${fm(Math.abs(diff))}</span></div>`:''}</div>
 
 <div class="esb">
 <div class="esb-title"><i class="fas fa-calculator"></i>Detay${e.isCurrentMonth?' (düne kadar, '+e.evaluableDays+'g)':''}</div>
@@ -784,11 +814,12 @@ ${e.absentDays>0?`<div class="esd"><span class="ek"><i class="fas fa-minus-circl
 <b>Günlük:</b> ${fm(u.netSalary)} ÷ 30 = <b>${fm(e.dailyRate)}</b> (İK m.49, sabit)<br>
 <b>Takvim:</b> ${e.dim}g | <b>Değerlendirilen:</b> ${e.evaluableDays}g${e.isCurrentMonth?' (bugün hariç)':''}<br>
 <b>Ücretli:</b> ${e.workedDays}ç + ${e.weeklyDays}ht + ${e.annualDays}yı + ${e.sickDays}r = <b>${e.paidDays}g</b><br>
+<b>H.sonu/Tatil (boş):</b> ${e.freePassDays}g (kesinti yok)<br>
 <b>Eksik:</b> ${e.unpaidDays}ücretsiz + ${e.missingDays}boş = <b>${e.absentDays}g</b><br>
 <div class="db-sep"></div>
 <b>Maaş:</b> ${fm(u.netSalary)} − (${e.absentDays} × ${fm(e.dailyRate)}) = <b>${fm(e.basePay)}</b><br>
 ${e.absentDays===0?`<span style="color:var(--g)">✓ Eksik yok → tam maaş</span>`:
-`<span style="color:var(--acc)">Doğrulama: ${e.paidDays} × ${fm(e.dailyRate)} = ${fm(e.paidDays*e.dailyRate)}</span>`}
+`<span style="color:var(--acc)">Kontrol: ${e.paidDays}ücretli + ${e.freePassDays}serbest + ${e.absentDays}eksik = ${e.paidDays+e.freePassDays+e.absentDays} (değ: ${e.evaluableDays})</span>`}
 </div>
 
 <div class="card" style="margin-top:16px"><div class="card-head"><h3><i class="fas fa-chart-pie"></i>Saatler</h3></div><div class="info-list">
@@ -801,21 +832,29 @@ ${e.absentDays===0?`<span style="color:var(--g)">✓ Eksik yok → tam maaş</sp
 
 function chgE(d){S.em+=d;if(S.em>11){S.em=0;S.ey++}if(S.em<0){S.em=11;S.ey--}renderEarn()}
 
+// ===== AYARLAR =====
+
 function loadSet(){
   const u=cu();if(!u)return;
   document.getElementById('sName').value=u.name||'';
   document.getElementById('sSalary').value=u.netSalary||'';
   document.getElementById('sStart').value=u.startDate||'';
-  document.getElementById('sLeave').value=u.annualLeave||14;
+  document.getElementById('sLeave').value=u.annualLeave!=null?u.annualLeave:14;
   updSal();updSeniority();renderCustomPresets();
   applyTheme(u.theme||'default');
 }
 
-/* FIX #15: Validate salary is non-negative */
 function sSet(k,v){
   const u=cu();
-  if(k==='netSalary'){v=parseFloat(v)||0;if(v<0){v=0;document.getElementById('sSalary').value=0;toast('Maaş negatif olamaz','error')}}
-  if(k==='annualLeave'){v=parseInt(v)||14;if(v<0)v=0;if(v>40)v=40}
+  if(k==='netSalary'){
+    v=parseFloat(v);
+    if(isNaN(v)||v<0){v=0;document.getElementById('sSalary').value=0;toast('Geçersiz maaş değeri','error')}
+  }
+  if(k==='annualLeave'){
+    v=parseInt(v);
+    if(isNaN(v)||v<0)v=0;
+    if(v>40)v=40;
+  }
   u[k]=v;
   if(k==='startDate'&&v){
     const s=new Date(v),n=new Date(),yr=(n-s)/(365.25*864e5);
@@ -854,19 +893,31 @@ function renderCustomPresets(){
 }
 
 function addCustomPreset(){
-  const name=prompt('Ad:');if(!name)return;
-  const icon=prompt('Emoji:','⏰')||'⏰',start=prompt('Giriş (HH:MM):','22:00'),end=prompt('Çıkış (HH:MM):','06:00'),brk=parseInt(prompt('Mola (dk):','30'))||0;
+  const name=prompt('Şablon adı:');if(!name)return;
+  const icon=prompt('Emoji:','⏰')||'⏰';
+  let start=prompt('Giriş saati (HH:MM):','22:00');
+  let end=prompt('Çıkış saati (HH:MM):','06:00');
+  const brk=parseInt(prompt('Mola süresi (dakika):','30'))||0;
   if(!start||!end)return;
-  /* Basic time format validation */
-  const timeRe=/^([01]\d|2[0-3]):([0-5]\d)$/;
+
+  // Tek haneli saati çift haneliye çevir
+  const timeRe=/^(\d{1,2}):([0-5]\d)$/;
   if(!timeRe.test(start)||!timeRe.test(end)){toast('Geçersiz saat formatı (HH:MM)','error');return}
+  start=start.replace(/^(\d):/, '0$1:');
+  end=end.replace(/^(\d):/, '0$1:');
+  const sh=parseInt(start.split(':')[0]),eh=parseInt(end.split(':')[0]);
+  if(sh>23||eh>23){toast('Saat 0-23 arası olmalı','error');return}
+
   cu().customPresets.push({name,icon,start,end,break:brk});
   saveLS();renderCustomPresets();toast(`"${name}" eklendi`,'success');
 }
 
 function delPreset(i){cu().customPresets.splice(i,1);saveLS();renderCustomPresets();toast('Silindi','success')}
 
+// ===== VERİ YÖNETİMİ =====
+
 function saveLS(){localStorage.setItem('st_data',JSON.stringify({users:S.u}))}
+
 function loadLS(){
   const s=localStorage.getItem('st_data');
   if(s){
@@ -876,11 +927,10 @@ function loadLS(){
         if(p.users[1])S.u[1]={...S.u[1],...p.users[1]};
         if(p.users[2])S.u[2]={...S.u[2],...p.users[2]};
       }else{
-        /* Legacy format compatibility */
         if(p[1])S.u[1]={...S.u[1],...p[1]};
         if(p[2])S.u[2]={...S.u[2],...p[2]};
       }
-    }catch(e){console.error('Data load error:',e)}
+    }catch(e){console.error('Veri yükleme hatası:',e)}
   }
 }
 
@@ -891,7 +941,6 @@ function exportD(){
   URL.revokeObjectURL(u);toast('İndirildi','success');
 }
 
-/* FIX #12: Import re-applies theme */
 function importD(e){
   const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
@@ -903,7 +952,7 @@ function importD(e){
         if(p.users[2])S.u[2]={...S.u[2],...p.users[2]};
       }
       saveLS();
-      applyTheme(cu().theme||'default');
+      if(S.cu)applyTheme(cu().theme||'default');
       renderAll();updTop();toast('Yüklendi!','success');
     }catch{toast('Geçersiz dosya','error')}
   };
