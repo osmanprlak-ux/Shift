@@ -273,7 +273,13 @@ tr:hover td{background:var(--bg3)}
 .theme-dot[data-t="sunset"]{background:linear-gradient(135deg,#ea580c,#f97316)}
 .theme-dot[data-t="rose"]{background:linear-gradient(135deg,#e11d48,#f43f5e)}
 .theme-dot[data-t="gold"]{background:linear-gradient(135deg,#d97706,#f59e0b)}
-.year-overview{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-bottom:20px}
+/* YEAR OVERVIEW */
+.year-overview-wrap{margin-bottom:20px}
+.year-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.year-nav span{font-size:14px;font-weight:800;color:var(--p)}
+.year-nav button{width:28px;height:28px;border-radius:8px;border:1px solid var(--b1);background:var(--card);cursor:pointer;font-size:11px;color:var(--t1);transition:background-color .2s,color .2s;display:flex;align-items:center;justify-content:center}
+.year-nav button:hover{background:var(--p2);color:#fff}
+.year-overview{display:grid;grid-template-columns:repeat(12,1fr);gap:3px}
 .year-month{padding:8px 4px;border-radius:8px;text-align:center;background:var(--card2);border:1px solid var(--b1);cursor:pointer;transition:border-color .2s,background-color .2s;font-size:10px;font-weight:700}
 .year-month:hover{border-color:var(--p);background:var(--p4)}.year-month.active{border-color:var(--p);background:var(--p4)}
 .year-month .ym-hrs{font-size:14px;font-weight:900;display:block;margin-top:2px;color:var(--p)}
@@ -300,6 +306,27 @@ tr:hover td{background:var(--bg3)}
 .install-banner{background:var(--pg);color:#fff;border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;animation:pageIn .3s}
 .install-banner .ib-text{font-size:13px;font-weight:600}
 .install-banner .ib-text small{display:block;font-size:11px;opacity:.7;margin-top:2px}
+/* WT MODAL */
+.wt-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1500;padding:16px}
+.wt-modal-overlay.show{display:flex}
+.wt-modal{background:var(--bg2);border-radius:var(--rad2);width:360px;max-width:100%;border:1px solid var(--b1);box-shadow:var(--sh3);animation:modalPop .3s cubic-bezier(.16,1,.3,1)}
+.wt-modal-top{padding:16px 18px 0;display:flex;justify-content:space-between;align-items:center}
+.wt-modal-top h3{font-size:15px;font-weight:800}
+.wt-modal-body{padding:14px 18px}
+.wt-modal-foot{padding:0 18px 16px;display:flex;gap:8px;justify-content:flex-end}
+.wt-preset-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+/* LEAVE YEAR NAV */
+.leave-year-nav{display:flex;align-items:center;gap:8px}
+.leave-year-nav button{width:28px;height:28px;border-radius:7px;border:1px solid var(--b1);background:var(--card);cursor:pointer;font-size:11px;color:var(--t1);display:flex;align-items:center;justify-content:center;transition:background-color .2s}
+.leave-year-nav button:hover{background:var(--p2);color:#fff}
+/* EARN MONTH MINI PREVIEW */
+.earn-day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:12px}
+.edg-cell{height:22px;border-radius:4px;background:var(--bg3);border:1px solid var(--b1);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--t3)}
+.edg-cell.edg-worked{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.2);color:var(--g)}
+.edg-cell.edg-leave{background:var(--p4);border-color:var(--b1);color:var(--p)}
+.edg-cell.edg-absent{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.15);color:var(--r)}
+.edg-cell.edg-hol{background:rgba(251,146,60,.1);border-color:rgba(251,146,60,.2);color:#fb923c}
+.edg-cell.edg-ot{background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.2);color:var(--acc)}
 @media(max-width:768px){
 .content{padding:122px 12px 28px}.grid-2,.grid-3{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}
 .cal-cell{min-height:56px;padding:4px 5px}.cal-cell .shift-time,.cal-cell .leave-label,.cal-cell .hol-tag{display:none}.cal-cell .hrs-display{font-size:13px}.cal-cell .leave-display{font-size:9px}
@@ -315,7 +342,34 @@ tr:hover td{background:var(--bg3)}
 <body>
 <div class="toast-container" id="toastContainer"></div>
 <div class="confirm-overlay" id="confirmOverlay"><div class="confirm-box"><div class="confirm-icon ci-danger"><i class="fas fa-exclamation-triangle"></i></div><h4 id="confirmTitle">Emin misiniz?</h4><p id="confirmMsg"></p><div class="confirm-btns"><button class="btn btn-ghost btn-sm" onclick="confirmCancel()">İptal</button><button class="btn btn-danger btn-sm" onclick="confirmOk()"><i class="fas fa-check"></i> Onayla</button></div></div></div>
-<div id="loginScreen"><div class="login-container"><div class="login-brand"><div class="icon"><i class="fas fa-clock"></i></div><h1>ShiftTrack Pro</h1><p>Akıllı Vardiya & Kazanç Yönetimi</p><span class="version">v4.0</span></div><div class="login-cards"><div class="login-card" onclick="login(1)"><div class="avatar" id="la1">1</div><h3 id="ln1">Kullanıcı 1</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti1"></div><span class="last-login" id="ll1"></span></div><div class="login-card" onclick="login(2)"><div class="avatar" id="la2">2</div><h3 id="ln2">Kullanıcı 2</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti2"></div><span class="last-login" id="ll2"></span></div></div></div></div>
+
+<!-- WT DAY MODAL -->
+<div class="wt-modal-overlay" id="wtModal">
+  <div class="wt-modal">
+    <div class="wt-modal-top"><h3 id="wtModalTitle">Pazartesi</h3><button class="modal-x" onclick="closeWTModal()"><i class="fas fa-times"></i></button></div>
+    <div class="wt-modal-body">
+      <div class="wt-preset-btns">
+        <button class="btn btn-soft btn-sm" onclick="wtSetPreset('08:00','16:00')"><i class="fas fa-sun"></i>Sabah</button>
+        <button class="btn btn-soft btn-sm" onclick="wtSetPreset('12:00','20:00')"><i class="fas fa-cloud-sun"></i>Öğlen</button>
+        <button class="btn btn-soft btn-sm" onclick="wtSetPreset('16:00','00:00')"><i class="fas fa-moon"></i>Akşam</button>
+        <button class="btn btn-soft btn-sm" onclick="wtSetPreset('22:00','06:00')"><i class="fas fa-star"></i>Gece</button>
+        <button class="btn btn-danger btn-sm" onclick="wtSetOff()"><i class="fas fa-times"></i>İzin</button>
+      </div>
+      <div class="time-inputs">
+        <div class="ti"><label>Giriş</label><input type="time" id="wtStart" value="08:00"></div>
+        <div class="ti"><label>Çıkış</label><input type="time" id="wtEnd" value="16:00"></div>
+        <div class="ti"><label>Mola</label><select id="wtBreak"><option value="0">Yok</option><option value="15">15dk</option><option value="30" selected>30dk</option><option value="45">45dk</option><option value="60">1s</option></select></div>
+      </div>
+      <div id="wtPreview" style="text-align:center;font-size:13px;font-weight:800;color:var(--p);margin-top:6px"></div>
+    </div>
+    <div class="wt-modal-foot">
+      <button class="btn btn-ghost btn-sm" onclick="closeWTModal()">İptal</button>
+      <button class="btn btn-primary btn-sm" onclick="saveWTDay()"><i class="fas fa-check"></i>Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<div id="loginScreen"><div class="login-container"><div class="login-brand"><div class="icon"><i class="fas fa-clock"></i></div><h1>ShiftTrack Pro</h1><p>Akıllı Vardiya & Kazanç Yönetimi</p><span class="version">v4.1</span></div><div class="login-cards"><div class="login-card" onclick="login(1)"><div class="avatar" id="la1">1</div><h3 id="ln1">Kullanıcı 1</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti1"></div><span class="last-login" id="ll1"></span></div><div class="login-card" onclick="login(2)"><div class="avatar" id="la2">2</div><h3 id="ln2">Kullanıcı 2</h3><span>Giriş yap →</span><div class="user-theme-indicator" id="uti2"></div><span class="last-login" id="ll2"></span></div></div></div></div>
 <div id="mainApp">
 <header class="topbar"><div class="topbar-brand"><div class="ico"><i class="fas fa-clock"></i></div>ShiftTrack</div><div class="topbar-right"><button class="topbar-undo" id="undoBtn" disabled onclick="undo()" title="Geri Al (Ctrl+Z)"><i class="fas fa-undo"></i></button><div class="topbar-user" onclick="go('settings',document.querySelectorAll('.nav-tab')[5])"><div class="av" id="topAv">U</div><span id="topName">Kullanıcı</span></div><button class="topbar-logout" onclick="logout()" title="Çıkış"><i class="fas fa-sign-out-alt"></i></button></div></header>
 <nav class="nav-tabs">
@@ -328,13 +382,13 @@ tr:hover td{background:var(--bg3)}
 </nav>
 <main class="content">
 <!-- DASHBOARD -->
-<div class="page active" id="pg-dashboard"><div class="page-head"><div><h1>Kontrol Paneli</h1><p id="dashSub"></p></div><div id="dashStreak"></div></div><div id="installBanner"></div><div class="stats" id="statsEl"></div><div class="year-overview" id="yearOverview"></div><div class="grid-2"><div class="card"><div class="card-head"><h3><i class="fas fa-chart-bar"></i>Haftalık Saatler</h3><span style="font-size:10px;color:var(--t3)">Limit: 45s</span></div><div class="week-chart" id="weekChart"></div></div><div class="card"><div class="card-head"><h3><i class="fas fa-info-circle"></i>Özet</h3></div><div class="info-list" id="dashInfo"></div></div></div><div id="dashEarnSummary"></div></div>
+<div class="page active" id="pg-dashboard"><div class="page-head"><div><h1>Kontrol Paneli</h1><p id="dashSub"></p></div><div id="dashStreak"></div></div><div id="installBanner"></div><div class="stats" id="statsEl"></div><div class="year-overview-wrap" id="yearOverviewWrap"></div><div class="grid-2"><div class="card"><div class="card-head"><h3><i class="fas fa-chart-bar"></i>Haftalık Saatler</h3><span style="font-size:10px;color:var(--t3)">Limit: 45s</span></div><div class="week-chart" id="weekChart"></div></div><div class="card"><div class="card-head"><h3><i class="fas fa-info-circle"></i>Özet</h3></div><div class="info-list" id="dashInfo"></div></div></div><div id="dashEarnSummary"></div></div>
 <!-- CALENDAR -->
 <div class="page" id="pg-calendar"><div class="page-head"><div><h1>Vardiya Takvimi</h1><p>Güne tıklayarak giriş yapın</p></div><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="toggleMultiSelect()" id="multiSelBtn"><i class="fas fa-object-group"></i>Çoklu Seç</button><button class="btn btn-soft btn-sm" onclick="goToday()"><i class="fas fa-crosshairs"></i>Bugün</button></div></div><div id="copyBar"></div><div id="multiBar"></div><div class="card"><div class="cal-controls"><div class="cal-nav"><button class="cal-nav-btn" onclick="chgM(-1)"><i class="fas fa-chevron-left"></i></button><span class="cal-month-title" id="calTitle"></span><button class="cal-nav-btn" onclick="chgM(1)"><i class="fas fa-chevron-right"></i></button></div><div><span style="font-size:11px;color:var(--t3);font-weight:600" id="calSummary"></span></div></div><div class="cal-grid" id="calGrid"></div><div id="calEarnBar"></div><div class="cal-legend"><span><i class="fas fa-circle" style="color:var(--p)"></i>Bugün</span><span><i class="fas fa-circle" style="color:var(--g)"></i>Vardiya</span><span><i class="fas fa-circle" style="color:var(--r)"></i>R.Tatil</span><span><i class="fas fa-circle" style="color:#60a5fa"></i>Y.İzin</span><span><i class="fas fa-circle" style="color:#fb923c"></i>Rapor</span></div></div></div>
 <!-- STATS -->
 <div class="page" id="pg-stats"><div class="page-head"><div><h1>İstatistik</h1><p>6 aylık trend analizi</p></div></div><div id="statsContent"></div></div>
 <!-- LEAVES -->
-<div class="page" id="pg-leaves"><div class="page-head"><div><h1>İzin Yönetimi</h1><p>İzin haklarınız</p></div></div><div class="leave-cards" id="leaveCards"></div><div class="card"><div class="card-head"><h3><i class="fas fa-history"></i>Geçmiş — <span id="leaveYr"></span></h3><select id="leaveFilter" onchange="renderLeaves()" style="padding:4px 8px;font-size:11px;width:auto"><option value="all">Tümü</option><option value="annual">Yıllık İzin</option><option value="sick">Rapor</option><option value="weekly">H.Tatil</option><option value="unpaid">Ücretsiz</option></select></div><div id="leaveTable"></div></div></div>
+<div class="page" id="pg-leaves"><div class="page-head"><div><h1>İzin Yönetimi</h1><p>İzin haklarınız</p></div></div><div class="leave-cards" id="leaveCards"></div><div class="card"><div class="card-head"><h3><i class="fas fa-history"></i>Geçmiş — <span id="leaveYr"></span></h3><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div class="leave-year-nav"><button onclick="chgLeaveYear(-1)"><i class="fas fa-chevron-left"></i></button><button onclick="chgLeaveYear(1)"><i class="fas fa-chevron-right"></i></button></div><select id="leaveFilter" onchange="renderLeaves()" style="padding:4px 8px;font-size:11px;width:auto"><option value="all">Tümü</option><option value="annual">Yıllık İzin</option><option value="sick">Rapor</option><option value="weekly">H.Tatil</option><option value="unpaid">Ücretsiz</option></select></div></div><div id="leaveTable"></div></div></div>
 <!-- EARNINGS -->
 <div class="page" id="pg-earnings"><div class="page-head"><div><h1>Kazanç Raporu</h1><p>Aylık gelir detayları</p></div></div><div class="cal-controls" style="margin-bottom:16px"><div class="cal-nav"><button class="cal-nav-btn" onclick="chgE(-1)"><i class="fas fa-chevron-left"></i></button><span class="cal-month-title" id="earnTitle"></span><button class="cal-nav-btn" onclick="chgE(1)"><i class="fas fa-chevron-right"></i></button></div></div><div id="earnContent"></div></div>
 <!-- SETTINGS -->
@@ -352,18 +406,23 @@ tr:hover td{background:var(--bg3)}
 <div class="overlay" id="modal"><div class="modal"><div class="modal-top"><div style="display:flex;align-items:center;gap:8px"><h3 id="mTitle">16</h3><span class="date-badge" id="mDate">Pzt</span></div><button class="modal-x" onclick="closeM()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div id="mAlert" class="h-alert" style="display:none"><i class="fas fa-flag"></i><span id="mAlertTx"></span></div><div class="mode-tabs"><button class="mode-tab active" onclick="mMode('shift',this)"><i class="fas fa-clock"></i>Vardiya</button><button class="mode-tab" onclick="mMode('leave',this)"><i class="fas fa-umbrella-beach"></i>İzin</button></div><div id="mShift"><div class="preset-row" id="presetRow"></div><div class="time-inputs"><div class="ti"><label>Giriş</label><input type="time" id="iStart" value="08:00"></div><div class="ti"><label>Çıkış</label><input type="time" id="iEnd" value="16:00"></div><div class="ti"><label>Mola</label><select id="iBreak"><option value="0">Yok</option><option value="15">15dk</option><option value="30" selected>30dk</option><option value="45">45dk</option><option value="60">1s</option><option value="90">1.5s</option></select></div></div><div class="result-box"><div class="rb-item"><div class="rb-val" id="rbGross">8s</div><div class="rb-lbl">Brüt</div></div><div class="rb-div"></div><div class="rb-item"><div class="rb-val accent" id="rbBreak">30dk</div><div class="rb-lbl">Mola</div></div><div class="rb-div"></div><div class="rb-item"><div class="rb-val green" id="rbNet">7.5s</div><div class="rb-lbl">Net</div></div><div class="rb-div"></div><div class="rb-item"><div class="rb-val" id="rbOT" style="color:var(--t3)">—</div><div class="rb-lbl">F.Mesai</div></div></div><div id="mEarningPreview" style="margin-top:8px;text-align:center;font-size:11px;color:var(--t2);font-weight:600"></div></div><div id="mLeave" style="display:none"><div class="lt-row"><div class="lt-opt" data-t="annual" onclick="selLT('annual',this)"><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Yıllık İzin<small>Ücretli</small></div><div class="lt-opt" data-t="weekly" onclick="selLT('weekly',this)"><i class="fas fa-couch" style="color:var(--p)"></i>Hafta Tatili<small>Ücretli</small></div><div class="lt-opt" data-t="sick" onclick="selLT('sick',this)"><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor<small>Hastalık</small></div><div class="lt-opt" data-t="unpaid" onclick="selLT('unpaid',this)"><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz<small>Kesinti</small></div></div><div class="fg"><label>Not</label><input type="text" id="iNote" placeholder="Opsiyonel..." maxlength="100"></div></div></div><div class="modal-foot"><button class="btn btn-outline btn-sm" id="mPaste" onclick="pasteAndClose()" style="display:none;margin-right:auto"><i class="fas fa-paste"></i>Yapıştır</button><button class="btn btn-outline btn-sm" id="mCopy" onclick="copyShift()" style="display:none"><i class="fas fa-copy"></i></button><button class="btn btn-danger btn-sm" id="mDel" onclick="delEntry()" style="display:none"><i class="fas fa-trash"></i>Sil</button><button class="btn btn-ghost btn-sm" onclick="closeM()">İptal</button><button class="btn btn-primary btn-sm" onclick="saveEntry()"><i class="fas fa-check"></i>Kaydet</button></div></div></div>
 
 <script>
-const DATA_VERSION='4.0';
+const DATA_VERSION='4.1';
 const MTR=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 const DFL=['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
-const MH=225;const MAX_SHIFT_HOURS=16;
+const MH=225;
+// FIX: MAX_SHIFT_HOURS kontrolü gross saate göre yapılır
+const MAX_SHIFT_HOURS_NET=16;
 const PRESETS_BASE=Object.freeze({morning:{start:'08:00',end:'16:00',break:30},afternoon:{start:'12:00',end:'20:00',break:30},evening:{start:'16:00',end:'00:00',break:30}});
 const FH=[{m:1,d:1,n:'Yılbaşı'},{m:4,d:23,n:'23 Nisan'},{m:5,d:1,n:'1 Mayıs'},{m:5,d:19,n:'19 Mayıs'},{m:7,d:15,n:'15 Temmuz'},{m:8,d:30,n:'30 Ağustos'},{m:10,d:29,n:'29 Ekim'}];
 const RH={2024:[{m:4,d:10,n:'Ramazan B.'},{m:4,d:11,n:'Ramazan B.'},{m:4,d:12,n:'Ramazan B.'},{m:6,d:17,n:'Kurban B.'},{m:6,d:18,n:'Kurban B.'},{m:6,d:19,n:'Kurban B.'},{m:6,d:20,n:'Kurban B.'}],2025:[{m:3,d:30,n:'Ramazan B.'},{m:3,d:31,n:'Ramazan B.'},{m:4,d:1,n:'Ramazan B.'},{m:6,d:6,n:'Kurban B.'},{m:6,d:7,n:'Kurban B.'},{m:6,d:8,n:'Kurban B.'},{m:6,d:9,n:'Kurban B.'}],2026:[{m:3,d:20,n:'Ramazan B.'},{m:3,d:21,n:'Ramazan B.'},{m:3,d:22,n:'Ramazan B.'},{m:5,d:27,n:'Kurban B.'},{m:5,d:28,n:'Kurban B.'},{m:5,d:29,n:'Kurban B.'},{m:5,d:30,n:'Kurban B.'}],2027:[{m:3,d:9,n:'Ramazan B.'},{m:3,d:10,n:'Ramazan B.'},{m:3,d:11,n:'Ramazan B.'},{m:5,d:16,n:'Kurban B.'},{m:5,d:17,n:'Kurban B.'},{m:5,d:18,n:'Kurban B.'},{m:5,d:19,n:'Kurban B.'}]};
 const THEME_COLORS={default:'linear-gradient(135deg,#7c3aed,#8b5cf6)',ocean:'linear-gradient(135deg,#0891b2,#06b6d4)',forest:'linear-gradient(135deg,#16a34a,#22c55e)',sunset:'linear-gradient(135deg,#ea580c,#f97316)',rose:'linear-gradient(135deg,#e11d48,#f43f5e)',gold:'linear-gradient(135deg,#d97706,#f59e0b)'};
 const THEME_NAMES={default:'Mor',ocean:'Okyanus',forest:'Orman',sunset:'Gün Batımı',rose:'Gül',gold:'Altın'};
-let S={cu:null,cm:new Date().getMonth(),cy:new Date().getFullYear(),em:new Date().getMonth(),ey:new Date().getFullYear(),sd:null,mt:'shift',lt:null,clipboard:null,multiSelect:false,selectedDates:[],u:{1:{name:'Kullanıcı 1',netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{},customPresets:[],weeklyTemplate:null,lastLogin:null,theme:'default'},2:{name:'Kullanıcı 2',netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{},customPresets:[],weeklyTemplate:null,lastLogin:null,theme:'default'}}};
+
+let S={cu:null,cm:new Date().getMonth(),cy:new Date().getFullYear(),lvy:new Date().getFullYear(),em:new Date().getMonth(),ey:new Date().getFullYear(),sd:null,mt:'shift',lt:null,clipboard:null,multiSelect:false,selectedDates:[],wtEditDay:null,u:{1:{name:'Kullanıcı 1',netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{},customPresets:[],weeklyTemplate:null,lastLogin:null,theme:'default'},2:{name:'Kullanıcı 2',netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{},customPresets:[],weeklyTemplate:null,lastLogin:null,theme:'default'}}};
+
 let confirmCallback=null,mdCache={};
+
 // UNDO
 const undoStack=[];const MAX_UNDO=20;
 function pushUndo(label){
@@ -381,6 +440,7 @@ function undo(){
   toast(`Geri alındı: ${snap.label}`,'info');
 }
 function updUndoBtn(){const b=$('undoBtn');if(b)b.disabled=!undoStack.length}
+
 // PWA
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;showInstallBanner()});
@@ -390,6 +450,7 @@ function showInstallBanner(){
   el.innerHTML=`<div class="install-banner"><div class="ib-text">📱 ShiftTrack'i yükle<small>Ana ekrana ekleyerek hızlı erişim sağla</small></div><div style="display:flex;gap:6px"><button class="btn btn-sm" style="background:rgba(255,255,255,.2);color:#fff" onclick="installPWA()"><i class="fas fa-download"></i>Yükle</button><button class="btn btn-sm" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)" onclick="this.closest('.install-banner').remove()"><i class="fas fa-times"></i></button></div></div>`;
 }
 function installPWA(){if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')toast('Uygulama yükleniyor!','success');deferredPrompt=null;const el=$('installBanner');if(el)el.innerHTML=''})}
+
 // HELPERS
 function escHtml(s){if(!s)return'';const d=document.createElement('div');d.textContent=String(s);return d.innerHTML}
 function $(id){return document.getElementById(id)}
@@ -407,143 +468,357 @@ function confirmCancel(){$('confirmOverlay').classList.remove('show');confirmCal
 function getH(ds){const p=parseDS(ds);if(!p)return null;const y=p.y,m=p.m+1,day=p.d;for(const h of FH)if(h.m===m&&h.d===day)return h.n;const r=RH[y];if(r)for(const h of r)if(h.m===m&&h.d===day)return h.n;return null}
 function isH(ds){return getH(ds)!==null}
 function parseTime(ts){if(!ts||typeof ts!=='string')return null;const p=ts.split(':');if(p.length!==2)return null;const h=parseInt(p[0]),m=parseInt(p[1]);if(isNaN(h)||isNaN(m)||h<0||h>23||m<0||m>59)return null;return h*60+m}
-function calcHr(s,e,b){const st=parseTime(s),en=parseTime(e);if(st===null||en===null||st===en)return 0;let d=en-st;if(d<=0)d+=1440;b=parseInt(b)||0;if(b<0)b=0;return Math.min(Math.max(0,(d-b)/60),24)}
+
+// FIX: calcHr — mola net süreden büyükse 0 döner (negatif olmaz)
+function calcHr(s,e,b){
+  const st=parseTime(s),en=parseTime(e);
+  if(st===null||en===null||st===en)return 0;
+  let d=en-st;
+  if(d<=0)d+=1440;
+  b=Math.max(0,parseInt(b)||0);
+  const net=(d-b)/60;
+  return Math.min(Math.max(0,net),24);
+}
 function grossHr(s,e){const st=parseTime(s),en=parseTime(e);if(st===null||en===null||st===en)return 0;let d=en-st;if(d<=0)d+=1440;return Math.max(0,d/60)}
+
 function getISOWeek(d){if(!(d instanceof Date)||isNaN(d.getTime()))return'0-W00';const dt=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const dn=dt.getUTCDay()||7;dt.setUTCDate(dt.getUTCDate()+4-dn);const ys=new Date(Date.UTC(dt.getUTCFullYear(),0,1));return dt.getUTCFullYear()+'-W'+String(Math.ceil((((dt-ys)/864e5)+1)/7)).padStart(2,'0')}
-function getStreak(){const u=cu();if(!u)return 0;let s=0,cs=0;const ms=10;const today=new Date();let d=new Date(today);if(!u.shifts[dStr(today)]&&!u.leaves[dStr(today)])d.setDate(d.getDate()-1);let g=0;while(g<400){g++;const ds=dStr(d);if(!ds)break;if(u.shifts[ds]||u.leaves[ds]){s++;cs=0;d.setDate(d.getDate()-1)}else{const dw=d.getDay();if((dw===0||dw===6||isH(ds))&&cs<ms){cs++;d.setDate(d.getDate()-1);continue}break}}return s}
-function getAnnualUsed(uid,yr,exc){const u=S.u[uid];if(!u)return 0;let c=0;Object.entries(u.leaves).forEach(([k,v])=>{if(!v||v.type!=='annual')return;const p=parseDS(k);if(!p||p.y!==yr)return;if(exc&&k===exc)return;c++});return c}
+function getStreak(){const u=cu();if(!u)return 0;let s=0;const today=new Date();let d=new Date(today);if(!u.shifts[dStr(today)]&&!u.leaves[dStr(today)])d.setDate(d.getDate()-1);let g=0,cs=0,ms=10;while(g<400){g++;const ds=dStr(d);if(!ds)break;if(u.shifts[ds]||u.leaves[ds]){s++;cs=0;d.setDate(d.getDate()-1)}else{const dw=d.getDay();if((dw===0||dw===6||isH(ds))&&cs<ms){cs++;d.setDate(d.getDate()-1);continue}break}}return s}
+
+// FIX: getAnnualUsed — exc parametresi çoklu seçimde de çalışacak şekilde düzenlendi
+function getAnnualUsed(uid,yr,excArr){
+  const u=S.u[uid];if(!u)return 0;
+  const excSet=new Set(Array.isArray(excArr)?excArr:(excArr?[excArr]:[]));
+  let c=0;
+  Object.entries(u.leaves).forEach(([k,v])=>{
+    if(!v||v.type!=='annual')return;
+    const p=parseDS(k);if(!p||p.y!==yr)return;
+    if(excSet.has(k))return;
+    c++;
+  });
+  return c;
+}
+
 function invalidateMDCache(){mdCache={}}
-function getMD(y,m){const u=cu();const empty={th:0,rh:0,oh:0,hh:0,wd:0,hdw:0,wh:{},wr:0,ud:0,yau:0,ysd:0,mau:0,msd:0,hr:0,dim:new Date(y,m+1,0).getDate()};if(!u)return empty;const ck=`${S.cu}-${y}-${m}`;if(mdCache[ck])return mdCache[ck];const dim=new Date(y,m+1,0).getDate();let th=0,hh=0,wd=0,hdw=0;const wh={};for(let d=1;d<=dim;d++){const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const sh=u.shifts[s];if(!sh||!sh.start||!sh.end)continue;const hrs=calcHr(sh.start,sh.end,sh.break||0);if(hrs<=0)continue;th+=hrs;wd++;const dt=new Date(y,m,d);const wk=getISOWeek(dt);if(!wh[wk])wh[wk]=0;wh[wk]+=hrs;if(isH(s)){hh+=hrs;hdw++}}let oh=0,rh=0;Object.values(wh).forEach(w=>{if(w>45){oh+=w-45;rh+=45}else rh+=w});let yau=0,ysd=0,mau=0,msd=0,wr=0,ud=0;Object.entries(u.leaves).forEach(([k,v])=>{const p=parseDS(k);if(!p||!v||!v.type)return;if(p.y===y){if(v.type==='annual')yau++;if(v.type==='sick')ysd++}if(p.y===y&&p.m===m){if(v.type==='annual')mau++;if(v.type==='sick')msd++;if(v.type==='weekly')wr++;if(v.type==='unpaid')ud++}});const hr=u.netSalary>0?u.netSalary/MH:0;const r={th,rh,oh,hh,wd,hdw,wh,wr,ud,yau,ysd,mau,msd,hr,dim};mdCache[ck]=r;return r}
+function getMD(y,m){
+  const u=cu();
+  const empty={th:0,rh:0,oh:0,hh:0,wd:0,hdw:0,wh:{},wr:0,ud:0,yau:0,ysd:0,mau:0,msd:0,hr:0,dim:new Date(y,m+1,0).getDate()};
+  if(!u)return empty;
+  const ck=`${S.cu}-${y}-${m}`;
+  if(mdCache[ck])return mdCache[ck];
+  const dim=new Date(y,m+1,0).getDate();
+  let th=0,hh=0,wd=0,hdw=0;
+  const wh={};
+  for(let d=1;d<=dim;d++){
+    const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const sh=u.shifts[s];
+    if(!sh||!sh.start||!sh.end)continue;
+    const hrs=calcHr(sh.start,sh.end,sh.break||0);
+    if(hrs<=0)continue;
+    th+=hrs;wd++;
+    const dt=new Date(y,m,d);
+    const wk=getISOWeek(dt);
+    if(!wh[wk])wh[wk]=0;
+    wh[wk]+=hrs;
+    if(isH(s)){hh+=hrs;hdw++}
+  }
+  let oh=0,rh=0;
+  Object.values(wh).forEach(w=>{if(w>45){oh+=w-45;rh+=45}else rh+=w});
+  let yau=0,ysd=0,mau=0,msd=0,wr=0,ud=0;
+  Object.entries(u.leaves).forEach(([k,v])=>{
+    const p=parseDS(k);if(!p||!v||!v.type)return;
+    if(p.y===y){if(v.type==='annual')yau++;if(v.type==='sick')ysd++}
+    if(p.y===y&&p.m===m){if(v.type==='annual')mau++;if(v.type==='sick')msd++;if(v.type==='weekly')wr++;if(v.type==='unpaid')ud++}
+  });
+  const hr=u.netSalary>0?u.netSalary/MH:0;
+  const r={th,rh,oh,hh,wd,hdw,wh,wr,ud,yau,ysd,mau,msd,hr,dim};
+  mdCache[ck]=r;return r;
+}
 function getPrevMD(){let pm=S.cm-1,py=S.cy;if(pm<0){pm=11;py--}return getMD(py,pm)}
-function calcEarningForMonth(y,m,ns){if(!ns||ns<=0)return null;const u=cu();if(!u)return null;const d=getMD(y,m);const dim=d.dim,dr=ns/30,hr=ns/MH;const today=new Date();const tY=today.getFullYear(),tM=today.getMonth(),tD=today.getDate();const isCur=(y===tY&&m===tM),isFut=(y>tY||(y===tY&&m>tM));let ev;if(isFut)ev=0;else if(isCur)ev=Math.max(0,tD);else ev=dim;let fp=0;for(let day=1;day<=ev;day++){const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;if(u.shifts[ds]||u.leaves[ds])continue;const dt=new Date(y,m,day);const dow=dt.getDay();if(dow===0||dow===6||isH(ds))fp++}const pd=d.wd+d.wr+d.mau+d.msd;const mis=Math.max(0,ev-pd-d.ud-fp);const ab=d.ud+mis;const bp=Math.max(0,ns-(ab*dr));const op=d.oh*hr*1.5;const hp=d.hh*hr;const te=Math.max(0,bp+op+hp);return{dailyRate:dr,hourlyRate:hr,basePay:bp,overtimePay:op,holidayPay:hp,totalEarning:te,paidDays:pd,workedDays:d.wd,weeklyDays:d.wr,annualDays:d.mau,sickDays:d.msd,unpaidDays:d.ud,missingDays:mis,absentDays:ab,freePassDays:fp,dim,totalHours:d.th,overtimeHours:d.oh,holidayHours:d.hh,isFullMonth:ab===0&&!isCur&&!isFut,isCurrentMonth:isCur,isFutureMonth:isFut,evaluableDays:ev}}
+
+function calcEarningForMonth(y,m,ns){
+  if(!ns||ns<=0)return null;
+  const u=cu();if(!u)return null;
+  const d=getMD(y,m);
+  const dim=d.dim,dr=ns/30,hr=ns/MH;
+  const today=new Date();
+  const tY=today.getFullYear(),tM=today.getMonth(),tD=today.getDate();
+  const isCur=(y===tY&&m===tM),isFut=(y>tY||(y===tY&&m>tM));
+  let ev;
+  if(isFut)ev=0;
+  else if(isCur)ev=Math.max(0,tD);
+  else ev=dim;
+  let fp=0;
+  for(let day=1;day<=ev;day++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    if(u.shifts[ds]||u.leaves[ds])continue;
+    const dt=new Date(y,m,day);
+    const dow=dt.getDay();
+    if(dow===0||dow===6||isH(ds))fp++;
+  }
+  const pd=d.wd+d.wr+d.mau+d.msd;
+  const mis=Math.max(0,ev-pd-d.ud-fp);
+  const ab=d.ud+mis;
+  const bp=Math.max(0,ns-(ab*dr));
+  const op=d.oh*hr*1.5;
+  const hp=d.hh*hr;
+  const te=Math.max(0,bp+op+hp);
+  return{dailyRate:dr,hourlyRate:hr,basePay:bp,overtimePay:op,holidayPay:hp,totalEarning:te,paidDays:pd,workedDays:d.wd,weeklyDays:d.wr,annualDays:d.mau,sickDays:d.msd,unpaidDays:d.ud,missingDays:mis,absentDays:ab,freePassDays:fp,dim,totalHours:d.th,overtimeHours:d.oh,holidayHours:d.hh,isFullMonth:ab===0&&!isCur&&!isFut,isCurrentMonth:isCur,isFutureMonth:isFut,evaluableDays:ev};
+}
+
 // 6-MONTH TREND DATA
-function getTrendData(){const u=cu();if(!u)return[];const today=new Date();const data=[];for(let i=5;i>=0;i--){let m=today.getMonth()-i,y=today.getFullYear();while(m<0){m+=12;y--}const md=getMD(y,m);const earn=u.netSalary?calcEarningForMonth(y,m,u.netSalary):null;data.push({y,m,label:MTR[m].substring(0,3),fullLabel:MTR[m]+' '+y,hours:md.th,overtime:md.oh,days:md.wd,earning:earn?earn.totalEarning:0,holidays:md.hdw,leaves:md.wr+md.mau+md.msd+md.ud})}return data}
+function getTrendData(){
+  const u=cu();if(!u)return[];
+  const today=new Date();
+  const data=[];
+  for(let i=5;i>=0;i--){
+    let m=today.getMonth()-i,y=today.getFullYear();
+    while(m<0){m+=12;y--}
+    const md=getMD(y,m);
+    const earn=u.netSalary?calcEarningForMonth(y,m,u.netSalary):null;
+    data.push({y,m,label:MTR[m].substring(0,3),fullLabel:MTR[m]+' '+y,hours:md.th,overtime:md.oh,days:md.wd,earning:earn?earn.totalEarning:0,holidays:md.hdw,leaves:md.wr+md.mau+md.msd+md.ud});
+  }
+  return data;
+}
+
 // RENDER STATS PAGE
 function renderStats(){
-const u=cu();if(!u)return;
-const data=getTrendData();
-const el=$('statsContent');if(!el)return;
-if(!data.length||data.every(d=>d.hours===0)){el.innerHTML='<div class="empty"><i class="fas fa-chart-line"></i><p>Yeterli veri yok</p></div>';return}
-const maxH=Math.max(1,...data.map(d=>d.hours));
-const maxE=Math.max(1,...data.map(d=>d.earning));
-const avgH=data.reduce((a,d)=>a+d.hours,0)/data.filter(d=>d.hours>0).length||0;
-const avgE=data.reduce((a,d)=>a+d.earning,0)/data.filter(d=>d.earning>0).length||0;
-const totalH=data.reduce((a,d)=>a+d.hours,0);
-const totalOT=data.reduce((a,d)=>a+d.overtime,0);
-const totalE=data.reduce((a,d)=>a+d.earning,0);
-// SVG TREND — Saat
-const W=680,H=220,pad=50,barW=60,gap=(W-pad*2-barW*6)/5;
-let hourBars='',hourLine='',hourDots='',labels='',gridLines='';
-const steps=4;
-for(let i=0;i<=steps;i++){const yy=pad+(H-pad*2)*(1-i/steps);const val=Math.round(maxH*i/steps);gridLines+=`<line x1="${pad}" y1="${yy}" x2="${W-20}" y2="${yy}" class="trend-grid"/>`;if(i>0)hourBars+=`<text x="${pad-8}" y="${yy+4}" text-anchor="end" class="trend-label" font-size="10">${val}</text>`}
-const pts=[];
-data.forEach((d,i)=>{
-const x=pad+i*(barW+gap);const bH=maxH>0?(d.hours/maxH)*(H-pad*2):0;const yy=pad+(H-pad*2)-bH;
-hourBars+=`<rect x="${x}" y="${yy}" width="${barW}" height="${bH}" rx="6" fill="url(#barGrad)" opacity=".7" class="trend-bar"><title>${d.fullLabel}: ${d.hours.toFixed(1)}s</title></rect>`;
-if(d.overtime>0){const otH=maxH>0?(d.overtime/maxH)*(H-pad*2):0;hourBars+=`<rect x="${x}" y="${yy}" width="${barW}" height="${Math.min(otH,bH)}" rx="6" fill="var(--acc)" opacity=".35"><title>FM: ${d.overtime.toFixed(1)}s</title></rect>`}
-const cx=x+barW/2,cy=yy;pts.push(`${cx},${cy}`);
-hourDots+=`<circle cx="${cx}" cy="${cy}" r="4" fill="var(--p)" stroke="var(--bg2)" stroke-width="2" class="trend-dot"><title>${d.hours.toFixed(1)}s</title></circle>`;
-labels+=`<text x="${x+barW/2}" y="${H-8}" text-anchor="middle" class="trend-label" font-size="11">${escHtml(d.label)}</text>`;
-hourBars+=`<text x="${x+barW/2}" y="${yy-6}" text-anchor="middle" class="trend-val" font-size="11">${d.hours>0?d.hours.toFixed(0):''}</text>`;
-});
-if(pts.length>1)hourLine=`<polyline points="${pts.join(' ')}" class="trend-line" stroke="var(--p)" opacity=".6"/>`;
-// SVG TREND — Kazanç
-let earnBars='',earnLine2='',earnDots2='',labels2='',gridLines2='';
-for(let i=0;i<=steps;i++){const yy=pad+(H-pad*2)*(1-i/steps);const val=maxE*i/steps;gridLines2+=`<line x1="${pad}" y1="${yy}" x2="${W-20}" y2="${yy}" class="trend-grid"/>`;if(i>0)earnBars+=`<text x="${pad-8}" y="${yy+4}" text-anchor="end" class="trend-label" font-size="9">${fm(val)}</text>`}
-const pts2=[];
-data.forEach((d,i)=>{
-const x=pad+i*(barW+gap);const bH=maxE>0?(d.earning/maxE)*(H-pad*2):0;const yy=pad+(H-pad*2)-bH;
-earnBars+=`<rect x="${x}" y="${yy}" width="${barW}" height="${bH}" rx="6" fill="url(#earnGrad)" opacity=".7" class="trend-bar"><title>${d.fullLabel}: ${fm(d.earning)}</title></rect>`;
-const cx=x+barW/2,cy=yy;pts2.push(`${cx},${cy}`);
-earnDots2+=`<circle cx="${cx}" cy="${cy}" r="4" fill="var(--g)" stroke="var(--bg2)" stroke-width="2" class="trend-dot"><title>${fm(d.earning)}</title></circle>`;
-labels2+=`<text x="${x+barW/2}" y="${H-8}" text-anchor="middle" class="trend-label" font-size="11">${escHtml(d.label)}</text>`;
-earnBars+=`<text x="${x+barW/2}" y="${yy-6}" text-anchor="middle" class="trend-val" font-size="10">${d.earning>0?fm(d.earning):''}</text>`;
-});
-if(pts2.length>1)earnLine2=`<polyline points="${pts2.join(' ')}" class="trend-line" stroke="var(--g)" opacity=".6"/>`;
-// Summary cards
-const lastM=data[data.length-1],prevM=data.length>1?data[data.length-2]:null;
-const hDiff=prevM&&prevM.hours>0?((lastM.hours-prevM.hours)/prevM.hours*100):0;
-const eDiff=prevM&&prevM.earning>0?((lastM.earning-prevM.earning)/prevM.earning*100):0;
-el.innerHTML=`
-<div class="stats" style="margin-bottom:20px">
-<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-clock"></i></div><div class="val">${totalH.toFixed(0)}</div><div class="lbl">6 Ay Toplam Saat</div></div>
-<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-chart-line"></i></div><div class="val">${avgH.toFixed(0)}s</div><div class="lbl">Aylık Ortalama</div></div>
-<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-fire"></i></div><div class="val">${totalOT.toFixed(1)}s</div><div class="lbl">6 Ay FM</div></div>
-<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-wallet"></i></div><div class="val">${fm(totalE)}</div><div class="lbl">6 Ay Kazanç</div></div>
-<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-arrow-${hDiff>=0?'up':'down'}"></i></div><div class="val">${hDiff>=0?'+':''}${hDiff.toFixed(1)}%</div><div class="lbl">Saat Değişim</div><span class="change ${hDiff>=0?'up':'down'}">Son aya göre</span></div>
-<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-arrow-${eDiff>=0?'up':'down'}"></i></div><div class="val">${eDiff>=0?'+':''}${eDiff.toFixed(1)}%</div><div class="lbl">Kazanç Değişim</div><span class="change ${eDiff>=0?'up':'down'}">Son aya göre</span></div>
-</div>
-<div class="grid-2">
-<div class="card">
-<div class="card-head"><h3><i class="fas fa-chart-bar"></i>6 Aylık Trend — Saat</h3><span style="font-size:10px;color:var(--t3)">Ort: ${avgH.toFixed(0)}s</span></div>
-<div class="trend-chart-wrap">
-<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
-<defs><linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--p)" stop-opacity=".9"/><stop offset="100%" stop-color="var(--p2)" stop-opacity=".5"/></linearGradient></defs>
-${gridLines}${hourBars}${hourLine}${hourDots}${labels}
-<line x1="${pad}" y1="${pad+(H-pad*2)*(1-avgH/maxH)}" x2="${W-20}" y2="${pad+(H-pad*2)*(1-avgH/maxH)}" stroke="var(--acc)" stroke-width="1" stroke-dasharray="6 3" opacity=".5"/>
-<text x="${W-18}" y="${pad+(H-pad*2)*(1-avgH/maxH)-4}" class="trend-label" font-size="9" fill="var(--acc)">ort</text>
-</svg>
-</div>
-</div>
-<div class="card">
-<div class="card-head"><h3><i class="fas fa-wallet"></i>6 Aylık Trend — Kazanç</h3><span style="font-size:10px;color:var(--t3)">Ort: ${fm(avgE)}</span></div>
-<div class="trend-chart-wrap">
-<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
-<defs><linearGradient id="earnGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--g)" stop-opacity=".9"/><stop offset="100%" stop-color="var(--g)" stop-opacity=".3"/></linearGradient></defs>
-${gridLines2}${earnBars}${earnLine2}${earnDots2}${labels2}
-<line x1="${pad}" y1="${pad+(H-pad*2)*(1-avgE/maxE)}" x2="${W-20}" y2="${pad+(H-pad*2)*(1-avgE/maxE)}" stroke="var(--acc)" stroke-width="1" stroke-dasharray="6 3" opacity=".5"/>
-<text x="${W-18}" y="${pad+(H-pad*2)*(1-avgE/maxE)-4}" class="trend-label" font-size="9" fill="var(--acc)">ort</text>
-</svg>
-</div>
-</div>
-</div>
-<div class="card" style="margin-top:16px">
-<div class="card-head"><h3><i class="fas fa-table"></i>Aylık Detay</h3></div>
-<div style="overflow-x:auto">
-<table><thead><tr><th>Ay</th><th>Gün</th><th>Saat</th><th>FM</th><th>Tatil</th><th>İzin</th><th>Kazanç</th></tr></thead><tbody>
-${data.map(d=>`<tr><td style="font-weight:700">${escHtml(d.fullLabel)}</td><td>${d.days}</td><td style="font-weight:800">${d.hours.toFixed(1)}</td><td class="${d.overtime>0?'warn':''}" style="font-weight:700;color:${d.overtime>0?'var(--acc)':'inherit'}">${d.overtime.toFixed(1)}</td><td>${d.holidays}</td><td>${d.leaves}</td><td style="font-weight:800;color:var(--g)">${d.earning>0?fm(d.earning):'—'}</td></tr>`).join('')}
-</tbody></table>
-</div>
-</div>`;
+  const u=cu();if(!u)return;
+  const data=getTrendData();
+  const el=$('statsContent');if(!el)return;
+  if(!data.length||data.every(d=>d.hours===0)){el.innerHTML='<div class="empty"><i class="fas fa-chart-line"></i><p>Yeterli veri yok</p></div>';return}
+  const maxH=Math.max(1,...data.map(d=>d.hours));
+  const maxE=Math.max(1,...data.map(d=>d.earning));
+  const nonZeroH=data.filter(d=>d.hours>0);
+  const nonZeroE=data.filter(d=>d.earning>0);
+  const avgH=nonZeroH.length?nonZeroH.reduce((a,d)=>a+d.hours,0)/nonZeroH.length:0;
+  const avgE=nonZeroE.length?nonZeroE.reduce((a,d)=>a+d.earning,0)/nonZeroE.length:0;
+  const totalH=data.reduce((a,d)=>a+d.hours,0);
+  const totalOT=data.reduce((a,d)=>a+d.overtime,0);
+  const totalE=data.reduce((a,d)=>a+d.earning,0);
+  const W=680,H=220,pad=50,barW=60,gap=(W-pad*2-barW*6)/5;
+  let hourBars='',hourLine='',hourDots='',labels='',gridLines='';
+  const steps=4;
+  for(let i=0;i<=steps;i++){const yy=pad+(H-pad*2)*(1-i/steps);const val=Math.round(maxH*i/steps);gridLines+=`<line x1="${pad}" y1="${yy}" x2="${W-20}" y2="${yy}" class="trend-grid"/>`;if(i>0)hourBars+=`<text x="${pad-8}" y="${yy+4}" text-anchor="end" class="trend-label" font-size="10">${val}</text>`}
+  const pts=[];
+  data.forEach((d,i)=>{
+    const x=pad+i*(barW+gap);const bH=maxH>0?(d.hours/maxH)*(H-pad*2):0;const yy=pad+(H-pad*2)-bH;
+    hourBars+=`<rect x="${x}" y="${yy}" width="${barW}" height="${bH}" rx="6" fill="url(#barGrad)" opacity=".7" class="trend-bar"><title>${escHtml(d.fullLabel)}: ${d.hours.toFixed(1)}s</title></rect>`;
+    if(d.overtime>0){const otH=maxH>0?(d.overtime/maxH)*(H-pad*2):0;hourBars+=`<rect x="${x}" y="${yy}" width="${barW}" height="${Math.min(otH,bH)}" rx="6" fill="var(--acc)" opacity=".35"><title>FM: ${d.overtime.toFixed(1)}s</title></rect>`}
+    const cx=x+barW/2,cy=yy;pts.push(`${cx},${cy}`);
+    hourDots+=`<circle cx="${cx}" cy="${cy}" r="4" fill="var(--p)" stroke="var(--bg2)" stroke-width="2" class="trend-dot"><title>${d.hours.toFixed(1)}s</title></circle>`;
+    labels+=`<text x="${x+barW/2}" y="${H-8}" text-anchor="middle" class="trend-label" font-size="11">${escHtml(d.label)}</text>`;
+    hourBars+=`<text x="${x+barW/2}" y="${yy-6}" text-anchor="middle" class="trend-val" font-size="11">${d.hours>0?d.hours.toFixed(0):''}</text>`;
+  });
+  if(pts.length>1)hourLine=`<polyline points="${pts.join(' ')}" class="trend-line" stroke="var(--p)" opacity=".6"/>`;
+  let earnBars='',earnLine2='',earnDots2='',labels2='',gridLines2='';
+  for(let i=0;i<=steps;i++){const yy=pad+(H-pad*2)*(1-i/steps);const val=maxE*i/steps;gridLines2+=`<line x1="${pad}" y1="${yy}" x2="${W-20}" y2="${yy}" class="trend-grid"/>`;if(i>0)earnBars+=`<text x="${pad-8}" y="${yy+4}" text-anchor="end" class="trend-label" font-size="9">${fm(val)}</text>`}
+  const pts2=[];
+  data.forEach((d,i)=>{
+    const x=pad+i*(barW+gap);const bH=maxE>0?(d.earning/maxE)*(H-pad*2):0;const yy=pad+(H-pad*2)-bH;
+    earnBars+=`<rect x="${x}" y="${yy}" width="${barW}" height="${bH}" rx="6" fill="url(#earnGrad)" opacity=".7" class="trend-bar"><title>${escHtml(d.fullLabel)}: ${fm(d.earning)}</title></rect>`;
+    const cx=x+barW/2,cy=yy;pts2.push(`${cx},${cy}`);
+    earnDots2+=`<circle cx="${cx}" cy="${cy}" r="4" fill="var(--g)" stroke="var(--bg2)" stroke-width="2" class="trend-dot"><title>${fm(d.earning)}</title></circle>`;
+    labels2+=`<text x="${x+barW/2}" y="${H-8}" text-anchor="middle" class="trend-label" font-size="11">${escHtml(d.label)}</text>`;
+    earnBars+=`<text x="${x+barW/2}" y="${yy-6}" text-anchor="middle" class="trend-val" font-size="10">${d.earning>0?fm(d.earning):''}</text>`;
+  });
+  if(pts2.length>1)earnLine2=`<polyline points="${pts2.join(' ')}" class="trend-line" stroke="var(--g)" opacity=".6"/>`;
+  const lastM=data[data.length-1],prevM=data.length>1?data[data.length-2]:null;
+  const hDiff=prevM&&prevM.hours>0?((lastM.hours-prevM.hours)/prevM.hours*100):0;
+  const eDiff=prevM&&prevM.earning>0?((lastM.earning-prevM.earning)/prevM.earning*100):0;
+  const avgYLine=avgH>0&&maxH>0?`<line x1="${pad}" y1="${pad+(H-pad*2)*(1-avgH/maxH)}" x2="${W-20}" y2="${pad+(H-pad*2)*(1-avgH/maxH)}" stroke="var(--acc)" stroke-width="1" stroke-dasharray="6 3" opacity=".5"/><text x="${W-18}" y="${pad+(H-pad*2)*(1-avgH/maxH)-4}" class="trend-label" font-size="9" fill="var(--acc)">ort</text>`:'';
+  const avgELine=avgE>0&&maxE>0?`<line x1="${pad}" y1="${pad+(H-pad*2)*(1-avgE/maxE)}" x2="${W-20}" y2="${pad+(H-pad*2)*(1-avgE/maxE)}" stroke="var(--acc)" stroke-width="1" stroke-dasharray="6 3" opacity=".5"/><text x="${W-18}" y="${pad+(H-pad*2)*(1-avgE/maxE)-4}" class="trend-label" font-size="9" fill="var(--acc)">ort</text>`:'';
+  el.innerHTML=`
+  <div class="stats" style="margin-bottom:20px">
+  <div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-clock"></i></div><div class="val">${totalH.toFixed(0)}</div><div class="lbl">6 Ay Toplam Saat</div></div>
+  <div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-chart-line"></i></div><div class="val">${avgH.toFixed(0)}s</div><div class="lbl">Aylık Ortalama</div></div>
+  <div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-fire"></i></div><div class="val">${totalOT.toFixed(1)}s</div><div class="lbl">6 Ay FM</div></div>
+  <div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-wallet"></i></div><div class="val">${fm(totalE)}</div><div class="lbl">6 Ay Kazanç</div></div>
+  <div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-arrow-${hDiff>=0?'up':'down'}"></i></div><div class="val">${hDiff>=0?'+':''}${hDiff.toFixed(1)}%</div><div class="lbl">Saat Değişim</div><span class="change ${hDiff>=0?'up':'down'}">Son aya göre</span></div>
+  <div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-arrow-${eDiff>=0?'up':'down'}"></i></div><div class="val">${eDiff>=0?'+':''}${eDiff.toFixed(1)}%</div><div class="lbl">Kazanç Değişim</div><span class="change ${eDiff>=0?'up':'down'}">Son aya göre</span></div>
+  </div>
+  <div class="grid-2">
+  <div class="card"><div class="card-head"><h3><i class="fas fa-chart-bar"></i>6 Aylık Trend — Saat</h3><span style="font-size:10px;color:var(--t3)">Ort: ${avgH.toFixed(0)}s</span></div><div class="trend-chart-wrap"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--p)" stop-opacity=".9"/><stop offset="100%" stop-color="var(--p2)" stop-opacity=".5"/></linearGradient></defs>${gridLines}${hourBars}${hourLine}${hourDots}${labels}${avgYLine}</svg></div></div>
+  <div class="card"><div class="card-head"><h3><i class="fas fa-wallet"></i>6 Aylık Trend — Kazanç</h3><span style="font-size:10px;color:var(--t3)">Ort: ${fm(avgE)}</span></div><div class="trend-chart-wrap"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="earnGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--g)" stop-opacity=".9"/><stop offset="100%" stop-color="var(--g)" stop-opacity=".3"/></linearGradient></defs>${gridLines2}${earnBars}${earnLine2}${earnDots2}${labels2}${avgELine}</svg></div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><div class="card-head"><h3><i class="fas fa-table"></i>Aylık Detay</h3></div><div style="overflow-x:auto"><table><thead><tr><th>Ay</th><th>Gün</th><th>Saat</th><th>FM</th><th>Tatil</th><th>İzin</th><th>Kazanç</th></tr></thead><tbody>${data.map(d=>`<tr><td style="font-weight:700">${escHtml(d.fullLabel)}</td><td>${d.days}</td><td style="font-weight:800">${d.hours.toFixed(1)}</td><td style="font-weight:700;color:${d.overtime>0?'var(--acc)':'inherit'}">${d.overtime.toFixed(1)}</td><td>${d.holidays}</td><td>${d.leaves}</td><td style="font-weight:800;color:var(--g)">${d.earning>0?fm(d.earning):'—'}</td></tr>`).join('')}</tbody></table></div></div>`;
 }
+
 // RENDER
 function renderActivePage(){if(!cu())return;const a=document.querySelector('.page.active');if(!a)return;switch(a.id){case'pg-dashboard':renderDash();renderYearOverview();break;case'pg-calendar':renderCal();break;case'pg-stats':renderStats();break;case'pg-leaves':renderLeaves();break;case'pg-earnings':renderEarn();break;case'pg-settings':loadSet();break}}
 function renderAll(){if(!cu())return;renderDash();renderCal();renderStats();renderLeaves();renderEarn();loadSet();renderYearOverview()}
-function renderYearOverview(){const el=$('yearOverview');if(!el)return;let h='';for(let m=0;m<12;m++){const d=getMD(S.cy,m);h+=`<div class="year-month ${m===S.cm?'active':''}" data-month="${m}"><span class="ym-name">${MTR[m].substring(0,3)}</span><span class="ym-hrs">${d.th>0?d.th.toFixed(0):'—'}</span></div>`}el.innerHTML=h;el.onclick=function(e){const ym=e.target.closest('.year-month');if(!ym)return;const mo=parseInt(ym.dataset.month);if(isNaN(mo))return;S.cm=mo;invalidateMDCache();renderActivePage()}}
-// INIT
-function init(){loadLS();applyTheme('default');updLogin();
-$('iStart').addEventListener('input',updResult);$('iEnd').addEventListener('input',updResult);$('iBreak').addEventListener('change',updResult);
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undo();return}if(e.key==='Escape'){closeM();$('confirmOverlay').classList.remove('show')}if($('modal').classList.contains('show'))return;if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;const pg=document.querySelector('.page.active');if(!pg)return;if(e.key==='ArrowLeft'){if(pg.id==='pg-calendar')chgM(-1);else if(pg.id==='pg-earnings')chgE(-1)}if(e.key==='ArrowRight'){if(pg.id==='pg-calendar')chgM(1);else if(pg.id==='pg-earnings')chgE(1)}if(e.key.toLowerCase()==='t'&&pg.id==='pg-calendar')goToday()});
-const cg=$('calGrid');if(cg){cg.addEventListener('click',function(e){const c=e.target.closest('.cal-cell');if(!c||c.classList.contains('out'))return;const ds=c.dataset.date;if(!ds)return;if(S.multiSelect){const i=S.selectedDates.indexOf(ds);if(i>-1)S.selectedDates.splice(i,1);else S.selectedDates.push(ds);renderCal();return}openM(ds)});cg.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){const c=e.target.closest('.cal-cell');if(c&&!c.classList.contains('out')){e.preventDefault();c.click()}}})}
-$('modal').addEventListener('click',function(e){if(e.target===this)closeM()});
-if('serviceWorker'in navigator){navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",function(e){e.respondWith(fetch(e.request).catch(function(){return new Response("Offline")}))})',{scope:'/'}).catch(()=>{})}
+
+// FIX: Year overview — yıl navigasyonu eklendi, tıklanınca S.cy de değişiyor
+function renderYearOverview(){
+  const wrap=$('yearOverviewWrap');if(!wrap)return;
+  let h=`<div class="year-nav"><button onclick="chgYear(-1)"><i class="fas fa-chevron-left"></i></button><span>${S.cy}</span><button onclick="chgYear(1)"><i class="fas fa-chevron-right"></i></button></div><div class="year-overview">`;
+  for(let m=0;m<12;m++){
+    const d=getMD(S.cy,m);
+    h+=`<div class="year-month ${m===S.cm?'active':''}" data-month="${m}"><span class="ym-name">${MTR[m].substring(0,3)}</span><span class="ym-hrs">${d.th>0?d.th.toFixed(0):'—'}</span></div>`;
+  }
+  h+='</div>';
+  wrap.innerHTML=h;
+  wrap.querySelector('.year-overview').onclick=function(e){
+    const ym=e.target.closest('.year-month');if(!ym)return;
+    const mo=parseInt(ym.dataset.month);if(isNaN(mo))return;
+    S.cm=mo;
+    invalidateMDCache();renderActivePage();
+  };
 }
+function chgYear(d){
+  S.cy+=d;
+  invalidateMDCache();renderActivePage();
+}
+
+// INIT
+function init(){
+  loadLS();applyTheme('default');updLogin();
+  $('iStart').addEventListener('input',updResult);
+  $('iEnd').addEventListener('input',updResult);
+  $('iBreak').addEventListener('change',updResult);
+  $('wtStart').addEventListener('input',updWTPreview);
+  $('wtEnd').addEventListener('input',updWTPreview);
+  $('wtBreak').addEventListener('change',updWTPreview);
+  document.addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undo();return}
+    if(e.key==='Escape'){
+      closeM();closeWTModal();
+      $('confirmOverlay').classList.remove('show');
+    }
+    if($('modal').classList.contains('show')||$('wtModal').classList.contains('show'))return;
+    if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
+    const pg=document.querySelector('.page.active');if(!pg)return;
+    if(e.key==='ArrowLeft'){if(pg.id==='pg-calendar')chgM(-1);else if(pg.id==='pg-earnings')chgE(-1)}
+    if(e.key==='ArrowRight'){if(pg.id==='pg-calendar')chgM(1);else if(pg.id==='pg-earnings')chgE(1)}
+    if(e.key.toLowerCase()==='t'&&pg.id==='pg-calendar')goToday();
+  });
+  const cg=$('calGrid');
+  if(cg){
+    cg.addEventListener('click',function(e){
+      const c=e.target.closest('.cal-cell');if(!c||c.classList.contains('out'))return;
+      const ds=c.dataset.date;if(!ds)return;
+      if(S.multiSelect){
+        const i=S.selectedDates.indexOf(ds);
+        if(i>-1)S.selectedDates.splice(i,1);else S.selectedDates.push(ds);
+        renderCal();return;
+      }
+      openM(ds);
+    });
+    cg.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){const c=e.target.closest('.cal-cell');if(c&&!c.classList.contains('out')){e.preventDefault();c.click()}}});
+  }
+  $('modal').addEventListener('click',function(e){if(e.target===this)closeM()});
+  $('wtModal').addEventListener('click',function(e){if(e.target===this)closeWTModal()});
+  if('serviceWorker'in navigator){navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",function(e){e.respondWith(fetch(e.request).catch(function(){return new Response("Offline")}))})',{scope:'/'}).catch(()=>{})}
+}
+
 function updLogin(){[1,2].forEach(i=>{const u=S.u[i];if(!u)return;setTxt('ln'+i,u.name||'Kullanıcı '+i);const la=$('la'+i);if(la)la.textContent=(u.name||'K')[0].toUpperCase();const ll=$('ll'+i);if(ll)ll.textContent=u.lastLogin?'Son: '+new Date(u.lastLogin).toLocaleDateString('tr-TR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'';const uti=$('uti'+i);if(uti)uti.innerHTML=`<span class="uti-dot" style="background:${THEME_COLORS[u.theme||'default']}"></span><span class="uti-text">${THEME_NAMES[u.theme||'default']}</span>`})}
 function login(id){S.cu=id;const u=cu();if(!u)return;u.lastLogin=new Date().toISOString();applyTheme(u.theme||'default');saveLS();$('loginScreen').style.display='none';$('mainApp').style.display='block';updTop();invalidateMDCache();undoStack.length=0;updUndoBtn();renderAll();toast(`Hoş geldin, ${escHtml(u.name)}!`,'success')}
 function logout(){S.cu=null;S.multiSelect=false;S.selectedDates=[];S.clipboard=null;undoStack.length=0;invalidateMDCache();applyTheme('default');$('mainApp').style.display='none';$('loginScreen').style.display='flex';updLogin();document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.querySelector('.nav-tab').classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('pg-dashboard').classList.add('active')}
 function updTop(){const u=cu();if(!u)return;setTxt('topName',u.name||'İsimsiz');const ta=$('topAv');if(ta)ta.textContent=(u.name||'K')[0].toUpperCase()}
 function go(p,btn){if(p!=='calendar'&&S.multiSelect){S.multiSelect=false;S.selectedDates=[];const mb=$('multiSelBtn');if(mb){mb.className='btn btn-outline btn-sm';mb.innerHTML='<i class="fas fa-object-group"></i>Çoklu Seç'}}document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));const pg=$('pg-'+p);if(pg)pg.classList.add('active');document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));if(btn)btn.classList.add('active');renderActivePage()}
-function setTheme(t){const u=cu();if(!u)return;u.theme=t;applyTheme(t);saveLS();toast(`${THEME_NAMES[t]||t} teması`,'info')}
+
+// FIX: setTheme — invalidateMDCache eklendi (tema sonrası istatistikler güncel kalır)
+function setTheme(t){const u=cu();if(!u)return;u.theme=t;applyTheme(t);invalidateMDCache();saveLS();toast(`${THEME_NAMES[t]||t} teması`,'info')}
 function applyTheme(t){document.body.className=t==='default'?'':'theme-'+t;document.querySelectorAll('.theme-dot').forEach(d=>d.classList.toggle('active',d.dataset.t===t))}
+
 // DASHBOARD
-function renderDash(){const u=cu();if(!u)return;const d=getMD(S.cy,S.cm),prev=getPrevMD();setTxt('dashSub',`${MTR[S.cm]} ${S.cy} — ${u.name}`);const streak=getStreak();setHtml('dashStreak',streak>0?`<div class="streak-badge"><i class="fas fa-fire"></i>${streak} gün seri</div>`:'');const e=u.netSalary?calcEarningForMonth(S.cy,S.cm,u.netSalary):null;function cmp(c,p){if(p===null||p===undefined)return'<span class="change neutral">—</span>';if(c===p)return'<span class="change neutral">→ 0%</span>';const df=c-p;const pc=p!==0?Math.round((df/p)*100):100;if(df>0)return`<span class="change up"><i class="fas fa-arrow-up"></i>${Math.abs(pc)}%</span>`;return`<span class="change down"><i class="fas fa-arrow-down"></i>${Math.abs(pc)}%</span>`}
-setHtml('statsEl',`<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-clock"></i></div><div class="val">${d.th.toFixed(1)}</div><div class="lbl">Toplam Saat</div>${cmp(d.th,prev.th)}</div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-fire"></i></div><div class="val">${d.oh.toFixed(1)}</div><div class="lbl">Fazla Mesai</div>${cmp(d.oh,prev.oh)}</div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-wallet"></i></div><div class="val">${e?fm(e.totalEarning):'—'}</div><div class="lbl">Kazanç${e&&e.isCurrentMonth?' (tahmini)':''}</div></div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-calendar-check"></i></div><div class="val">${d.wd}/${d.dim}</div><div class="lbl">Çalışma Günü</div></div>`);
-const wks=Object.entries(d.wh).sort((a,b)=>a[0].localeCompare(b[0]));const maxWk=wks.length?Math.max(60,...wks.map(([,h])=>h)):60;let wc='';if(!wks.length){wc='<div class="empty"><i class="fas fa-calendar-times"></i><p>Bu ay vardiya yok</p></div>'}else{wks.forEach(([,h],i)=>{const p=maxWk>0?Math.min(100,h/maxWk*100):0;const lp=maxWk>0?(45/maxWk*100).toFixed(1):0;wc+=`<div class="wk-row"><span class="label">${i+1}. Hafta</span><div class="track"><div class="limit-line" style="left:${lp}%"></div><div class="fill ${h>45?'ot':'ok'}" style="width:${p}%">${h.toFixed(1)}s</div></div><span class="hrs ${h>45?'overtime':''}">${h.toFixed(1)}</span></div>`})}setHtml('weekChart',wc);
-const al=u.annualLeave||14,ar=Math.max(0,al-d.yau),dr=u.netSalary?u.netSalary/30:0;let info='';if(!u.netSalary)info='<div class="hint" style="margin-bottom:8px"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';info+=`<div class="info-row"><span class="k"><i class="fas fa-umbrella-beach"></i>Kalan Y.İzin</span><span class="v ${ar<=3?'neg':''}">${ar}g</span></div><div class="info-row"><span class="k"><i class="fas fa-notes-medical"></i>Rapor (yıl)</span><span class="v">${d.ysd}g</span></div><div class="info-row"><span class="k"><i class="fas fa-couch"></i>H.Tatil (ay)</span><span class="v">${d.wr}g</span></div><div class="info-row"><span class="k"><i class="fas fa-coins"></i>Saatlik</span><span class="v">${u.netSalary?fm(d.hr):'—'}</span></div><div class="info-row"><span class="k"><i class="fas fa-chart-line"></i>Günlük Ort.</span><span class="v">${d.wd>0?(d.th/d.wd).toFixed(1)+'s':'—'}</span></div>`;setHtml('dashInfo',info);
-const deb=$('dashEarnSummary');if(deb){if(e&&(d.wd>0||d.wr>0)){const sl=e.isCurrentMonth?'Devam':e.isFullMonth?'Tam':'−'+e.absentDays+'g';const sc=e.isCurrentMonth?'var(--s)':e.isFullMonth?'var(--g)':'var(--acc)';deb.innerHTML=`<div class="esb" style="margin-top:16px"><div class="esb-title"><i class="fas fa-calculator"></i>${MTR[S.cm]} Kazanç</div><div class="esb-grid"><div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.paidDays}<small style="font-size:11px;color:var(--t3)">g</small></div><div class="esb-lbl">Ücretli</div></div><div class="esb-item"><div class="esb-val" style="color:${sc}"><small style="font-size:11px">${sl}</small></div><div class="esb-lbl">Durum</div></div><div class="esb-item"><div class="esb-val" style="color:var(--g)">${fm(e.basePay)}</div><div class="esb-lbl">Maaş</div></div><div class="esb-item"><div class="esb-val" style="color:var(--acc)">${fm(e.totalEarning)}</div><div class="esb-lbl">Toplam</div></div></div></div>`}else deb.innerHTML=''}}
+function renderDash(){
+  const u=cu();if(!u)return;
+  const d=getMD(S.cy,S.cm),prev=getPrevMD();
+  setTxt('dashSub',`${MTR[S.cm]} ${S.cy} — ${u.name}`);
+  const streak=getStreak();
+  setHtml('dashStreak',streak>0?`<div class="streak-badge"><i class="fas fa-fire"></i>${streak} gün seri</div>`:'');
+  const e=u.netSalary?calcEarningForMonth(S.cy,S.cm,u.netSalary):null;
+  function cmp(c,p){if(p===null||p===undefined)return'<span class="change neutral">—</span>';if(c===p)return'<span class="change neutral">→ 0%</span>';const df=c-p;const pc=p!==0?Math.round((df/p)*100):100;if(df>0)return`<span class="change up"><i class="fas fa-arrow-up"></i>${Math.abs(pc)}%</span>`;return`<span class="change down"><i class="fas fa-arrow-down"></i>${Math.abs(pc)}%</span>`}
+  setHtml('statsEl',`<div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-clock"></i></div><div class="val">${d.th.toFixed(1)}</div><div class="lbl">Toplam Saat</div>${cmp(d.th,prev.th)}</div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-fire"></i></div><div class="val">${d.oh.toFixed(1)}</div><div class="lbl">Fazla Mesai</div>${cmp(d.oh,prev.oh)}</div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-wallet"></i></div><div class="val">${e?fm(e.totalEarning):'—'}</div><div class="lbl">Kazanç${e&&e.isCurrentMonth?' (tahmini)':''}</div></div><div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-calendar-check"></i></div><div class="val">${d.wd}/${d.dim}</div><div class="lbl">Çalışma Günü</div></div>`);
+  const wks=Object.entries(d.wh).sort((a,b)=>a[0].localeCompare(b[0]));
+  const maxWk=wks.length?Math.max(60,...wks.map(([,h])=>h)):60;
+  let wc='';
+  if(!wks.length){wc='<div class="empty"><i class="fas fa-calendar-times"></i><p>Bu ay vardiya yok</p></div>'}
+  else{wks.forEach(([,h],i)=>{const p=maxWk>0?Math.min(100,h/maxWk*100):0;const lp=maxWk>0?(45/maxWk*100).toFixed(1):0;wc+=`<div class="wk-row"><span class="label">${i+1}. Hafta</span><div class="track"><div class="limit-line" style="left:${lp}%"></div><div class="fill ${h>45?'ot':'ok'}" style="width:${p}%">${h.toFixed(1)}s</div></div><span class="hrs ${h>45?'overtime':''}">${h.toFixed(1)}</span></div>`})}
+  setHtml('weekChart',wc);
+  const al=u.annualLeave||14,ar=Math.max(0,al-d.yau);
+  // FIX: iş günleri bazlı doluluk oranı (daha anlamlı)
+  const workdays=d.wd+d.wr+d.mau+d.msd;
+  let info='';
+  if(!u.netSalary)info='<div class="hint" style="margin-bottom:8px"><i class="fas fa-exclamation-triangle"></i><span>Ayarlar\'dan maaş girin.</span></div>';
+  info+=`<div class="info-row"><span class="k"><i class="fas fa-umbrella-beach"></i>Kalan Y.İzin</span><span class="v ${ar<=3?'neg':''}">${ar}g</span></div><div class="info-row"><span class="k"><i class="fas fa-notes-medical"></i>Rapor (yıl)</span><span class="v">${d.ysd}g</span></div><div class="info-row"><span class="k"><i class="fas fa-couch"></i>H.Tatil (ay)</span><span class="v">${d.wr}g</span></div><div class="info-row"><span class="k"><i class="fas fa-coins"></i>Saatlik</span><span class="v">${u.netSalary?fm(d.hr):'—'}</span></div><div class="info-row"><span class="k"><i class="fas fa-chart-line"></i>İş Günü Dol.</span><span class="v">${d.dim>0?workdays+'/'+d.dim:'—'}</span></div>`;
+  setHtml('dashInfo',info);
+  const deb=$('dashEarnSummary');
+  if(deb){if(e&&(d.wd>0||d.wr>0)){const sl=e.isCurrentMonth?'Devam':e.isFullMonth?'Tam':'−'+e.absentDays+'g';const sc=e.isCurrentMonth?'var(--s)':e.isFullMonth?'var(--g)':'var(--acc)';deb.innerHTML=`<div class="esb" style="margin-top:16px"><div class="esb-title"><i class="fas fa-calculator"></i>${MTR[S.cm]} Kazanç</div><div class="esb-grid"><div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.paidDays}<small style="font-size:11px;color:var(--t3)">g</small></div><div class="esb-lbl">Ücretli</div></div><div class="esb-item"><div class="esb-val" style="color:${sc}"><small style="font-size:11px">${sl}</small></div><div class="esb-lbl">Durum</div></div><div class="esb-item"><div class="esb-val" style="color:var(--g)">${fm(e.basePay)}</div><div class="esb-lbl">Maaş</div></div><div class="esb-item"><div class="esb-val" style="color:var(--acc)">${fm(e.totalEarning)}</div><div class="esb-lbl">Toplam</div></div></div></div>`}else deb.innerHTML=''}
+}
+
 // CALENDAR
 function toggleMultiSelect(){S.multiSelect=!S.multiSelect;S.selectedDates=[];const btn=$('multiSelBtn');if(btn){btn.className=S.multiSelect?'btn btn-primary btn-sm':'btn btn-outline btn-sm';btn.innerHTML=S.multiSelect?'<i class="fas fa-check"></i>Bitir':'<i class="fas fa-object-group"></i>Çoklu Seç'}if(S.multiSelect)toast('Çoklu seçim açık','info');renderCal()}
 function renderMultiBar(){const el=$('multiBar');if(!el)return;if(!S.multiSelect||!S.selectedDates.length){el.innerHTML='';return}el.innerHTML=`<div class="multi-select-bar"><span><i class="fas fa-check-circle"></i> ${S.selectedDates.length} gün</span><div class="actions"><button class="btn btn-soft btn-xs" onclick="multiApplyShift()"><i class="fas fa-clock"></i>Vardiya</button><button class="btn btn-xs" style="background:rgba(96,165,250,.15);color:#60a5fa" onclick="multiApplyLeave('annual')">Y.İzin</button><button class="btn btn-xs" style="background:var(--p4);color:var(--p)" onclick="multiApplyLeave('weekly')">H.Tatil</button><button class="btn btn-danger btn-xs" onclick="multiClear()"><i class="fas fa-times"></i></button></div></div>`}
 function multiApplyShift(){const u=cu();if(!u||!S.selectedDates.length)return;pushUndo('Çoklu vardiya');S.selectedDates.forEach(ds=>{u.shifts[ds]={start:'08:00',end:'16:00',break:30};delete u.leaves[ds]});toast(`${S.selectedDates.length}g vardiya eklendi`,'success');S.selectedDates=[];invalidateMDCache();saveLS();renderActivePage()}
-function multiApplyLeave(t){const u=cu();if(!u||!S.selectedDates.length)return;if(t==='annual'){const yg={};S.selectedDates.forEach(ds=>{const p=parseDS(ds);if(!p)return;if(!yg[p.y])yg[p.y]=[];yg[p.y].push(ds)});for(const[yr,dates]of Object.entries(yg)){const al=u.annualLeave||14;let used=0;Object.entries(u.leaves).forEach(([k,v])=>{if(!v||v.type!=='annual')return;const pk=parseDS(k);if(!pk||pk.y!==parseInt(yr))return;if(dates.includes(k))return;used++});if(used+dates.length>al){toast(`${yr} izin hakkı yetersiz! (${Math.max(0,al-used)}g kaldı)`,'error');return}}}pushUndo('Çoklu izin');S.selectedDates.forEach(ds=>{u.leaves[ds]={type:t,note:''};delete u.shifts[ds]});toast(`${S.selectedDates.length}g izin eklendi`,'success');S.selectedDates=[];invalidateMDCache();saveLS();renderActivePage()}
+
+// FIX: multiApplyLeave — getAnnualUsed array desteğiyle düzeltildi
+function multiApplyLeave(t){
+  const u=cu();if(!u||!S.selectedDates.length)return;
+  if(t==='annual'){
+    const yg={};
+    S.selectedDates.forEach(ds=>{const p=parseDS(ds);if(!p)return;if(!yg[p.y])yg[p.y]=[];yg[p.y].push(ds)});
+    for(const[yr,dates]of Object.entries(yg)){
+      const al=u.annualLeave||14;
+      const used=getAnnualUsed(S.cu,parseInt(yr),dates);
+      if(used+dates.length>al){toast(`${yr} izin hakkı yetersiz! (${Math.max(0,al-used)}g kaldı)`,'error');return}
+    }
+  }
+  pushUndo('Çoklu izin');
+  S.selectedDates.forEach(ds=>{u.leaves[ds]={type:t,note:''};delete u.shifts[ds]});
+  toast(`${S.selectedDates.length}g izin eklendi`,'success');
+  S.selectedDates=[];invalidateMDCache();saveLS();renderActivePage();
+}
 function multiClear(){S.selectedDates=[];renderCal()}
-function renderCal(){const u=cu();if(!u)return;const y=S.cy,m=S.cm;setTxt('calTitle',MTR[m]+' '+y);const g=$('calGrid');if(!g)return;g.innerHTML='';DTR.forEach(d=>{const e=document.createElement('div');e.className='cal-dname';e.textContent=d;g.appendChild(e)});const fd=new Date(y,m,1);let sd2=fd.getDay();sd2=sd2===0?6:sd2-1;const dim=new Date(y,m+1,0).getDate();const pip=new Date(y,m,0).getDate();const td=dStr(new Date());let mH=0,mD=0;
-for(let i=sd2-1;i>=0;i--){const e=document.createElement('div');e.className='cal-cell out';e.innerHTML=`<div class="num">${pip-i}</div>`;g.appendChild(e)}
-for(let d=1;d<=dim;d++){const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const e=document.createElement('div');let c='cal-cell';if(s===td)c+=' today';const hol=getH(s),sh=u.shifts[s],lv=u.leaves[s];const dow=new Date(y,m,d).getDay();const dn=DTR[dow===0?6:dow-1];if(sh&&sh.start&&sh.end)c+=' has-shift';else if(lv&&lv.type)c+=' leave-'+lv.type;else if(hol)c+=' holiday';if(S.multiSelect&&S.selectedDates.includes(s))c+=' selecting';let inner=`<div class="num"><span>${d}</span><small>${dn}</small></div>`;if(sh&&sh.start&&sh.end){const h=calcHr(sh.start,sh.end,sh.break||0);if(h>0){mH+=h;mD++}inner+=`<div class="hrs-display ${h>7.5?'overtime':''}">${h.toFixed(1)}s</div><div class="shift-time">${escHtml(sh.start)}–${escHtml(sh.end)}</div>`;if(hol)inner+=`<span class="hol-tag">🏛️ ${escHtml(hol)}</span>`}else if(lv&&lv.type){const ic={annual:'fa-umbrella-beach',weekly:'fa-couch',sick:'fa-notes-medical',unpaid:'fa-ban'};const lb={annual:'Y.İzin',weekly:'H.Tatil',sick:'Rapor',unpaid:'Ücretsiz'};inner+=`<div class="leave-display ld-${lv.type}"><i class="fas ${ic[lv.type]||'fa-circle'}"></i>${lb[lv.type]||''}</div><span class="leave-label ll-${lv.type}">${lb[lv.type]||''}</span>`;if(hol)inner+=`<span class="hol-tag">${escHtml(hol)}</span>`}else if(hol){inner+=`<span class="hol-tag">${escHtml(hol)}</span>`}e.className=c;e.innerHTML=inner;e.dataset.date=s;e.setAttribute('tabindex','0');e.setAttribute('role','button');g.appendChild(e)}
-const tot=sd2+dim;const rem=tot%7===0?0:7-(tot%7);for(let i=1;i<=rem;i++){const e=document.createElement('div');e.className='cal-cell out';e.innerHTML=`<div class="num">${i}</div>`;g.appendChild(e)}
-setTxt('calSummary',mD>0?`${mD}g • ${mH.toFixed(1)}s`:'');
-const ceb=$('calEarnBar');if(ceb){if(u.netSalary>0){const md=getMD(y,m);if(md.wd>0||md.wr>0||md.mau>0||md.msd>0){const e2=calcEarningForMonth(y,m,u.netSalary);if(e2){ceb.innerHTML=`<div class="cal-earn-bar"><div class="ceb"><i class="fas fa-calendar-day"></i>Günlük: <b>${fm(e2.dailyRate)}</b></div><div class="ceb"><i class="fas fa-calendar-check"></i>Ücretli: <b>${e2.paidDays}g</b></div>${e2.absentDays>0?`<div class="ceb"><i class="fas fa-minus-circle"></i>Eksik: <b style="color:var(--r)">${e2.absentDays}g</b></div>`:''}<div class="ceb"><i class="fas fa-wallet"></i><b class="accent">${fm(e2.totalEarning)}</b></div></div>`}else ceb.innerHTML=''}else ceb.innerHTML=''}else ceb.innerHTML=''}
-renderCopyBar();renderMultiBar()}
+
+function renderCal(){
+  const u=cu();if(!u)return;
+  const y=S.cy,m=S.cm;
+  setTxt('calTitle',MTR[m]+' '+y);
+  const g=$('calGrid');if(!g)return;
+  g.innerHTML='';
+  DTR.forEach(d=>{const e=document.createElement('div');e.className='cal-dname';e.textContent=d;g.appendChild(e)});
+  const fd=new Date(y,m,1);let sd2=fd.getDay();sd2=sd2===0?6:sd2-1;
+  const dim=new Date(y,m+1,0).getDate();
+  const pip=new Date(y,m,0).getDate();
+  const td=dStr(new Date());
+  let mH=0,mD=0;
+  for(let i=sd2-1;i>=0;i--){const e=document.createElement('div');e.className='cal-cell out';e.innerHTML=`<div class="num">${pip-i}</div>`;g.appendChild(e)}
+  for(let d=1;d<=dim;d++){
+    const s=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const e=document.createElement('div');
+    let c='cal-cell';
+    if(s===td)c+=' today';
+    const hol=getH(s),sh=u.shifts[s],lv=u.leaves[s];
+    const dow=new Date(y,m,d).getDay();
+    const dn=DTR[dow===0?6:dow-1];
+    if(sh&&sh.start&&sh.end)c+=' has-shift';
+    else if(lv&&lv.type)c+=' leave-'+lv.type;
+    else if(hol)c+=' holiday';
+    if(S.multiSelect&&S.selectedDates.includes(s))c+=' selecting';
+    let inner=`<div class="num"><span>${d}</span><small>${dn}</small></div>`;
+    if(sh&&sh.start&&sh.end){
+      const h=calcHr(sh.start,sh.end,sh.break||0);
+      if(h>0){mH+=h;mD++}
+      inner+=`<div class="hrs-display ${h>7.5?'overtime':''}">${h.toFixed(1)}s</div><div class="shift-time">${escHtml(sh.start)}–${escHtml(sh.end)}</div>`;
+      if(hol)inner+=`<span class="hol-tag">🏛️ ${escHtml(hol)}</span>`;
+    }else if(lv&&lv.type){
+      const ic={annual:'fa-umbrella-beach',weekly:'fa-couch',sick:'fa-notes-medical',unpaid:'fa-ban'};
+      const lb={annual:'Y.İzin',weekly:'H.Tatil',sick:'Rapor',unpaid:'Ücretsiz'};
+      inner+=`<div class="leave-display ld-${lv.type}"><i class="fas ${ic[lv.type]||'fa-circle'}"></i>${lb[lv.type]||''}</div><span class="leave-label ll-${lv.type}">${lb[lv.type]||''}</span>`;
+      if(hol)inner+=`<span class="hol-tag">${escHtml(hol)}</span>`;
+    }else if(hol){inner+=`<span class="hol-tag">${escHtml(hol)}</span>`}
+    e.className=c;e.innerHTML=inner;e.dataset.date=s;e.setAttribute('tabindex','0');e.setAttribute('role','button');
+    g.appendChild(e);
+  }
+  const tot=sd2+dim;const rem=tot%7===0?0:7-(tot%7);
+  for(let i=1;i<=rem;i++){const e=document.createElement('div');e.className='cal-cell out';e.innerHTML=`<div class="num">${i}</div>`;g.appendChild(e)}
+  setTxt('calSummary',mD>0?`${mD}g • ${mH.toFixed(1)}s`:'');
+  const ceb=$('calEarnBar');
+  if(ceb){if(u.netSalary>0){const md=getMD(y,m);if(md.wd>0||md.wr>0||md.mau>0||md.msd>0){const e2=calcEarningForMonth(y,m,u.netSalary);if(e2){ceb.innerHTML=`<div class="cal-earn-bar"><div class="ceb"><i class="fas fa-calendar-day"></i>Günlük: <b>${fm(e2.dailyRate)}</b></div><div class="ceb"><i class="fas fa-calendar-check"></i>Ücretli: <b>${e2.paidDays}g</b></div>${e2.absentDays>0?`<div class="ceb"><i class="fas fa-minus-circle"></i>Eksik: <b style="color:var(--r)">${e2.absentDays}g</b></div>`:''}<div class="ceb"><i class="fas fa-wallet"></i><b class="accent">${fm(e2.totalEarning)}</b></div></div>`}else ceb.innerHTML=''}else ceb.innerHTML=''}else ceb.innerHTML=''}
+  renderCopyBar();renderMultiBar();
+}
+
 function chgM(d){S.cm+=d;if(S.cm>11){S.cm=0;S.cy++}if(S.cm<0){S.cm=11;S.cy--}S.selectedDates=[];invalidateMDCache();renderActivePage()}
 function goToday(){S.cm=new Date().getMonth();S.cy=new Date().getFullYear();S.selectedDates=[];invalidateMDCache();renderActivePage()}
 function copyShift(){const u=cu();if(!u||!S.sd)return;const sh=u.shifts[S.sd];if(sh){S.clipboard={...sh};renderCopyBar();closeM();toast('Kopyalandı','info')}}
@@ -552,45 +827,315 @@ function pasteAndClose(){if(!S.clipboard||!S.sd)return;pasteShift(S.sd);closeM()
 function clearClipboard(){S.clipboard=null;renderCopyBar()}
 function renderCopyBar(){const el=$('copyBar');if(!el)return;if(S.clipboard&&S.clipboard.start&&S.clipboard.end){const h=calcHr(S.clipboard.start,S.clipboard.end,S.clipboard.break||0);el.innerHTML=`<div class="copy-bar"><span><i class="fas fa-clipboard"></i> ${escHtml(S.clipboard.start)}–${escHtml(S.clipboard.end)} (${h.toFixed(1)}s)</span><button class="btn btn-soft btn-xs" onclick="clearClipboard()"><i class="fas fa-times"></i></button></div>`}else el.innerHTML=''}
 function getAllPresets(){const ps={...PRESETS_BASE};const u=cu();if(u&&u.customPresets&&Array.isArray(u.customPresets)){u.customPresets.forEach((cp,i)=>{if(cp&&cp.start&&cp.end)ps['cp_'+i]={start:cp.start,end:cp.end,break:cp.break||0,name:cp.name||'Özel',icon:cp.icon||'⏰'}})}return ps}
+
 // MODAL
-function openM(ds){S.sd=ds;const d=dsToDate(ds);const dow=d.getDay();const dn=DFL[dow===0?6:dow-1];setTxt('mTitle',d.getDate()+' '+MTR[d.getMonth()]);setTxt('mDate',dn);const hol=getH(ds);const al=$('mAlert');if(al){if(hol){al.style.display='flex';setTxt('mAlertTx',`${hol} — Çalışma ek ücret hak eder`)}else al.style.display='none'}const u=cu();if(!u)return;const sh=u.shifts[ds],lv=u.leaves[ds];mMode('shift',document.querySelectorAll('.mode-tab')[0]);S.lt=null;document.querySelectorAll('.lt-opt').forEach(o=>o.classList.remove('active'));$('iNote').value='';renderModalPresets();const mP=$('mPaste');if(mP)mP.style.display=S.clipboard?'inline-flex':'none';if(sh&&sh.start&&sh.end){$('iStart').value=sh.start;$('iEnd').value=sh.end;$('iBreak').value=String(sh.break||0);$('mDel').style.display='inline-flex';$('mCopy').style.display='inline-flex';hlPreset(sh)}else if(lv&&lv.type){mMode('leave',document.querySelectorAll('.mode-tab')[1]);const el2=document.querySelector(`.lt-opt[data-t="${lv.type}"]`);if(el2)selLT(lv.type,el2);$('iNote').value=lv.note||'';$('mDel').style.display='inline-flex';$('mCopy').style.display='none'}else{$('iStart').value='08:00';$('iEnd').value='16:00';$('iBreak').value='30';$('mDel').style.display='none';$('mCopy').style.display='none';const mp=document.querySelector('.preset[data-key="morning"]');if(mp)applyPreset('morning',mp)}updResult();$('modal').classList.add('show')}
-function renderModalPresets(){const row=$('presetRow');if(!row)return;const u=cu();let h=`<div class="preset" data-key="morning" onclick="applyPreset('morning',this)"><span class="p-icon">🌅</span><span class="p-name">Sabah</span><span class="p-time">08–16</span></div><div class="preset" data-key="afternoon" onclick="applyPreset('afternoon',this)"><span class="p-icon">🌇</span><span class="p-name">Öğlen</span><span class="p-time">12–20</span></div><div class="preset" data-key="evening" onclick="applyPreset('evening',this)"><span class="p-icon">🌙</span><span class="p-name">Akşam</span><span class="p-time">16–00</span></div>`;if(u&&u.customPresets&&Array.isArray(u.customPresets)){u.customPresets.forEach((cp,i)=>{if(!cp||!cp.start||!cp.end)return;h+=`<div class="preset" data-key="cp_${i}" onclick="applyPreset('cp_${i}',this)"><span class="p-icon">${escHtml(cp.icon||'⏰')}</span><span class="p-name">${escHtml(cp.name||'Özel')}</span><span class="p-time">${escHtml(cp.start.substring(0,5))}–${escHtml(cp.end.substring(0,5))}</span></div>`})}h+=`<div class="preset" data-key="custom" onclick="applyPreset('custom',this)"><span class="p-icon">⚙️</span><span class="p-name">Özel</span><span class="p-time">Serbest</span></div>`;row.innerHTML=h}
+function openM(ds){
+  S.sd=ds;
+  const d=dsToDate(ds);
+  const dow=d.getDay();
+  const dn=DFL[dow===0?6:dow-1];
+  setTxt('mTitle',d.getDate()+' '+MTR[d.getMonth()]);
+  setTxt('mDate',dn);
+  // FIX: escHtml uygulandı holiday adına
+  const hol=getH(ds);
+  const al=$('mAlert');
+  if(al){if(hol){al.style.display='flex';setTxt('mAlertTx',`${hol} — Çalışma ek ücret hak eder`)}else al.style.display='none'}
+  const u=cu();if(!u)return;
+  const sh=u.shifts[ds],lv=u.leaves[ds];
+  mMode('shift',document.querySelectorAll('.mode-tab')[0]);
+  S.lt=null;document.querySelectorAll('.lt-opt').forEach(o=>o.classList.remove('active'));
+  $('iNote').value='';
+  renderModalPresets();
+  const mP=$('mPaste');if(mP)mP.style.display=S.clipboard?'inline-flex':'none';
+  if(sh&&sh.start&&sh.end){
+    $('iStart').value=sh.start;$('iEnd').value=sh.end;$('iBreak').value=String(sh.break||0);
+    $('mDel').style.display='inline-flex';$('mCopy').style.display='inline-flex';
+    hlPreset(sh);
+  }else if(lv&&lv.type){
+    mMode('leave',document.querySelectorAll('.mode-tab')[1]);
+    const el2=document.querySelector(`.lt-opt[data-t="${lv.type}"]`);
+    if(el2)selLT(lv.type,el2);
+    $('iNote').value=lv.note||'';$('mDel').style.display='inline-flex';$('mCopy').style.display='none';
+  }else{
+    $('iStart').value='08:00';$('iEnd').value='16:00';$('iBreak').value='30';
+    $('mDel').style.display='none';$('mCopy').style.display='none';
+    const mp=document.querySelector('.preset[data-key="morning"]');if(mp)applyPreset('morning',mp);
+  }
+  updResult();$('modal').classList.add('show');
+}
+function renderModalPresets(){
+  const row=$('presetRow');if(!row)return;
+  const u=cu();
+  let h=`<div class="preset" data-key="morning" onclick="applyPreset('morning',this)"><span class="p-icon">🌅</span><span class="p-name">Sabah</span><span class="p-time">08–16</span></div><div class="preset" data-key="afternoon" onclick="applyPreset('afternoon',this)"><span class="p-icon">🌇</span><span class="p-name">Öğlen</span><span class="p-time">12–20</span></div><div class="preset" data-key="evening" onclick="applyPreset('evening',this)"><span class="p-icon">🌙</span><span class="p-name">Akşam</span><span class="p-time">16–00</span></div>`;
+  if(u&&u.customPresets&&Array.isArray(u.customPresets)){u.customPresets.forEach((cp,i)=>{if(!cp||!cp.start||!cp.end)return;h+=`<div class="preset" data-key="cp_${i}" onclick="applyPreset('cp_${i}',this)"><span class="p-icon">${escHtml(cp.icon||'⏰')}</span><span class="p-name">${escHtml(cp.name||'Özel')}</span><span class="p-time">${escHtml(cp.start.substring(0,5))}–${escHtml(cp.end.substring(0,5))}</span></div>`})}
+  h+=`<div class="preset" data-key="custom" onclick="applyPreset('custom',this)"><span class="p-icon">⚙️</span><span class="p-name">Özel</span><span class="p-time">Serbest</span></div>`;
+  row.innerHTML=h;
+}
 function hlPreset(sh){const ps=getAllPresets();document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));for(const[k,v]of Object.entries(ps)){if(v.start===sh.start&&v.end===sh.end&&(v.break||0)===(sh.break||0)){const el=document.querySelector(`.preset[data-key="${k}"]`);if(el){el.classList.add('active');return}}}const c=document.querySelector('.preset[data-key="custom"]');if(c)c.classList.add('active')}
 function closeM(){$('modal').classList.remove('show')}
 function mMode(t,btn){S.mt=t;document.querySelectorAll('.mode-tab').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');$('mShift').style.display=t==='shift'?'block':'none';$('mLeave').style.display=t==='leave'?'block':'none'}
 function selLT(t,el){S.lt=t;document.querySelectorAll('.lt-opt').forEach(o=>o.classList.remove('active'));if(el)el.classList.add('active')}
 function applyPreset(key,el){document.querySelectorAll('.preset').forEach(p=>p.classList.remove('active'));if(el)el.classList.add('active');const ps=getAllPresets();if(key!=='custom'&&ps[key]){$('iStart').value=ps[key].start;$('iEnd').value=ps[key].end;$('iBreak').value=String(ps[key].break||0)}updResult()}
-function updResult(){const s=$('iStart').value,e=$('iEnd').value,b=parseInt($('iBreak').value)||0;if(!s||!e)return;const net=calcHr(s,e,b),gross=grossHr(s,e);setTxt('rbGross',gross.toFixed(1)+'s');setTxt('rbBreak',b+'dk');setTxt('rbNet',net.toFixed(1)+'s');const ot=net>7.5?net-7.5:0;const rbOT=$('rbOT');if(rbOT){rbOT.textContent=ot>0?'+'+ot.toFixed(1)+'s':'—';rbOT.style.color=ot>0?'var(--acc)':'var(--t3)'}const u=cu();const ep=$('mEarningPreview');if(!ep)return;if(u&&u.netSalary>0&&net>0){const hr=u.netSalary/MH;const isHol2=isH(S.sd);let earn=0;if(isHol2)earn=net*hr;if(ot>0)earn+=ot*hr*0.5;ep.textContent=earn>0?`💰 Tahmini ek: ~${fm(earn)}`:''}else ep.textContent=''}
-function saveEntry(){const u=cu();if(!u||!S.sd)return;pushUndo(S.mt==='shift'?'Vardiya':'İzin');if(S.mt==='shift'){const st=$('iStart').value,en=$('iEnd').value,br=parseInt($('iBreak').value)||0;if(!st||!en){toast('Saatleri girin','error');return}if(st===en){toast('Giriş ve çıkış aynı olamaz','error');return}const hrs=calcHr(st,en,br);if(hrs<=0){toast('Geçersiz süre','error');return}if(hrs>MAX_SHIFT_HOURS){toast(`Vardiya ${MAX_SHIFT_HOURS}s aşamaz`,'error');return}u.shifts[S.sd]={start:st,end:en,break:br};delete u.leaves[S.sd];toast(`${hrs.toFixed(1)}s kaydedildi`,'success')}else{if(!S.lt){toast('İzin türü seçin','error');return}if(S.lt==='annual'){const p=parseDS(S.sd);if(p){const used=getAnnualUsed(S.cu,p.y,S.sd);if(used>=(u.annualLeave||14)){toast('Yıllık izin hakkı doldu!','error');return}}}u.leaves[S.sd]={type:S.lt,note:($('iNote').value||'').substring(0,100)};delete u.shifts[S.sd];toast('Kaydedildi','success')}invalidateMDCache();saveLS();closeM();renderActivePage()}
+function updResult(){
+  const s=$('iStart').value,e=$('iEnd').value,b=parseInt($('iBreak').value)||0;
+  if(!s||!e)return;
+  const net=calcHr(s,e,b),gross=grossHr(s,e);
+  setTxt('rbGross',gross.toFixed(1)+'s');
+  setTxt('rbBreak',b+'dk');
+  setTxt('rbNet',net.toFixed(1)+'s');
+  const ot=net>7.5?net-7.5:0;
+  const rbOT=$('rbOT');
+  if(rbOT){rbOT.textContent=ot>0?'+'+ot.toFixed(1)+'s':'—';rbOT.style.color=ot>0?'var(--acc)':'var(--t3)'}
+  const u=cu();const ep=$('mEarningPreview');if(!ep)return;
+  if(u&&u.netSalary>0&&net>0){
+    const hr=u.netSalary/MH;
+    const isHol2=isH(S.sd);
+    let earn=0;
+    if(isHol2)earn=net*hr;
+    if(ot>0)earn+=ot*hr*0.5;
+    ep.textContent=earn>0?`💰 Tahmini ek: ~${fm(earn)}`:'';
+  }else ep.textContent='';
+}
+
+// FIX: saveEntry — MAX_SHIFT_HOURS artık net saate göre değil gross'a göre kontrol edilir
+function saveEntry(){
+  const u=cu();if(!u||!S.sd)return;
+  pushUndo(S.mt==='shift'?'Vardiya':'İzin');
+  if(S.mt==='shift'){
+    const st=$('iStart').value,en=$('iEnd').value,br=parseInt($('iBreak').value)||0;
+    if(!st||!en){toast('Saatleri girin','error');return}
+    if(st===en){toast('Giriş ve çıkış aynı olamaz','error');return}
+    const gross=grossHr(st,en);
+    if(gross<=0){toast('Geçersiz süre','error');return}
+    // FIX: gross saat kontrolü (örn. 22:00-06:00 = 8s gross, geçerli)
+    if(gross>MAX_SHIFT_HOURS_NET){toast(`Vardiya ${MAX_SHIFT_HOURS_NET}s brüt aşamaz`,'error');return}
+    const hrs=calcHr(st,en,br);
+    if(hrs<=0){toast('Mola vardiya süresinden uzun olamaz','error');return}
+    u.shifts[S.sd]={start:st,end:en,break:br};
+    delete u.leaves[S.sd];
+    toast(`${hrs.toFixed(1)}s kaydedildi`,'success');
+  }else{
+    if(!S.lt){toast('İzin türü seçin','error');return}
+    if(S.lt==='annual'){
+      const p=parseDS(S.sd);
+      if(p){
+        const used=getAnnualUsed(S.cu,p.y,[S.sd]);
+        if(used>=(u.annualLeave||14)){toast('Yıllık izin hakkı doldu!','error');return}
+      }
+    }
+    u.leaves[S.sd]={type:S.lt,note:($('iNote').value||'').substring(0,100)};
+    delete u.shifts[S.sd];
+    toast('Kaydedildi','success');
+  }
+  invalidateMDCache();saveLS();closeM();renderActivePage();
+}
 function delEntry(){showConfirm('Sil','Bu girdiyi silmek istiyor musunuz?',()=>{const u=cu();if(!u||!S.sd)return;pushUndo('Silme');delete u.shifts[S.sd];delete u.leaves[S.sd];invalidateMDCache();saveLS();closeM();renderActivePage();toast('Silindi','success')})}
-// LEAVES
-function renderLeaves(){const u=cu();if(!u)return;const y=S.cy,d=getMD(y,S.cm);const at=u.annualLeave||14,ar=Math.max(0,at-d.yau),dr=u.netSalary?u.netSalary/30:0;setTxt('leaveYr',String(y));setHtml('leaveCards',`<div class="card leave-c"><h4><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Yıllık İzin</h4><div class="big" style="color:#60a5fa">${ar} <small>/ ${at}g</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,at>0?(d.yau/at)*100:0)}%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div><div class="meta"><span>Kullanılan: ${d.yau}</span><span>Kalan: ${ar}</span></div></div><div class="card leave-c"><h4><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor</h4><div class="big" style="color:#fb923c">${d.ysd} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ysd/20*100)}%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div><div class="meta"><span>Bu yıl</span><span>${d.ysd}g</span></div></div><div class="card leave-c"><h4><i class="fas fa-couch" style="color:var(--p)"></i>Hafta Tatili</h4><div class="big" style="color:var(--p)">${d.wr} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.wr/5*100)}%;background:var(--pg)"></div></div><div class="meta"><span>${MTR[S.cm]}</span><span>${d.wr}g</span></div></div><div class="card leave-c"><h4><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz</h4><div class="big" style="color:var(--r)">${d.ud} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ud/5*100)}%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div><div class="meta"><span>Kesinti</span><span>${u.netSalary?fm(d.ud*dr):'—'}</span></div></div>`);
-const filter=($('leaveFilter')||{}).value||'all';const all=Object.entries(u.leaves).filter(([k,v])=>{const p=parseDS(k);if(!p||p.y!==y||!v||!v.type)return false;return filter==='all'||v.type===filter}).sort((a,b)=>b[0].localeCompare(a[0]));const lt=$('leaveTable');if(!lt)return;if(!all.length){lt.innerHTML='<div class="empty"><i class="fas fa-check-circle"></i><p>Kayıt yok</p></div>';return}const tl={annual:'Yıllık',weekly:'H.Tatil',sick:'Rapor',unpaid:'Ücretsiz'};const tc={annual:'a',weekly:'w',sick:'s',unpaid:'u'};let t='<table><thead><tr><th>Tarih</th><th>Gün</th><th>Tür</th><th>Not</th><th></th></tr></thead><tbody>';all.forEach(([k,v])=>{const dd=dsToDate(k);const dow=dd.getDay();t+=`<tr><td>${dd.getDate()} ${MTR[dd.getMonth()]}</td><td>${DFL[dow===0?6:dow-1]}</td><td><span class="tag tag-${tc[v.type]||'u'}">${tl[v.type]||escHtml(v.type)}</span></td><td style="color:var(--t2)">${escHtml(v.note)||'—'}</td><td><button class="btn btn-danger btn-xs" onclick="delLv('${escHtml(k)}')"><i class="fas fa-trash"></i></button></td></tr>`});t+='</tbody></table>';lt.innerHTML=t}
+
+// FIX: LEAVES — leaveYr yıl navigasyonuyla ve S.lvy ile yönetiliyor
+function chgLeaveYear(d){
+  S.lvy+=d;
+  renderLeaves();
+}
+function renderLeaves(){
+  const u=cu();if(!u)return;
+  const y=S.lvy;
+  // İzin özet kartları her zaman mevcut yıl gösterir (lvy)
+  const d=getMD(y,S.cm);
+  const at=u.annualLeave||14,ar=Math.max(0,at-d.yau),dr=u.netSalary?u.netSalary/30:0;
+  setTxt('leaveYr',String(y));
+  setHtml('leaveCards',`<div class="card leave-c"><h4><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Yıllık İzin</h4><div class="big" style="color:#60a5fa">${ar} <small>/ ${at}g</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,at>0?(d.yau/at)*100:0)}%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div><div class="meta"><span>Kullanılan: ${d.yau}</span><span>Kalan: ${ar}</span></div></div><div class="card leave-c"><h4><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor</h4><div class="big" style="color:#fb923c">${d.ysd} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ysd/20*100)}%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div><div class="meta"><span>Bu yıl</span><span>${d.ysd}g</span></div></div><div class="card leave-c"><h4><i class="fas fa-couch" style="color:var(--p)"></i>Hafta Tatili</h4><div class="big" style="color:var(--p)">${d.wr} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.wr/5*100)}%;background:var(--pg)"></div></div><div class="meta"><span>${MTR[S.cm]}</span><span>${d.wr}g</span></div></div><div class="card leave-c"><h4><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz</h4><div class="big" style="color:var(--r)">${d.ud} <small>gün</small></div><div class="pbar"><div class="pf" style="width:${Math.min(100,d.ud/5*100)}%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div><div class="meta"><span>Kesinti</span><span>${u.netSalary?fm(d.ud*dr):'—'}</span></div></div>`);
+  const filter=($('leaveFilter')||{}).value||'all';
+  const all=Object.entries(u.leaves).filter(([k,v])=>{
+    const p=parseDS(k);if(!p||p.y!==y||!v||!v.type)return false;
+    return filter==='all'||v.type===filter;
+  }).sort((a,b)=>b[0].localeCompare(a[0]));
+  const lt=$('leaveTable');if(!lt)return;
+  if(!all.length){lt.innerHTML='<div class="empty"><i class="fas fa-check-circle"></i><p>Kayıt yok</p></div>';return}
+  const tl={annual:'Yıllık',weekly:'H.Tatil',sick:'Rapor',unpaid:'Ücretsiz'};
+  const tc={annual:'a',weekly:'w',sick:'s',unpaid:'u'};
+  let t='<table><thead><tr><th>Tarih</th><th>Gün</th><th>Tür</th><th>Not</th><th></th></tr></thead><tbody>';
+  all.forEach(([k,v])=>{const dd=dsToDate(k);const dow=dd.getDay();t+=`<tr><td>${dd.getDate()} ${MTR[dd.getMonth()]}</td><td>${DFL[dow===0?6:dow-1]}</td><td><span class="tag tag-${tc[v.type]||'u'}">${tl[v.type]||escHtml(v.type)}</span></td><td style="color:var(--t2)">${escHtml(v.note)||'—'}</td><td><button class="btn btn-danger btn-xs" onclick="delLv('${escHtml(k)}')"><i class="fas fa-trash"></i></button></td></tr>`});
+  t+='</tbody></table>';lt.innerHTML=t;
+}
 function delLv(k){showConfirm('Sil','İzni silmek istiyor musunuz?',()=>{const u=cu();if(!u)return;pushUndo('İzin silme');delete u.leaves[k];invalidateMDCache();saveLS();renderActivePage();toast('Silindi','success')})}
-// EARNINGS
-function renderEarn(){const u=cu();if(!u)return;const y=S.ey,m=S.em;setTxt('earnTitle',MTR[m]+' '+y);const ec=$('earnContent');if(!ec)return;const d=getMD(y,m);if(!u.netSalary||u.netSalary<=0){ec.innerHTML='<div class="hint"><i class="fas fa-exclamation-triangle"></i><span>Kazanç raporu için Ayarlar\'dan maaş bilginizi girin.</span></div>';return}if(d.wd===0&&d.wr===0&&d.mau===0&&d.msd===0&&d.ud===0){ec.innerHTML='<div class="empty"><i class="fas fa-calendar-times"></i><p>Bu ay için veri yok</p></div>';return}const e=calcEarningForMonth(y,m,u.netSalary);if(!e){ec.innerHTML='';return}let pm2=m-1,py2=y;if(pm2<0){pm2=11;py2--}const prevE=calcEarningForMonth(py2,pm2,u.netSalary);const diff=prevE&&prevE.totalEarning>0&&!prevE.isFutureMonth?e.totalEarning-prevE.totalEarning:0;
-ec.innerHTML=`<div class="earn-hero"><div class="sub">KAZANÇ — ${MTR[m].toUpperCase()} ${y}${e.isCurrentMonth?' — DEVAM EDİYOR':''}</div><div class="amt">${fm(e.totalEarning)}${e.isCurrentMonth?' <small style="font-size:14px;opacity:.6">tahmini</small>':''}</div><div class="info">${e.isFullMonth?'Tam ay':e.isCurrentMonth?'Devam ediyor':e.absentDays>0?e.absentDays+'g eksik':'Tam'} • ${e.totalHours.toFixed(1)}s</div>${prevE&&prevE.totalEarning>0&&!prevE.isFutureMonth?`<div style="margin-top:8px"><span style="font-size:11px;opacity:.7">${diff>=0?'↑':'↓'} Önceki aya göre ${fm(Math.abs(diff))}</span></div>`:''}</div>
-<div class="esb"><div class="esb-title"><i class="fas fa-calculator"></i>Detaylı Hesaplama</div><div class="esb-grid"><div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.workedDays}g</div><div class="esb-lbl">Çalışma</div></div><div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.weeklyDays+e.annualDays+e.sickDays}g</div><div class="esb-lbl">Ücretli İzin</div></div><div class="esb-item"><div class="esb-val" style="color:${e.absentDays>0?'var(--r)':'var(--g)'}"><small>${e.absentDays>0?'−'+e.absentDays+'g':'✓ Tam'}</small></div><div class="esb-lbl">Eksik</div></div><div class="esb-item"><div class="esb-val">${fm(e.dailyRate)}</div><div class="esb-lbl">Günlük</div></div></div><div class="esb-detail"><div class="esd"><span class="ek"><i class="fas fa-money-bill"></i>Net Maaş</span><span class="ev">${fm(u.netSalary)}</span></div>${e.absentDays>0?`<div class="esd"><span class="ek"><i class="fas fa-minus-circle"></i>Kesinti (${e.absentDays}g)</span><span class="ev neg">−${fm(e.absentDays*e.dailyRate)}</span></div>`:''}<div class="esd"><span class="ek"><i class="fas fa-equals"></i>Maaş</span><span class="ev">${fm(e.basePay)}</span></div><div class="esd"><span class="ek"><i class="fas fa-fire"></i>FM (${e.overtimeHours.toFixed(1)}s×1.5)</span><span class="ev pos">+${fm(e.overtimePay)}</span></div><div class="esd"><span class="ek"><i class="fas fa-flag"></i>Tatil (${e.holidayHours.toFixed(1)}s)</span><span class="ev pos">+${fm(e.holidayPay)}</span></div><div class="esd total"><span class="ek"><i class="fas fa-wallet"></i><b>TOPLAM</b></span><span class="ev">${fm(e.totalEarning)}</span></div></div></div>`}
+
+// EARNINGS — aylık gün grid önizlemesi eklendi
+function renderEarn(){
+  const u=cu();if(!u)return;
+  const y=S.ey,m=S.em;
+  setTxt('earnTitle',MTR[m]+' '+y);
+  const ec=$('earnContent');if(!ec)return;
+  const d=getMD(y,m);
+  if(!u.netSalary||u.netSalary<=0){ec.innerHTML='<div class="hint"><i class="fas fa-exclamation-triangle"></i><span>Kazanç raporu için Ayarlar\'dan maaş bilginizi girin.</span></div>';return}
+  if(d.wd===0&&d.wr===0&&d.mau===0&&d.msd===0&&d.ud===0){ec.innerHTML='<div class="empty"><i class="fas fa-calendar-times"></i><p>Bu ay için veri yok</p></div>';return}
+  const e=calcEarningForMonth(y,m,u.netSalary);
+  if(!e){ec.innerHTML='';return}
+  let pm2=m-1,py2=y;if(pm2<0){pm2=11;py2--}
+  const prevE=calcEarningForMonth(py2,pm2,u.netSalary);
+  const diff=prevE&&prevE.totalEarning>0&&!prevE.isFutureMonth?e.totalEarning-prevE.totalEarning:0;
+
+  // Day grid oluştur
+  const dim=d.dim;
+  const fd=new Date(y,m,1);
+  let fdow=fd.getDay();fdow=fdow===0?6:fdow-1;
+  let dgHtml='<div style="margin-top:16px"><div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Gün Görünümü</div>';
+  dgHtml+='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px">';
+  DTR.forEach(dn=>{dgHtml+=`<div style="text-align:center;font-size:9px;font-weight:700;color:var(--t3);padding:2px">${dn}</div>`});
+  dgHtml+='</div><div class="earn-day-grid">';
+  for(let i=0;i<fdow;i++)dgHtml+='<div class="edg-cell"></div>';
+  for(let d2=1;d2<=dim;d2++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d2).padStart(2,'0')}`;
+    const sh=u.shifts[ds],lv=u.leaves[ds];
+    const hol2=isH(ds);
+    const today=new Date();const isToday=(y===today.getFullYear()&&m===today.getMonth()&&d2===today.getDate());
+    let cls='edg-cell';let title=String(d2);
+    if(sh&&sh.start&&sh.end){
+      const hrs=calcHr(sh.start,sh.end,sh.break||0);
+      cls+=hrs>7.5?' edg-ot':' edg-worked';
+      title=d2+'';
+    }else if(lv&&lv.type){cls+=' edg-leave';title=d2+''}
+    else if(hol2){cls+=' edg-hol';title=d2+''}
+    else{const dt=new Date(y,m,d2);const dow=dt.getDay();if(dow===0||dow===6)cls+=' edg-leave';else cls+=' edg-absent';title=d2+''}
+    dgHtml+=`<div class="${cls}" ${isToday?'style="outline:2px solid var(--p);outline-offset:1px"':''}>${title}</div>`;
+  }
+  dgHtml+='</div>';
+  dgHtml+='<div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">';
+  [{c:'edg-worked',l:'Çalışma'},{c:'edg-ot',l:'FM'},{c:'edg-leave',l:'İzin'},{c:'edg-hol',l:'Tatil'},{c:'edg-absent',l:'Eksik'}].forEach(({c,l})=>{
+    dgHtml+=`<span style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--t2)"><span class="edg-cell ${c}" style="width:14px;height:14px;border-radius:3px;font-size:0;display:inline-block"></span>${l}</span>`;
+  });
+  dgHtml+='</div></div>';
+
+  ec.innerHTML=`<div class="earn-hero"><div class="sub">KAZANÇ — ${MTR[m].toUpperCase()} ${y}${e.isCurrentMonth?' — DEVAM EDİYOR':''}</div><div class="amt">${fm(e.totalEarning)}${e.isCurrentMonth?' <small style="font-size:14px;opacity:.6">tahmini</small>':''}</div><div class="info">${e.isFullMonth?'Tam ay':e.isCurrentMonth?'Devam ediyor':e.absentDays>0?e.absentDays+'g eksik':'Tam'} • ${e.totalHours.toFixed(1)}s</div>${prevE&&prevE.totalEarning>0&&!prevE.isFutureMonth?`<div style="margin-top:8px"><span style="font-size:11px;opacity:.7">${diff>=0?'↑':'↓'} Önceki aya göre ${fm(Math.abs(diff))}</span></div>`:''}</div>
+  <div class="esb"><div class="esb-title"><i class="fas fa-calculator"></i>Detaylı Hesaplama</div><div class="esb-grid"><div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.workedDays}g</div><div class="esb-lbl">Çalışma</div></div><div class="esb-item"><div class="esb-val" style="color:var(--p)">${e.weeklyDays+e.annualDays+e.sickDays}g</div><div class="esb-lbl">Ücretli İzin</div></div><div class="esb-item"><div class="esb-val" style="color:${e.absentDays>0?'var(--r)':'var(--g)'}"><small>${e.absentDays>0?'−'+e.absentDays+'g':'✓ Tam'}</small></div><div class="esb-lbl">Eksik</div></div><div class="esb-item"><div class="esb-val">${fm(e.dailyRate)}</div><div class="esb-lbl">Günlük</div></div></div><div class="esb-detail"><div class="esd"><span class="ek"><i class="fas fa-money-bill"></i>Net Maaş</span><span class="ev">${fm(u.netSalary)}</span></div>${e.absentDays>0?`<div class="esd"><span class="ek"><i class="fas fa-minus-circle"></i>Kesinti (${e.absentDays}g)</span><span class="ev neg">−${fm(e.absentDays*e.dailyRate)}</span></div>`:''}<div class="esd"><span class="ek"><i class="fas fa-equals"></i>Maaş</span><span class="ev">${fm(e.basePay)}</span></div><div class="esd"><span class="ek"><i class="fas fa-fire"></i>FM (${e.overtimeHours.toFixed(1)}s×1.5)</span><span class="ev pos">+${fm(e.overtimePay)}</span></div><div class="esd"><span class="ek"><i class="fas fa-flag"></i>Tatil (${e.holidayHours.toFixed(1)}s)</span><span class="ev pos">+${fm(e.holidayPay)}</span></div><div class="esd total"><span class="ek"><i class="fas fa-wallet"></i><b>TOPLAM</b></span><span class="ev">${fm(e.totalEarning)}</span></div></div></div>
+  ${dgHtml}`;
+}
 function chgE(d){S.em+=d;if(S.em>11){S.em=0;S.ey++}if(S.em<0){S.em=11;S.ey--}renderEarn()}
+
 // SETTINGS
 function loadSet(){const u=cu();if(!u)return;const sN=$('sName'),sS=$('sSalary'),sSt=$('sStart'),sL=$('sLeave');if(sN)sN.value=u.name||'';if(sS)sS.value=u.netSalary||'';if(sSt)sSt.value=u.startDate||'';if(sL)sL.value=u.annualLeave!=null?u.annualLeave:14;updSal();updSeniority();renderCustomPresets();renderWeeklyTemplate();applyTheme(u.theme||'default')}
-function sSet(k,v){const u=cu();if(!u)return;if(k==='netSalary'){v=parseFloat(v);if(isNaN(v)||v<0)v=0}if(k==='annualLeave'){v=parseInt(v);if(isNaN(v)||v<0)v=0;if(v>40)v=40}if(k==='name'){v=(v||'').trim();if(!v){toast('İsim boş olamaz','error');return}}if(k==='startDate'&&v){const s2=new Date(v);if(isNaN(s2.getTime())||s2>new Date()){toast('Geçersiz tarih','error');return}}u[k]=v;if(k==='startDate'&&v){const s2=new Date(v),n=new Date();const yr=(n-s2)/(365.25*864e5);u.annualLeave=yr>=15?26:yr>=5?20:14;const sL=$('sLeave');if(sL)sL.value=u.annualLeave}invalidateMDCache();saveLS();updTop();updSal();updSeniority();renderActivePage();toast('Kaydedildi','success')}
+function sSet(k,v){
+  const u=cu();if(!u)return;
+  if(k==='netSalary'){v=parseFloat(v);if(isNaN(v)||v<0)v=0}
+  if(k==='annualLeave'){v=parseInt(v);if(isNaN(v)||v<0)v=0;if(v>40)v=40}
+  if(k==='name'){v=(v||'').trim();if(!v){toast('İsim boş olamaz','error');return}}
+  if(k==='startDate'&&v){const s2=new Date(v);if(isNaN(s2.getTime())||s2>new Date()){toast('Geçersiz tarih','error');return}}
+  u[k]=v;
+  if(k==='startDate'&&v){const s2=new Date(v),n=new Date();const yr=(n-s2)/(365.25*864e5);u.annualLeave=yr>=15?26:yr>=5?20:14;const sL=$('sLeave');if(sL)sL.value=u.annualLeave}
+  invalidateMDCache();saveLS();updTop();updSal();updSeniority();renderActivePage();toast('Kaydedildi','success');
+}
 function updSal(){const u=cu();if(!u)return;const el=$('salPrev');if(!el)return;if(u.netSalary>0){el.style.display='block';setTxt('salAmt',fm(u.netSalary));setTxt('salDet',`Günlük: ${fm(u.netSalary/30)} | Saatlik: ${fm(u.netSalary/MH)} | FM: ${fm(u.netSalary/MH*1.5)}`)}else el.style.display='none'}
 function updSeniority(){const u=cu();if(!u)return;const el=$('seniorityInfo');if(!el)return;if(u.startDate){const s2=new Date(u.startDate);if(isNaN(s2.getTime())){el.innerHTML='';return}const df=new Date()-s2;if(df<0){el.innerHTML='<div style="margin-top:8px;padding:10px;background:rgba(248,113,113,.08);border-radius:8px;font-size:12px;color:var(--r)">Tarih gelecekte!</div>';return}const y=Math.floor(df/(365.25*864e5)),mo=Math.floor((df%(365.25*864e5))/(30.44*864e5));el.innerHTML=`<div style="margin-top:8px;padding:10px 12px;background:var(--bg3);border-radius:8px;border:1px solid var(--b1);font-size:12px;color:var(--t2)"><i class="fas fa-briefcase" style="color:var(--p);margin-right:6px"></i>Kıdem: <strong>${y}y ${mo}a</strong> | İzin: <strong>${u.annualLeave||14}g</strong></div>`}else el.innerHTML=''}
 function renderCustomPresets(){const u=cu();if(!u)return;const el=$('customPresets');if(!el)return;if(!u.customPresets)u.customPresets=[];if(!u.customPresets.length){el.innerHTML='<div style="font-size:12px;color:var(--t3)">Özel şablon yok.</div>';return}let h='';u.customPresets.forEach((cp,i)=>{if(!cp)return;const hrs=calcHr(cp.start||'08:00',cp.end||'16:00',cp.break||0);h+=`<div style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg3);border-radius:8px;margin-bottom:6px;border:1px solid var(--b1)"><span style="font-size:18px">${escHtml(cp.icon||'⏰')}</span><div style="flex:1"><div style="font-size:12px;font-weight:700">${escHtml(cp.name||'Özel')}</div><div style="font-size:10px;color:var(--t3)">${escHtml(cp.start)}–${escHtml(cp.end)} (${hrs.toFixed(1)}s)</div></div><button class="btn btn-danger btn-xs" onclick="delPreset(${i})"><i class="fas fa-trash"></i></button></div>`});el.innerHTML=h}
-function addCustomPreset(){const name=prompt('Şablon adı:');if(!name||!name.trim())return;const icon=prompt('Emoji:','⏰')||'⏰';let start=prompt('Giriş (HH:MM):','22:00'),end=prompt('Çıkış (HH:MM):','06:00');const brk=parseInt(prompt('Mola (dk):','30'));if(isNaN(brk)||brk<0){toast('Geçersiz mola','error');return}if(!start||!end){toast('Saatler gerekli','error');return}const re=/^(\d{1,2}):([0-5]\d)$/;if(!re.test(start)||!re.test(end)){toast('Format: HH:MM','error');return}start=start.replace(/^(\d):/,'0$1:');end=end.replace(/^(\d):/,'0$1:');const hrs=calcHr(start,end,brk);if(hrs<=0||hrs>MAX_SHIFT_HOURS){toast('Geçersiz süre','error');return}const u=cu();if(!u)return;if(!u.customPresets)u.customPresets=[];u.customPresets.push({name:name.trim().substring(0,30),icon:icon.substring(0,4),start,end,break:brk});saveLS();renderCustomPresets();toast(`"${escHtml(name.trim())}" eklendi`,'success')}
+function addCustomPreset(){
+  const name=prompt('Şablon adı:');if(!name||!name.trim())return;
+  const icon=prompt('Emoji:','⏰')||'⏰';
+  let start=prompt('Giriş (HH:MM):','22:00'),end=prompt('Çıkış (HH:MM):','06:00');
+  const brk=parseInt(prompt('Mola (dk):','30'));
+  if(isNaN(brk)||brk<0){toast('Geçersiz mola','error');return}
+  if(!start||!end){toast('Saatler gerekli','error');return}
+  const re=/^(\d{1,2}):([0-5]\d)$/;
+  if(!re.test(start)||!re.test(end)){toast('Format: HH:MM','error');return}
+  start=start.replace(/^(\d):/,'0$1:');end=end.replace(/^(\d):/,'0$1:');
+  const hrs=calcHr(start,end,brk);
+  if(hrs<=0){toast('Mola süreden fazla veya süreler eşit','error');return}
+  if(grossHr(start,end)>MAX_SHIFT_HOURS_NET){toast(`${MAX_SHIFT_HOURS_NET}s aşılamaz`,'error');return}
+  const u=cu();if(!u)return;
+  if(!u.customPresets)u.customPresets=[];
+  u.customPresets.push({name:name.trim().substring(0,30),icon:icon.substring(0,4),start,end,break:brk});
+  saveLS();renderCustomPresets();toast(`"${escHtml(name.trim())}" eklendi`,'success');
+}
 function delPreset(i){const u=cu();if(!u||!u.customPresets||i<0||i>=u.customPresets.length)return;u.customPresets.splice(i,1);saveLS();renderCustomPresets();toast('Silindi','success')}
-// WEEKLY TEMPLATE
-function renderWeeklyTemplate(){const u=cu();if(!u)return;const el=$('weeklyTemplate');if(!el)return;const wt=u.weeklyTemplate||{};const ps=getAllPresets();let h='<div class="wt-grid">';for(let d=0;d<7;d++){const dayConf=wt[d];const isOff=!dayConf||dayConf.type==='off';h+=`<div class="wt-day ${isOff?'':'wt-active'}" onclick="editWTDay(${d})"><span class="wt-name">${DTR[d]}</span>`;if(isOff)h+=`<span class="wt-off">İzin</span>`;else h+=`<span class="wt-shift">${escHtml(dayConf.start||'?')}–${escHtml(dayConf.end||'?')}</span>`;h+='</div>'}h+='</div>';h+=`<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="applyWeeklyTemplate()"><i class="fas fa-calendar-plus"></i>Aya Uygula (${MTR[S.cm]})</button><button class="btn btn-outline btn-sm" onclick="clearWeeklyTemplate()"><i class="fas fa-eraser"></i>Temizle</button></div>`;el.innerHTML=h}
-function editWTDay(d){const u=cu();if(!u)return;if(!u.weeklyTemplate)u.weeklyTemplate={};const cur=u.weeklyTemplate[d];const choice=prompt(`${DFL[d]} için:\n1=Sabah(08-16) 2=Öğlen(12-20) 3=Akşam(16-00) 0=İzin\nVeya HH:MM-HH:MM formatında:`,cur&&cur.type!=='off'?`${cur.start}-${cur.end}`:'0');if(choice===null)return;if(choice==='0'||choice.toLowerCase()==='off'){u.weeklyTemplate[d]={type:'off'}}else if(choice==='1'){u.weeklyTemplate[d]={start:'08:00',end:'16:00',break:30,type:'shift'}}else if(choice==='2'){u.weeklyTemplate[d]={start:'12:00',end:'20:00',break:30,type:'shift'}}else if(choice==='3'){u.weeklyTemplate[d]={start:'16:00',end:'00:00',break:30,type:'shift'}}else{const m=choice.match(/^(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})$/);if(m){const s=m[1].replace(/^(\d):/,'0$1:'),e=m[2].replace(/^(\d):/,'0$1:');if(parseTime(s)!==null&&parseTime(e)!==null){u.weeklyTemplate[d]={start:s,end:e,break:30,type:'shift'}}else{toast('Geçersiz saat','error');return}}else{toast('Format: HH:MM-HH:MM veya 0-3','error');return}}saveLS();renderWeeklyTemplate();toast(`${DFL[d]} güncellendi`,'success')}
-function applyWeeklyTemplate(){const u=cu();if(!u||!u.weeklyTemplate)return;const wt=u.weeklyTemplate;const hasShift=Object.values(wt).some(v=>v&&v.type==='shift');if(!hasShift){toast('Önce şablon tanımlayın','error');return}showConfirm('Aya Uygula',`${MTR[S.cm]} ${S.cy} ayına haftalık şablon uygulanacak. Mevcut boş günler doldurulacak.`,()=>{pushUndo('Haftalık şablon');const dim=new Date(S.cy,S.cm+1,0).getDate();let count=0;for(let d=1;d<=dim;d++){const ds=`${S.cy}-${String(S.cm+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;if(u.shifts[ds]||u.leaves[ds])continue;const dt=new Date(S.cy,S.cm,d);let dow=dt.getDay();dow=dow===0?6:dow-1;const conf=wt[dow];if(!conf||conf.type==='off'){if(dow>=5)u.leaves[ds]={type:'weekly',note:'Şablon'};continue}u.shifts[ds]={start:conf.start,end:conf.end,break:conf.break||30};count++}invalidateMDCache();saveLS();renderActivePage();toast(`${count} gün dolduruldu`,'success')})}
+
+// FIX: WEEKLY TEMPLATE — native prompt() kaldırıldı, modal kullanılıyor
+function renderWeeklyTemplate(){
+  const u=cu();if(!u)return;
+  const el=$('weeklyTemplate');if(!el)return;
+  const wt=u.weeklyTemplate||{};
+  let h='<div class="wt-grid">';
+  for(let d=0;d<7;d++){
+    const dayConf=wt[d];
+    const isOff=!dayConf||dayConf.type==='off';
+    h+=`<div class="wt-day ${isOff?'':'wt-active'}" onclick="openWTModal(${d})"><span class="wt-name">${DTR[d]}</span>`;
+    if(isOff)h+=`<span class="wt-off">İzin</span>`;
+    else h+=`<span class="wt-shift">${escHtml(dayConf.start||'?')}–${escHtml(dayConf.end||'?')}</span>`;
+    h+='</div>';
+  }
+  h+='</div>';
+  h+=`<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="applyWeeklyTemplate()"><i class="fas fa-calendar-plus"></i>Aya Uygula (${MTR[S.cm]})</button><button class="btn btn-outline btn-sm" onclick="clearWeeklyTemplate()"><i class="fas fa-eraser"></i>Temizle</button></div>`;
+  el.innerHTML=h;
+}
+function openWTModal(d){
+  S.wtEditDay=d;
+  setTxt('wtModalTitle',DFL[d]);
+  const u=cu();if(!u)return;
+  const wt=u.weeklyTemplate||{};
+  const cur=wt[d];
+  if(cur&&cur.type!=='off'){
+    $('wtStart').value=cur.start||'08:00';
+    $('wtEnd').value=cur.end||'16:00';
+    $('wtBreak').value=String(cur.break||30);
+  }else{
+    $('wtStart').value='08:00';$('wtEnd').value='16:00';$('wtBreak').value='30';
+  }
+  updWTPreview();
+  $('wtModal').classList.add('show');
+}
+function closeWTModal(){$('wtModal').classList.remove('show');S.wtEditDay=null}
+function wtSetPreset(s,e){$('wtStart').value=s;$('wtEnd').value=e;updWTPreview()}
+function wtSetOff(){
+  const u=cu();if(!u||S.wtEditDay===null)return;
+  if(!u.weeklyTemplate)u.weeklyTemplate={};
+  u.weeklyTemplate[S.wtEditDay]={type:'off'};
+  saveLS();renderWeeklyTemplate();closeWTModal();toast(`${DFL[S.wtEditDay]} → İzin`,'info');
+}
+function updWTPreview(){
+  const s=$('wtStart').value,e=$('wtEnd').value,b=parseInt($('wtBreak').value)||0;
+  const p=$('wtPreview');if(!p)return;
+  if(s&&e){const h=calcHr(s,e,b);p.textContent=h>0?`${s}–${e} = ${h.toFixed(1)}s`:'Geçersiz süreler'}
+}
+function saveWTDay(){
+  const u=cu();if(!u||S.wtEditDay===null)return;
+  const s=$('wtStart').value,e=$('wtEnd').value,b=parseInt($('wtBreak').value)||0;
+  if(!s||!e){toast('Saatleri girin','error');return}
+  const hrs=calcHr(s,e,b);
+  if(hrs<=0){toast('Geçersiz süreler','error');return}
+  if(!u.weeklyTemplate)u.weeklyTemplate={};
+  u.weeklyTemplate[S.wtEditDay]={start:s,end:e,break:b,type:'shift'};
+  saveLS();renderWeeklyTemplate();closeWTModal();toast(`${DFL[S.wtEditDay]} güncellendi`,'success');
+}
+function applyWeeklyTemplate(){
+  const u=cu();if(!u||!u.weeklyTemplate)return;
+  const wt=u.weeklyTemplate;
+  const hasShift=Object.values(wt).some(v=>v&&v.type==='shift');
+  if(!hasShift){toast('Önce şablon tanımlayın','error');return}
+  showConfirm('Aya Uygula',`${MTR[S.cm]} ${S.cy} ayına haftalık şablon uygulanacak. Mevcut boş günler doldurulacak.`,()=>{
+    pushUndo('Haftalık şablon');
+    const dim=new Date(S.cy,S.cm+1,0).getDate();
+    let count=0;
+    for(let d=1;d<=dim;d++){
+      const ds=`${S.cy}-${String(S.cm+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      if(u.shifts[ds]||u.leaves[ds])continue;
+      const dt=new Date(S.cy,S.cm,d);
+      let dow=dt.getDay();dow=dow===0?6:dow-1;
+      const conf=wt[dow];
+      if(!conf||conf.type==='off'){
+        if(dow>=5)u.leaves[ds]={type:'weekly',note:'Şablon'};
+        continue;
+      }
+      u.shifts[ds]={start:conf.start,end:conf.end,break:conf.break||30};count++;
+    }
+    invalidateMDCache();saveLS();renderActivePage();toast(`${count} gün dolduruldu`,'success');
+  });
+}
 function clearWeeklyTemplate(){const u=cu();if(!u)return;u.weeklyTemplate={};saveLS();renderWeeklyTemplate();toast('Şablon temizlendi','info')}
+
 // DATA
 function saveLS(){try{const d=JSON.stringify({users:S.u,version:DATA_VERSION});if(d.length>4*1024*1024)toast('Veri büyük, yedekleme önerilir','warning');localStorage.setItem('st_data',d)}catch(e){if(e.name==='QuotaExceededError')toast('Depolama dolu!','error');else toast('Kayıt hatası!','error')}}
 function loadLS(){try{const s=localStorage.getItem('st_data');if(!s)return;const p=JSON.parse(s);if(!p||!p.users)return;[1,2].forEach(i=>{if(p.users[i]){S.u[i]={...S.u[i],...p.users[i]};if(typeof S.u[i].shifts!=='object'||!S.u[i].shifts)S.u[i].shifts={};if(typeof S.u[i].leaves!=='object'||!S.u[i].leaves)S.u[i].leaves={};if(!Array.isArray(S.u[i].customPresets))S.u[i].customPresets=[];S.u[i].netSalary=parseFloat(S.u[i].netSalary)||0;S.u[i].annualLeave=parseInt(S.u[i].annualLeave)||14;const bs=[];Object.entries(S.u[i].shifts).forEach(([k,v])=>{if(!parseDS(k)||!v||!v.start||!v.end)bs.push(k)});bs.forEach(k=>delete S.u[i].shifts[k]);const bl=[];Object.entries(S.u[i].leaves).forEach(([k,v])=>{if(!parseDS(k)||!v||!v.type)bl.push(k)});bl.forEach(k=>delete S.u[i].leaves[k])}})}catch(e){console.error(e);toast('Veri yükleme hatası','error')}}
 function exportD(){try{const d={users:S.u,exportDate:new Date().toISOString(),version:DATA_VERSION};const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`shifttrack_${dStr(new Date())}.json`;a.click();URL.revokeObjectURL(u);toast('Yedek indirildi','success')}catch(e){toast('İndirme hatası','error')}}
 function importD(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){try{const p=JSON.parse(ev.target.result);if(!p||!p.users){toast('Geçersiz format','error');return}[1,2].forEach(i=>{if(p.users[i]){S.u[i]={...S.u[i],...p.users[i]};if(typeof S.u[i].shifts!=='object')S.u[i].shifts={};if(typeof S.u[i].leaves!=='object')S.u[i].leaves={};if(!Array.isArray(S.u[i].customPresets))S.u[i].customPresets=[];S.u[i].netSalary=parseFloat(S.u[i].netSalary)||0}});invalidateMDCache();saveLS();if(cu())applyTheme(cu().theme||'default');renderAll();updTop();toast('Yedek yüklendi!','success')}catch(err){toast('Geçersiz dosya','error')}};r.readAsText(f);e.target.value=''}
 function clearD(){showConfirm('Sıfırla','Tüm veriler silinecek!',()=>{const u=cu();if(!u)return;const kl=u.lastLogin,kt=u.theme,kn=u.name;S.u[S.cu]={name:kn||'Kullanıcı '+S.cu,netSalary:0,startDate:'',annualLeave:14,shifts:{},leaves:{},customPresets:[],weeklyTemplate:null,lastLogin:kl,theme:kt};invalidateMDCache();saveLS();renderAll();updTop();loadSet();toast('Sıfırlandı','success')})}
+
 init();
 </script>
 </body>
