@@ -211,6 +211,8 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .h-alert i{font-size:14px}
 .h-warn{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:11px;color:var(--acc);font-weight:600}
 .h-warn i{font-size:14px}
+.h-info{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:11px;color:var(--s);font-weight:600}
+.h-info i{font-size:14px}
 .mode-tabs{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:12px}
 .mode-tab{flex:1;padding:8px;border:none;background:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;color:var(--t3);transition:background-color .2s,color .2s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:5px}
 .mode-tab.active{background:var(--card2);color:var(--p);box-shadow:var(--sh1)}
@@ -371,12 +373,12 @@ tr:hover td{background:var(--bg3)}
 .edg-cell.edg-hol{background:rgba(251,146,60,.1);border-color:rgba(251,146,60,.2);color:#fb923c}
 .edg-cell.edg-ot{background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.2);color:var(--acc)}
 
-/* NOTES PANEL (YENİ) */
+/* NOTES PANEL */
 .notes-panel{margin-top:16px}
 .notes-panel textarea{min-height:80px;resize:vertical;font-size:12px;line-height:1.5}
 .note-save-row{display:flex;justify-content:flex-end;margin-top:6px}
 
-/* SEARCH BAR (YENİ) */
+/* SEARCH BAR */
 .search-bar{display:flex;align-items:center;gap:8px;background:var(--card2);border:1.5px solid var(--b1);border-radius:10px;padding:6px 12px;margin-bottom:12px;transition:border-color .2s}
 .search-bar:focus-within{border-color:var(--p)}
 .search-bar i{color:var(--t3);font-size:13px;flex-shrink:0}
@@ -481,7 +483,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v4.3</span>
+      <span class="version">v4.4</span>
     </div>
     <div class="login-cards">
       <div class="login-card" onclick="login(1)">
@@ -708,6 +710,7 @@ tr:hover td{background:var(--bg3)}
     <div class="modal-body">
       <div id="mAlert" class="h-alert" style="display:none"><i class="fas fa-flag"></i><span id="mAlertTx"></span></div>
       <div id="mConflictWarn" class="h-warn" style="display:none"><i class="fas fa-exclamation-triangle"></i><span id="mConflictTx"></span></div>
+      <div id="mNightInfo" class="h-info" style="display:none"><i class="fas fa-moon"></i><span id="mNightTx"></span></div>
       <div class="mode-tabs">
         <button class="mode-tab active" onclick="mMode('shift',this)"><i class="fas fa-clock"></i>Vardiya</button>
         <button class="mode-tab" onclick="mMode('leave',this)"><i class="fas fa-umbrella-beach"></i>İzin</button>
@@ -761,28 +764,32 @@ tr:hover td{background:var(--bg3)}
 /* ============================================================
    CONSTANTS
 ============================================================ */
-const DATA_VERSION = '4.3';
+const DATA_VERSION = '4.4';
 const MTR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 const DFL = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
-const MH = 225; // aylık saatlik ücret tabanı
+const MH = 225;
 const MAX_GROSS_HOURS = 16;
 const PRESETS_BASE = Object.freeze({
   morning:   { start:'08:00', end:'16:00', break:30 },
   afternoon: { start:'12:00', end:'20:00', break:30 },
   evening:   { start:'16:00', end:'00:00', break:30 }
 });
-// Sabit resmi tatiller (her yıl aynı)
 const FH = [
   {m:1,d:1,n:'Yılbaşı'},{m:4,d:23,n:'23 Nisan'},{m:5,d:1,n:'1 Mayıs'},
   {m:5,d:19,n:'19 Mayıs'},{m:7,d:15,n:'15 Temmuz'},{m:8,d:30,n:'30 Ağustos'},{m:10,d:29,n:'29 Ekim'}
 ];
-// Dini tatiller (yıla göre)
+/* [FIX] Dini tatiller 2024-2032 genişletildi */
 const RH = {
   2024:[{m:4,d:10,n:'Ramazan B.'},{m:4,d:11,n:'Ramazan B.'},{m:4,d:12,n:'Ramazan B.'},{m:6,d:17,n:'Kurban B.'},{m:6,d:18,n:'Kurban B.'},{m:6,d:19,n:'Kurban B.'},{m:6,d:20,n:'Kurban B.'}],
   2025:[{m:3,d:30,n:'Ramazan B.'},{m:3,d:31,n:'Ramazan B.'},{m:4,d:1,n:'Ramazan B.'},{m:6,d:6,n:'Kurban B.'},{m:6,d:7,n:'Kurban B.'},{m:6,d:8,n:'Kurban B.'},{m:6,d:9,n:'Kurban B.'}],
   2026:[{m:3,d:20,n:'Ramazan B.'},{m:3,d:21,n:'Ramazan B.'},{m:3,d:22,n:'Ramazan B.'},{m:5,d:27,n:'Kurban B.'},{m:5,d:28,n:'Kurban B.'},{m:5,d:29,n:'Kurban B.'},{m:5,d:30,n:'Kurban B.'}],
-  2027:[{m:3,d:9,n:'Ramazan B.'},{m:3,d:10,n:'Ramazan B.'},{m:3,d:11,n:'Ramazan B.'},{m:5,d:16,n:'Kurban B.'},{m:5,d:17,n:'Kurban B.'},{m:5,d:18,n:'Kurban B.'},{m:5,d:19,n:'Kurban B.'}]
+  2027:[{m:3,d:9,n:'Ramazan B.'},{m:3,d:10,n:'Ramazan B.'},{m:3,d:11,n:'Ramazan B.'},{m:5,d:16,n:'Kurban B.'},{m:5,d:17,n:'Kurban B.'},{m:5,d:18,n:'Kurban B.'},{m:5,d:19,n:'Kurban B.'}],
+  2028:[{m:2,d:27,n:'Ramazan B.'},{m:2,d:28,n:'Ramazan B.'},{m:2,d:29,n:'Ramazan B.'},{m:5,d:4,n:'Kurban B.'},{m:5,d:5,n:'Kurban B.'},{m:5,d:6,n:'Kurban B.'},{m:5,d:7,n:'Kurban B.'}],
+  2029:[{m:2,d:14,n:'Ramazan B.'},{m:2,d:15,n:'Ramazan B.'},{m:2,d:16,n:'Ramazan B.'},{m:4,d:24,n:'Kurban B.'},{m:4,d:25,n:'Kurban B.'},{m:4,d:26,n:'Kurban B.'},{m:4,d:27,n:'Kurban B.'}],
+  2030:[{m:2,d:4,n:'Ramazan B.'},{m:2,d:5,n:'Ramazan B.'},{m:2,d:6,n:'Ramazan B.'},{m:4,d:13,n:'Kurban B.'},{m:4,d:14,n:'Kurban B.'},{m:4,d:15,n:'Kurban B.'},{m:4,d:16,n:'Kurban B.'}],
+  2031:[{m:1,d:24,n:'Ramazan B.'},{m:1,d:25,n:'Ramazan B.'},{m:1,d:26,n:'Ramazan B.'},{m:4,d:2,n:'Kurban B.'},{m:4,d:3,n:'Kurban B.'},{m:4,d:4,n:'Kurban B.'},{m:4,d:5,n:'Kurban B.'}],
+  2032:[{m:1,d:13,n:'Ramazan B.'},{m:1,d:14,n:'Ramazan B.'},{m:1,d:15,n:'Ramazan B.'},{m:3,d:22,n:'Kurban B.'},{m:3,d:23,n:'Kurban B.'},{m:3,d:24,n:'Kurban B.'},{m:3,d:25,n:'Kurban B.'}]
 };
 const THEME_COLORS = {
   default:'linear-gradient(135deg,#7c3aed,#8b5cf6)',ocean:'linear-gradient(135deg,#0891b2,#06b6d4)',
@@ -810,10 +817,7 @@ let S = {
   selectedDates: [],
   wtEditDay: null,
   cpSelectedEmoji: '⏰',
-  u: {
-    1: mkUser(1),
-    2: mkUser(2)
-  }
+  u: { 1: mkUser(1), 2: mkUser(2) }
 };
 
 function mkUser(i) {
@@ -970,7 +974,6 @@ function parseTime(ts) {
   return h * 60 + m;
 }
 
-// Net çalışma saati (mola düşüldükten sonra). Negatif dönemez.
 function calcHr(s, e, b) {
   const st = parseTime(s), en = parseTime(e);
   if (st === null || en === null || st === en) return 0;
@@ -981,7 +984,6 @@ function calcHr(s, e, b) {
   return Math.min(Math.max(0, net), 24);
 }
 
-// Brüt çalışma saati (mola dahil)
 function grossHr(s, e) {
   const st = parseTime(s), en = parseTime(e);
   if (st === null || en === null || st === en) return 0;
@@ -990,8 +992,14 @@ function grossHr(s, e) {
   return Math.max(0, d / 60);
 }
 
+/* [FIX] Gece vardiyası tespiti */
+function isNightShift(start, end) {
+  const st = parseTime(start), en = parseTime(end);
+  if (st === null || en === null) return false;
+  return en < st; // çıkış < giriş → gece geçişi
+}
+
 function getISOWeek(d) {
-  // Lokal saat üzerinden ISO hafta numarası (UTC bug'ı önlendi)
   const day = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const jan4 = new Date(day.getFullYear(), 0, 4);
   const startOfWeek1 = new Date(jan4);
@@ -999,7 +1007,6 @@ function getISOWeek(d) {
   startOfWeek1.setDate(jan4.getDate() - (dow - 1));
   const diff = day - startOfWeek1;
   if (diff < 0) {
-    // Önceki yılın son haftası
     const prevJan4 = new Date(day.getFullYear() - 1, 0, 4);
     const prevDow = prevJan4.getDay() || 7;
     const prevStart = new Date(prevJan4);
@@ -1007,19 +1014,18 @@ function getISOWeek(d) {
     return (day.getFullYear() - 1) + '-W' + String(Math.ceil((day - prevStart) / (7 * 864e5))).padStart(2, '0');
   }
   const wk = Math.floor(diff / (7 * 864e5)) + 1;
-  // 53. haftadan büyükse sonraki yılın 1. haftası
   const lastDow = new Date(day.getFullYear(), 11, 31).getDay() || 7;
   const maxWeeks = (lastDow >= 4 || new Date(day.getFullYear(), 0, 1).getDay() === 4) ? 53 : 52;
   if (wk > maxWeeks) return (day.getFullYear() + 1) + '-W01';
   return day.getFullYear() + '-W' + String(wk).padStart(2, '0');
 }
 
+/* [FIX] getStreak — hafta sonu atlaması sınırlandırıldı (max 3 gün atlama) */
 function getStreak() {
   const u = cu(); if (!u) return 0;
-  let streak = 0;
+  let streak = 0, skipCount = 0;
   const today = new Date();
   let d = new Date(today);
-  // Bugün veri yoksa dünden başla
   if (!u.shifts[dStr(today)] && !u.leaves[dStr(today)]) {
     d.setDate(d.getDate() - 1);
   }
@@ -1028,11 +1034,12 @@ function getStreak() {
     if (!ds) break;
     if (u.shifts[ds] || u.leaves[ds]) {
       streak++;
+      skipCount = 0;
       d.setDate(d.getDate() - 1);
     } else {
       const dow = d.getDay();
-      // Hafta sonu veya resmi tatil — boş bırakılmış olabilir, seriyi kırmadan atla
-      if (dow === 0 || dow === 6 || isH(ds)) {
+      if ((dow === 0 || dow === 6 || isH(ds)) && skipCount < 3) {
+        skipCount++;
         d.setDate(d.getDate() - 1);
         continue;
       }
@@ -1042,11 +1049,6 @@ function getStreak() {
   return streak;
 }
 
-/* ============================================================
-   ANNUAL LEAVE COUNTER
-   excArr: bu tarihler zaten annual ise sayıma dahil etme
-   (düzenleme modunda mevcut günü dışarıda bırakıp kontrol eder)
-============================================================ */
 function getAnnualUsed(uid, yr, excArr) {
   const u = S.u[uid]; if (!u) return 0;
   const excSet = new Set(Array.isArray(excArr) ? excArr : (excArr ? [excArr] : []));
@@ -1072,9 +1074,10 @@ function invalidateMDCache(uid, y, m) {
 }
 
 /* ============================================================
-   MONTH DATA (getMD)
-   Hafta anahtarı: "<yıl>-<ay padded>-W<hafta>" — ay bilgisi
-   dahil edilerek farklı ayların saatleri karışmaz.
+   [FIX] MONTH DATA (getMD) — Hafta-ay sınırı düzeltildi
+   Artık ISO hafta anahtarı kullanılıyor, ay sınırı yapay eklentisi kaldırıldı.
+   Bir ISO haftası iki aya taşarsa, her iki aydaki saatler gerçek hafta toplamında
+   birleştirilir. FM hesabı doğru hafta bazında yapılır.
 ============================================================ */
 function getMD(y, m) {
   const u = cu();
@@ -1086,8 +1089,13 @@ function getMD(y, m) {
 
   const dim = new Date(y, m + 1, 0).getDate();
   let th = 0, hh = 0, wd = 0, hdw = 0;
-  const wh = {};   // hafta -> toplam saat
-  const whH = {};  // hafta -> tatil saati
+
+  // Bu aydaki her gün için: hangi ISO haftasında, kaç saat, tatil mi?
+  // dayData[isoWeek] = { monthHrs, monthHolHrs }
+  const weekMonthHrs = {};  // isoWeek -> bu aydaki saatler
+  const weekMonthHolHrs = {}; // isoWeek -> bu aydaki tatil saatleri
+  const weekTotalHrs = {};  // isoWeek -> tüm hafta boyunca toplam (diğer aylar dahil)
+  const weekTotalHolHrs = {}; // isoWeek -> tüm hafta tatil saatleri
 
   for (let d = 1; d <= dim; d++) {
     const s = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
@@ -1097,35 +1105,70 @@ function getMD(y, m) {
     if (hrs <= 0) continue;
     th += hrs; wd++;
     const dt = new Date(y, m, d);
-    // Hafta anahtarına ay bilgisi ekleniyor: başka ayların saatleri karışmaz
-    const wk = `${y}-${String(m+1).padStart(2,'0')}-${getISOWeek(dt).split('-W')[1]}`;
-    if (!wh[wk]) wh[wk] = 0;
-    wh[wk] += hrs;
+    const wk = getISOWeek(dt);
+    if (!weekMonthHrs[wk]) weekMonthHrs[wk] = 0;
+    weekMonthHrs[wk] += hrs;
     if (isH(s)) {
       hh += hrs; hdw++;
-      if (!whH[wk]) whH[wk] = 0;
-      whH[wk] += hrs;
+      if (!weekMonthHolHrs[wk]) weekMonthHolHrs[wk] = 0;
+      weekMonthHolHrs[wk] += hrs;
     }
   }
 
-  // FM hesabı:
-  // - Haftalık 45s üstü FM'dir
-  // - Tatil günü çalışma: normal ücret (maaşta var) + 1 kat ek (hp)
-  // - FM: 0.5 kat ek (op)
-  // - Tatil günündeki FM: her iki bonus da uygulanır (hp + op birlikte)
-  let oh = 0, rh = 0, hhOT = 0;
-  Object.keys(wh).forEach(wk => {
-    const w = wh[wk];
-    const hW = whH[wk] || 0;
-    if (w > 45) {
-      const otTotal = w - 45;
-      oh += otTotal;
-      rh += 45;
-      hhOT += Math.max(0, Math.min(hW, otTotal));
-    } else {
-      rh += w;
+  // Şimdi bu aydaki haftaların GERÇEK toplam saatlerini hesapla
+  // (aynı ISO haftasına düşen diğer ayların günlerini de tara)
+  const weeksInMonth = Object.keys(weekMonthHrs);
+  for (const wk of weeksInMonth) {
+    // ISO hafta numarasını parse et
+    const wkParts = wk.match(/^(\d+)-W(\d+)$/);
+    if (!wkParts) continue;
+    const wkYear = parseInt(wkParts[1]), wkNum = parseInt(wkParts[2]);
+
+    // Bu haftanın Pazartesi gününü bul
+    const jan4 = new Date(wkYear, 0, 4);
+    const jan4Dow = jan4.getDay() || 7;
+    const monday = new Date(jan4);
+    monday.setDate(jan4.getDate() - (jan4Dow - 1) + (wkNum - 1) * 7);
+
+    let totalH = 0, totalHolH = 0;
+    for (let i = 0; i < 7; i++) {
+      const dd = new Date(monday);
+      dd.setDate(monday.getDate() + i);
+      const ds = dStr(dd);
+      if (!ds) continue;
+      const sh = u.shifts[ds];
+      if (!sh || !sh.start || !sh.end) continue;
+      const hrs = calcHr(sh.start, sh.end, sh.break || 0);
+      if (hrs <= 0) continue;
+      totalH += hrs;
+      if (isH(ds)) totalHolH += hrs;
     }
-  });
+    weekTotalHrs[wk] = totalH;
+    weekTotalHolHrs[wk] = totalHolH;
+  }
+
+  // FM hesabı: gerçek haftalık toplam üzerinden, sonra bu aya düşen oran
+  let oh = 0, rh = 0, hhOT = 0;
+  for (const wk of weeksInMonth) {
+    const totalW = weekTotalHrs[wk] || 0;
+    const monthW = weekMonthHrs[wk] || 0;
+    const totalHolW = weekTotalHolHrs[wk] || 0;
+    const monthHolW = weekMonthHolHrs[wk] || 0;
+
+    if (totalW > 45) {
+      const otTotal = totalW - 45;
+      // Bu aya düşen FM oranı: monthW / totalW * otTotal
+      const monthRatio = totalW > 0 ? monthW / totalW : 0;
+      const monthOT = otTotal * monthRatio;
+      oh += monthOT;
+      rh += monthW - monthOT;
+      // Tatil+FM çakışma oranı
+      const holRatio = totalW > 0 ? monthHolW / totalW : 0;
+      hhOT += Math.max(0, Math.min(monthHolW, otTotal * holRatio));
+    } else {
+      rh += monthW;
+    }
+  }
 
   let yau = 0, ysd = 0, mau = 0, msd = 0, wr = 0, ud = 0;
   Object.entries(u.leaves).forEach(([k, v]) => {
@@ -1140,7 +1183,10 @@ function getMD(y, m) {
   });
 
   const hr = u.netSalary > 0 ? u.netSalary / MH : 0;
-  const r = { th, rh, oh, hh, hhOT, wd, hdw, wh, wr, ud, yau, ysd, mau, msd, hr, dim };
+  // wh: dashboard haftalık chart için — bu aydaki saatler (görüntüleme amaçlı)
+  const wh = weekMonthHrs;
+  const r = { th, rh, oh, hh, hhOT, wd, hdw, wh, wr, ud, yau, ysd, mau, msd, hr, dim,
+    weekTotalHrs }; // chart'ta gerçek haftalık toplamı göstermek için
   mdCache[ck] = r;
   return r;
 }
@@ -1169,7 +1215,6 @@ function calcEarningForMonth(y, m, ns) {
   else if (isCur) ev = Math.max(0, tD);
   else ev = dim;
 
-  // Hafta sonu + resmi tatil (kayıt girilmemiş olanlar) — eksik sayılmaz
   let fp = 0;
   for (let day = 1; day <= ev; day++) {
     const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
@@ -1184,9 +1229,7 @@ function calcEarningForMonth(y, m, ns) {
   const ab = d.ud + mis;
   const bp = Math.max(0, ns - (ab * dr));
 
-  // Tatil ek: tatil saati × 1 kat (maaş normal ücreti kapsar, sadece ek)
   const hp = d.hh * hr;
-  // FM ek: 45s üstü × 0.5 kat
   const op = d.oh * hr * 0.5;
   const te = Math.max(0, bp + op + hp);
 
@@ -1262,7 +1305,8 @@ function renderYearOverview() {
   </div><div class="year-overview">`;
   for (let m = 0; m < 12; m++) {
     const d = getMD(S.cy, m);
-    h += `<div class="year-month ${(m === S.cm && S.cy === new Date().getFullYear() ? 'active' : m === S.cm ? 'active' : '')}" data-month="${m}">
+    /* [FIX] çift kontrol kaldırıldı */
+    h += `<div class="year-month ${m === S.cm ? 'active' : ''}" data-month="${m}">
       <span class="ym-name">${MTR[m].substring(0, 3)}</span>
       <span class="ym-hrs">${d.th > 0 ? d.th.toFixed(0) : '—'}</span>
     </div>`;
@@ -1280,7 +1324,6 @@ function renderYearOverview() {
 
 function chgYear(d) {
   S.cy += d;
-  // S.cm geçerli ay aralığında kalır (sıfırlanmaz — kullanıcı aynı ayı takip eder)
   invalidateMDCache();
   renderActivePage();
 }
@@ -1303,7 +1346,6 @@ function init() {
   $('cpEnd').addEventListener('input', updCPPreview);
   $('cpBreak').addEventListener('change', updCPPreview);
 
-  // Klavye kısayolları
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); return; }
     if (e.key === 'Escape') {
@@ -1318,7 +1360,6 @@ function init() {
     if (e.key.toLowerCase() === 't' && pg.id === 'pg-calendar') goToday();
   });
 
-  // Takvim tıklama delegasyonu
   const cg = $('calGrid');
   if (cg) {
     cg.addEventListener('click', function(e) {
@@ -1456,19 +1497,25 @@ function renderDash() {
     <div class="stat"><div class="ribbon"></div><div class="ico"><i class="fas fa-calendar-check"></i></div><div class="val">${d.wd}/${d.dim}</div><div class="lbl">Çalışma Günü</div></div>
   `);
 
+  /* [FIX] Haftalık chart: gerçek hafta toplamını da göster */
   const wks = Object.entries(d.wh).sort((a, b) => {
-    const wa = parseInt(a[0].split('-W')[1] || 0), wb = parseInt(b[0].split('-W')[1] || 0);
+    const wa = parseInt(a[0].split('-W')[1] || a[0].split('W')[1] || 0);
+    const wb = parseInt(b[0].split('-W')[1] || b[0].split('W')[1] || 0);
     return wa - wb;
   });
-  const maxWk = wks.length ? Math.max(60, ...wks.map(([, h]) => h)) : 60;
+  const maxWk = wks.length ? Math.max(60, ...wks.map(([wk]) => d.weekTotalHrs[wk] || 0)) : 60;
   let wc = '';
   if (!wks.length) {
     wc = '<div class="empty"><i class="fas fa-calendar-times"></i><p>Bu ay vardiya yok</p></div>';
   } else {
-    wks.forEach(([, h], i) => {
-      const p = maxWk > 0 ? Math.min(100, h / maxWk * 100) : 0;
+    wks.forEach(([wk, h], i) => {
+      const realTotal = d.weekTotalHrs[wk] || h;
+      const p = maxWk > 0 ? Math.min(100, realTotal / maxWk * 100) : 0;
       const lp = maxWk > 0 ? (45 / maxWk * 100).toFixed(1) : 0;
-      wc += `<div class="wk-row"><span class="label">${i+1}. Hafta</span><div class="track"><div class="limit-line" style="left:${lp}%"></div><div class="fill ${h > 45 ? 'ot' : 'ok'}" style="width:${p}%">${h.toFixed(1)}s</div></div><span class="hrs ${h > 45 ? 'overtime' : ''}">${h.toFixed(1)}</span></div>`;
+      const isOT = realTotal > 45;
+      const crossMonth = Math.abs(realTotal - h) > 0.01;
+      const label = crossMonth ? `${h.toFixed(1)}s (hafta: ${realTotal.toFixed(1)}s)` : `${h.toFixed(1)}s`;
+      wc += `<div class="wk-row"><span class="label">${i+1}. Hafta</span><div class="track"><div class="limit-line" style="left:${lp}%"></div><div class="fill ${isOT ? 'ot' : 'ok'}" style="width:${p}%">${realTotal.toFixed(1)}s</div></div><span class="hrs ${isOT ? 'overtime' : ''}" title="${crossMonth ? 'Bu aydaki: '+h.toFixed(1)+'s' : ''}">${label}</span></div>`;
     });
   }
   setHtml('weekChart', wc);
@@ -1534,11 +1581,17 @@ function renderMultiBar() {
   </div>`;
 }
 
+/* [FIX] multiApplyShift — validasyon eklendi */
 function multiApplyShift() {
   const u = cu(); if (!u || !S.selectedDates.length) return;
+  const defaultStart = '08:00', defaultEnd = '16:00', defaultBreak = 30;
+  const g = grossHr(defaultStart, defaultEnd);
+  if (g > MAX_GROSS_HOURS || g <= 0) { toast('Geçersiz varsayılan vardiya', 'error'); return; }
+  const h = calcHr(defaultStart, defaultEnd, defaultBreak);
+  if (h <= 0) { toast('Geçersiz varsayılan vardiya', 'error'); return; }
   pushUndo('Çoklu vardiya');
   S.selectedDates.forEach(ds => {
-    u.shifts[ds] = { start:'08:00', end:'16:00', break:30 };
+    u.shifts[ds] = { start:defaultStart, end:defaultEnd, break:defaultBreak };
     delete u.leaves[ds];
   });
   toast(S.selectedDates.length + 'g vardiya eklendi', 'success');
@@ -1548,11 +1601,9 @@ function multiApplyShift() {
   renderActivePage();
 }
 
-// FIX: Çoklu izin — yıl bazlı doğru kontrol, excArr yanlış kullanımı düzeltildi
 function multiApplyLeave(t) {
   const u = cu(); if (!u || !S.selectedDates.length) return;
   if (t === 'annual') {
-    // Her yıl için ayrı kontrol
     const yg = {};
     S.selectedDates.forEach(ds => {
       const p = parseDS(ds); if (!p) return;
@@ -1561,7 +1612,6 @@ function multiApplyLeave(t) {
     });
     for (const [yr, dates] of Object.entries(yg)) {
       const al = u.annualLeave || 14;
-      // excArr: bu tarihlerde zaten annual izin varsa dışarıda bırak (yeniden uygulama)
       const alreadyAnnual = dates.filter(ds => u.leaves[ds] && u.leaves[ds].type === 'annual');
       const used = getAnnualUsed(S.cu, parseInt(yr), alreadyAnnual);
       const newCount = dates.filter(ds => !alreadyAnnual.includes(ds)).length;
@@ -1625,7 +1675,7 @@ function renderCal() {
       const h = calcHr(sh.start, sh.end, sh.break || 0);
       if (h > 0) { mH += h; mD++; }
       inner += `<div class="hrs-display ${h > 7.5 ? 'overtime' : ''}">${h.toFixed(1)}s</div>`;
-      inner += `<div class="shift-time">${escHtml(sh.start)}–${escHtml(sh.end)}</div>`;
+      inner += `<div class="shift-time">${escHtml(sh.start)}–${escHtml(sh.end)}${isNightShift(sh.start, sh.end) ? ' 🌙' : ''}</div>`;
       if (sh.note) inner += `<div class="shift-time" style="color:var(--p3);opacity:.7">📝 ${escHtml(sh.note.substring(0,20))}</div>`;
       if (hol) inner += `<span class="hol-tag">🏛️ ${escHtml(hol)}</span>`;
     } else if (lv && lv.type) {
@@ -1759,7 +1809,6 @@ function openM(ds) {
   const u = cu(); if (!u) return;
   const sh = u.shifts[ds], lv = u.leaves[ds];
 
-  // Tatil uyarısı
   const al = $('mAlert');
   if (al) {
     if (hol) {
@@ -1768,7 +1817,6 @@ function openM(ds) {
     } else { al.style.display = 'none'; }
   }
 
-  // FIX: Çakışma uyarısı (vardiya varken izin, izin varken vardiya seçilince)
   const cw = $('mConflictWarn');
   if (cw) {
     if (sh && sh.start) {
@@ -1779,6 +1827,10 @@ function openM(ds) {
       setTxt('mConflictTx', 'Bu günde ' + {annual:'yıllık izin',weekly:'hafta tatili',sick:'rapor',unpaid:'ücretsiz izin'}[lv.type] + ' var. Üzerine yazabilirsiniz.');
     } else { cw.style.display = 'none'; }
   }
+
+  /* [FIX] Gece vardiyası notu — varsayılan olarak gizli */
+  const ni = $('mNightInfo');
+  if (ni) ni.style.display = 'none';
 
   mMode('shift', document.querySelectorAll('.mode-tab')[0]);
   S.lt = null;
@@ -1856,7 +1908,6 @@ function mMode(t, btn) {
   if (btn) btn.classList.add('active');
   $('mShift').style.display = t === 'shift' ? 'block' : 'none';
   $('mLeave').style.display = t === 'leave' ? 'block' : 'none';
-  // Çakışma uyarısını güncelle
   const cw = $('mConflictWarn');
   if (cw && S.sd) {
     const u = cu();
@@ -1904,6 +1955,18 @@ function updResult() {
     rbOT.textContent = ot > 0 ? '+' + ot.toFixed(1) + 's' : '—';
     rbOT.style.color = ot > 0 ? 'var(--acc)' : 'var(--t3)';
   }
+
+  /* [FIX] Gece vardiyası bilgi notu */
+  const ni = $('mNightInfo');
+  if (ni) {
+    if (isNightShift(s, e)) {
+      ni.style.display = 'flex';
+      setTxt('mNightTx', 'Gece vardiyası — saatler giriş gününe kaydedilir, ertesi güne taşmaz.');
+    } else {
+      ni.style.display = 'none';
+    }
+  }
+
   const u = cu(); const ep = $('mEarningPreview'); if (!ep) return;
   if (u && u.netSalary > 0 && net > 0) {
     const hr = u.netSalary / MH;
@@ -1915,7 +1978,6 @@ function updResult() {
   } else { ep.textContent = ''; }
 }
 
-// FIX: saveEntry — gross saat kontrolü (brüt), izin sayımında düzenleme doğru yapılıyor
 function saveEntry() {
   const u = cu(); if (!u || !S.sd) return;
   pushUndo(S.mt === 'shift' ? 'Vardiya' : 'İzin');
@@ -1938,7 +2000,6 @@ function saveEntry() {
     if (S.lt === 'annual') {
       const p = parseDS(S.sd);
       if (p) {
-        // FIX: Eğer bu gün zaten annual ise dışarıda bırak (düzenleme senaryosu)
         const isAlreadyAnnual = u.leaves[S.sd] && u.leaves[S.sd].type === 'annual';
         const excArr = isAlreadyAnnual ? [S.sd] : [];
         const used = getAnnualUsed(S.cu, p.y, excArr);
@@ -2088,23 +2149,11 @@ function chgLeaveYear(d) {
   renderLeaves();
 }
 
-// FIX: leave year view — S.lvy kullanılıyor, aylık metrikler o yılın tüm ayına göre toplanıyor
 function renderLeaves() {
   const u = cu(); if (!u) return;
   const y = S.lvy;
 
-  // Yıllık toplam — tüm aylar toplanır
   let yau = 0, ysd = 0, wr_year = 0, ud_year = 0;
-  for (let m = 0; m < 12; m++) {
-    const md = getMD(y, m);
-    yau += md.yau > yau ? md.yau - yau : 0; // yau yıllık zaten
-    ysd += md.ysd > ysd ? md.ysd - ysd : 0;
-    wr_year += md.wr;
-    ud_year += md.ud;
-  }
-  // getMD yau/ysd'yi yıllık veriyor, aylık wr/ud ayrı sayılıyor
-  // Daha doğrusu: leaves'i doğrudan tarat
-  yau = 0; ysd = 0; wr_year = 0; ud_year = 0;
   Object.entries(u.leaves).forEach(([k, v]) => {
     const p = parseDS(k); if (!p || p.y !== y || !v || !v.type) return;
     if (v.type === 'annual') yau++;
@@ -2140,7 +2189,6 @@ function renderLeaves() {
     </div>
   `);
 
-  // Arama çubuğu
   const sw = $('leaveSearchWrap');
   if (sw && !sw.querySelector('.search-bar')) {
     sw.innerHTML = `<div class="search-bar"><i class="fas fa-search"></i><input type="text" id="leaveSearch" placeholder="Tarih veya not ara..." oninput="renderLeaveTable()"></div>`;
@@ -2226,7 +2274,6 @@ function renderEarn() {
   const prevE = calcEarningForMonth(py2, pm2, u.netSalary);
   const diff = prevE && prevE.totalEarning > 0 && !prevE.isFutureMonth ? e.totalEarning - prevE.totalEarning : 0;
 
-  // Gün görünümü
   const dim = d.dim;
   const fd = new Date(y, m, 1);
   let fdow = fd.getDay(); fdow = fdow === 0 ? 6 : fdow - 1;
@@ -2323,7 +2370,6 @@ function sSet(k, v) {
     if (isNaN(s2.getTime()) || s2 > new Date()) { toast('Geçersiz tarih', 'error'); return; }
   }
   u[k] = v;
-  // Kıdeme göre otomatik izin hakkı
   if (k === 'startDate' && v) {
     const s2 = new Date(v), n = new Date();
     const yr = (n - s2) / (365.25 * 864e5);
@@ -2370,7 +2416,7 @@ function updSeniority() {
 }
 
 /* ============================================================
-   CUSTOM PRESETS — modal tabanlı (prompt() kaldırıldı)
+   CUSTOM PRESETS
 ============================================================ */
 function openCPModal() {
   $('cpName').value = '';
@@ -2525,7 +2571,6 @@ function saveWTDay() {
   toast(DFL[S.wtEditDay] + ' güncellendi', 'success');
 }
 
-// FIX: applyWeeklyTemplate — resmi tatil günlerine weekly izin yazılmaz
 function applyWeeklyTemplate() {
   const u = cu(); if (!u || !u.weeklyTemplate) return;
   const wt = u.weeklyTemplate;
@@ -2537,14 +2582,13 @@ function applyWeeklyTemplate() {
     let count = 0;
     for (let d = 1; d <= dim; d++) {
       const ds = `${S.cy}-${String(S.cm+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-      if (u.shifts[ds] || u.leaves[ds]) continue; // mevcut girişi korur
+      if (u.shifts[ds] || u.leaves[ds]) continue;
       const dt = new Date(S.cy, S.cm, d);
-      let dow = dt.getDay(); dow = dow === 0 ? 6 : dow - 1; // 0=Pzt..6=Paz
+      let dow = dt.getDay(); dow = dow === 0 ? 6 : dow - 1;
       const conf = wt[dow];
-      // FIX: Resmi tatil — hafta sonu mu diye kontrol yap, tatilse weekly izin yazma
-      if (isH(ds)) continue; // resmi tatil: dokunma
+      if (isH(ds)) continue;
       if (!conf || conf.type === 'off') {
-        if (dow >= 5) { // Cmt(5) veya Paz(6)
+        if (dow >= 5) {
           u.leaves[ds] = { type:'weekly', note:'Şablon' };
         }
         continue;
@@ -2568,7 +2612,7 @@ function clearWeeklyTemplate() {
 }
 
 /* ============================================================
-   DATA (save / load / export / import)
+   DATA
 ============================================================ */
 function saveLS() {
   try {
@@ -2589,16 +2633,13 @@ function loadLS() {
     if (!p || !p.users) return;
     [1, 2].forEach(i => {
       if (!p.users[i]) return;
-      // Mevcut default ile birleştir — eksik alanlar varsayılanla dolsun
       S.u[i] = Object.assign(mkUser(i), p.users[i]);
-      // Tip güvenliği
       if (typeof S.u[i].shifts !== 'object' || !S.u[i].shifts) S.u[i].shifts = {};
       if (typeof S.u[i].leaves !== 'object' || !S.u[i].leaves) S.u[i].leaves = {};
       if (!Array.isArray(S.u[i].customPresets)) S.u[i].customPresets = [];
       S.u[i].netSalary = parseFloat(S.u[i].netSalary) || 0;
       S.u[i].annualLeave = parseInt(S.u[i].annualLeave) || 14;
       if (typeof S.u[i].notes !== 'string') S.u[i].notes = '';
-      // Bozuk veri temizliği
       const bs = Object.keys(S.u[i].shifts).filter(k => !parseDS(k) || !S.u[i].shifts[k] || !S.u[i].shifts[k].start);
       bs.forEach(k => delete S.u[i].shifts[k]);
       const bl = Object.keys(S.u[i].leaves).filter(k => !parseDS(k) || !S.u[i].leaves[k] || !S.u[i].leaves[k].type);
