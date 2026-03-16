@@ -509,6 +509,7 @@ tr:hover td{background:var(--bg3)}
   <header class="topbar">
     <div class="topbar-brand"><div class="ico"><i class="fas fa-clock"></i></div>ShiftTrack</div>
     <div class="topbar-right">
+      <button class="topbar-btn" onclick="showShortcuts()" title="Kısayollar (?)"><i class="fas fa-keyboard"></i></button>
       <button class="topbar-btn" id="undoBtn" disabled onclick="undo()" title="Geri Al (Ctrl+Z)"><i class="fas fa-undo"></i></button>
       <div class="topbar-user" onclick="go('settings',document.querySelectorAll('.nav-tab')[5])">
         <div class="av" id="topAv">U</div>
@@ -664,6 +665,12 @@ tr:hover td{background:var(--bg3)}
       </div>
 
       <div class="card s-card">
+        <h3><i class="fas fa-bullseye"></i>Aylık Saat Hedefi</h3>
+        <div class="hint"><i class="fas fa-lightbulb"></i><span>Saatlik ücret hesaplaması için aylık toplam çalışma saati. Varsayılan: 225 saat.</span></div>
+        <div class="fg"><label>Aylık Saat</label><input type="number" id="sMH" placeholder="225" min="100" max="400" step="5" onchange="sSet('monthlyHours',this.value)"></div>
+      </div>
+
+      <div class="card s-card">
         <h3><i class="fas fa-clock"></i>Vardiya Şablonları</h3>
         <div id="customPresets"></div>
         <button class="btn btn-soft btn-sm" onclick="openCPModal()" style="margin-top:8px"><i class="fas fa-plus"></i>Ekle</button>
@@ -685,8 +692,10 @@ tr:hover td{background:var(--bg3)}
 
       <div class="card s-card">
         <h3><i class="fas fa-database"></i>Veri</h3>
+        <div id="dataUsage" style="margin-bottom:12px"></div>
         <div class="data-btns">
           <button class="btn btn-outline" onclick="exportD()"><i class="fas fa-download"></i>Yedekle</button>
+          <button class="btn btn-outline" onclick="exportCSV()"><i class="fas fa-file-csv"></i>CSV</button>
           <button class="btn btn-outline" onclick="document.getElementById('impF').click()"><i class="fas fa-upload"></i>Yükle</button>
           <input type="file" id="impF" style="display:none" accept=".json" onchange="importD(event)">
           <button class="btn btn-danger" onclick="clearD()"><i class="fas fa-trash"></i>Sıfırla</button>
@@ -768,7 +777,7 @@ const DATA_VERSION = '4.4';
 const MTR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 const DFL = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
-const MH = 225;
+let MH = 225;
 const MAX_GROSS_HOURS = 16;
 const PRESETS_BASE = Object.freeze({
   morning:   { start:'08:00', end:'16:00', break:30 },
@@ -832,7 +841,8 @@ function mkUser(i) {
     weeklyTemplate: null,
     notes: '',
     lastLogin: null,
-    theme: 'default'
+    theme: 'default',
+    monthlyHours: 225
   };
 }
 
@@ -1358,6 +1368,7 @@ function init() {
     if (e.key === 'ArrowLeft') { if (pg.id === 'pg-calendar') chgM(-1); else if (pg.id === 'pg-earnings') chgE(-1); }
     if (e.key === 'ArrowRight') { if (pg.id === 'pg-calendar') chgM(1); else if (pg.id === 'pg-earnings') chgE(1); }
     if (e.key.toLowerCase() === 't' && pg.id === 'pg-calendar') goToday();
+    if (e.key === '?') showShortcuts();
   });
 
   const cg = $('calGrid');
@@ -1407,6 +1418,7 @@ function login(id) {
   S.cu = id;
   const u = cu(); if (!u) return;
   u.lastLogin = new Date().toISOString();
+  MH = u.monthlyHours || 225;
   applyTheme(u.theme || 'default');
   saveLS();
   $('loginScreen').style.display = 'none';
@@ -1980,7 +1992,6 @@ function updResult() {
 
 function saveEntry() {
   const u = cu(); if (!u || !S.sd) return;
-  pushUndo(S.mt === 'shift' ? 'Vardiya' : 'İzin');
 
   if (S.mt === 'shift') {
     const st = $('iStart').value, en = $('iEnd').value, br = parseInt($('iBreak').value) || 0;
@@ -1991,6 +2002,7 @@ function saveEntry() {
     if (gross > MAX_GROSS_HOURS) { toast(`Vardiya ${MAX_GROSS_HOURS}s brüt aşamaz`, 'error'); return; }
     const hrs = calcHr(st, en, br);
     if (hrs <= 0) { toast('Mola vardiya süresinden uzun olamaz', 'error'); return; }
+    pushUndo('Vardiya');
     const note = ($('iShiftNote').value || '').trim().substring(0, 100);
     u.shifts[S.sd] = { start:st, end:en, break:br, note };
     delete u.leaves[S.sd];
@@ -2006,7 +2018,8 @@ function saveEntry() {
         if (used >= (u.annualLeave || 14)) { toast('Yıllık izin hakkı doldu!', 'error'); return; }
       }
     }
-    u.leaves[S.sd] = { type:S.lt, note:($('iNote').value || '').substring(0, 100) };
+    pushUndo('İzin');
+    u.leaves[S.sd] = { type:S.lt, note:($('iNote').value || '').trim().substring(0, 100) };
     delete u.shifts[S.sd];
     toast('Kaydedildi', 'success');
   }
@@ -2138,6 +2151,27 @@ function renderStats() {
         <td style="font-weight:800;color:var(--g)">${d.earning>0?fm(d.earning):'—'}</td>
       </tr>`).join('')}</tbody>
     </table></div>
+  </div>
+  ${renderDayOfWeekChart()}`;
+}
+
+function renderDayOfWeekChart() {
+  const stats = getDayOfWeekStats();
+  if (!stats || stats.days.every(d => d === 0)) return '';
+  const maxD = Math.max(1, ...stats.days);
+  let bars = '';
+  DTR.forEach((name, i) => {
+    const pct = maxD > 0 ? (stats.days[i] / maxD * 100) : 0;
+    const avg = stats.days[i] > 0 ? (stats.hours[i] / stats.days[i]).toFixed(1) : '0';
+    bars += `<div class="wk-row">
+      <span class="label">${name}</span>
+      <div class="track"><div class="fill ok" style="width:${pct}%">${stats.days[i]}g</div></div>
+      <span class="hrs" title="Ort: ${avg}s">${stats.hours[i].toFixed(0)}s</span>
+    </div>`;
+  });
+  return `<div class="card" style="margin-top:16px">
+    <div class="card-head"><h3><i class="fas fa-calendar-day"></i>Gün Bazlı Dağılım</h3><span style="font-size:10px;color:var(--t3)">Tüm zamanlar</span></div>
+    ${bars}
   </div>`;
 }
 
@@ -2349,11 +2383,13 @@ function loadSet() {
   if (sS) sS.value = u.netSalary || '';
   if (sSt) sSt.value = u.startDate || '';
   if (sL) sL.value = u.annualLeave != null ? u.annualLeave : 14;
+  const sMH = $('sMH'); if (sMH) sMH.value = u.monthlyHours || 225;
   const uN = $('userNotes'); if (uN) uN.value = u.notes || '';
   updSal();
   updSeniority();
   renderCustomPresets();
   renderWeeklyTemplate();
+  renderDataUsage();
   applyTheme(u.theme || 'default');
 }
 
@@ -2361,6 +2397,7 @@ function sSet(k, v) {
   const u = cu(); if (!u) return;
   if (k === 'netSalary') { v = parseFloat(v); if (isNaN(v) || v < 0) v = 0; }
   if (k === 'annualLeave') { v = parseInt(v); if (isNaN(v) || v < 0) v = 0; if (v > 40) v = 40; }
+  if (k === 'monthlyHours') { v = parseInt(v); if (isNaN(v) || v < 100) v = 100; if (v > 400) v = 400; MH = v; }
   if (k === 'name') {
     v = (v || '').trim();
     if (!v) { toast('İsim boş olamaz', 'error'); return; }
@@ -2707,9 +2744,145 @@ function clearD() {
 }
 
 /* ============================================================
+   DATA USAGE
+============================================================ */
+function renderDataUsage() {
+  const el = $('dataUsage'); if (!el) return;
+  try {
+    const d = localStorage.getItem('st_data') || '';
+    const bytes = new Blob([d]).size;
+    const kb = (bytes / 1024).toFixed(1);
+    const maxKB = 5120;
+    const pct = Math.min(100, (bytes / 1024 / maxKB) * 100);
+    const u = cu();
+    const shiftCount = u ? Object.keys(u.shifts).length : 0;
+    const leaveCount = u ? Object.keys(u.leaves).length : 0;
+    const color = pct > 80 ? 'var(--r)' : pct > 50 ? 'var(--acc)' : 'var(--g)';
+    el.innerHTML = `<div style="padding:12px;background:var(--bg3);border-radius:10px;border:1px solid var(--b1)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:11px;font-weight:700;color:var(--t2)"><i class="fas fa-hdd" style="color:var(--p);margin-right:4px"></i>Depolama</span>
+        <span style="font-size:11px;font-weight:800;color:${color}">${kb} KB / ${maxKB} KB</span>
+      </div>
+      <div class="pbar" style="margin:0"><div class="pf" style="width:${pct}%;background:${color}"></div></div>
+      <div style="display:flex;gap:12px;margin-top:6px;font-size:10px;color:var(--t3)">
+        <span><i class="fas fa-clock" style="margin-right:3px"></i>${shiftCount} vardiya</span>
+        <span><i class="fas fa-umbrella-beach" style="margin-right:3px"></i>${leaveCount} izin</span>
+      </div>
+    </div>`;
+  } catch(e) { el.innerHTML = ''; }
+}
+
+/* ============================================================
+   CSV EXPORT
+============================================================ */
+function exportCSV() {
+  const u = cu(); if (!u) return;
+  try {
+    let csv = 'Tarih,Gün,Tür,Giriş,Çıkış,Mola(dk),Net Saat,Brüt Saat,Not\n';
+    const allDates = new Set([...Object.keys(u.shifts), ...Object.keys(u.leaves)]);
+    const sorted = [...allDates].sort();
+    sorted.forEach(ds => {
+      const d = dsToDate(ds);
+      const dow = d.getDay();
+      const dayName = DFL[dow === 0 ? 6 : dow - 1];
+      const sh = u.shifts[ds], lv = u.leaves[ds];
+      if (sh && sh.start && sh.end) {
+        const net = calcHr(sh.start, sh.end, sh.break || 0);
+        const gross = grossHr(sh.start, sh.end);
+        const note = (sh.note || '').replace(/"/g, '""');
+        csv += `${ds},${dayName},Vardiya,${sh.start},${sh.end},${sh.break||0},${net.toFixed(1)},${gross.toFixed(1)},"${note}"\n`;
+      } else if (lv && lv.type) {
+        const tl = {annual:'Yıllık İzin',weekly:'Hafta Tatili',sick:'Rapor',unpaid:'Ücretsiz'};
+        const note = (lv.note || '').replace(/"/g, '""');
+        csv += `${ds},${dayName},${tl[lv.type]||lv.type},,,,,"${note}"\n`;
+      }
+    });
+    const bom = '\uFEFF';
+    const b = new Blob([bom + csv], { type:'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(b);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `shifttrack_${dStr(new Date())}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('CSV indirildi', 'success');
+  } catch(e) { toast('CSV hatası', 'error'); }
+}
+
+/* ============================================================
+   KEYBOARD SHORTCUTS HELP
+============================================================ */
+function showShortcuts() {
+  const shortcuts = [
+    ['Ctrl+Z', 'Geri al'],
+    ['Escape', 'Modal/diyalog kapat'],
+    ['← →', 'Ay değiştir (takvim/kazanç)'],
+    ['T', 'Bugüne git (takvim)'],
+    ['?', 'Kısayolları göster']
+  ];
+  let h = '<div style="padding:16px"><h3 style="font-size:16px;font-weight:800;margin-bottom:14px"><i class="fas fa-keyboard" style="color:var(--p);margin-right:6px"></i>Klavye Kısayolları</h3>';
+  shortcuts.forEach(([key, desc]) => {
+    h += `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--b1)">
+      <span style="font-size:12px;color:var(--t2)">${escHtml(desc)}</span>
+      <kbd style="padding:3px 8px;border-radius:6px;background:var(--bg3);border:1px solid var(--b1);font-size:11px;font-weight:700;font-family:monospace;color:var(--p)">${escHtml(key)}</kbd>
+    </div>`;
+  });
+  h += '</div>';
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:2000;padding:16px';
+  overlay.onclick = function(e) { if (e.target === this) this.remove(); };
+  const box = document.createElement('div');
+  box.style.cssText = 'background:var(--bg2);border-radius:var(--rad2);max-width:360px;width:100%;border:1px solid var(--b1);box-shadow:var(--sh3);animation:modalPop .3s cubic-bezier(.16,1,.3,1)';
+  box.innerHTML = h;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+}
+
+/* ============================================================
+   TOUCH SWIPE
+============================================================ */
+function initSwipe() {
+  let startX = 0, startY = 0, swiping = false;
+  const content = document.querySelector('.content');
+  if (!content) return;
+  content.addEventListener('touchstart', function(e) {
+    const t = e.touches[0];
+    startX = t.clientX; startY = t.clientY; swiping = true;
+  }, { passive: true });
+  content.addEventListener('touchend', function(e) {
+    if (!swiping) return; swiping = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - startX, dy = t.clientY - startY;
+    if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx) * 0.7) return;
+    const pg = document.querySelector('.page.active'); if (!pg) return;
+    if (pg.id === 'pg-calendar') { chgM(dx < 0 ? 1 : -1); }
+    else if (pg.id === 'pg-earnings') { chgE(dx < 0 ? 1 : -1); }
+  }, { passive: true });
+}
+
+/* ============================================================
+   DAY-OF-WEEK STATS
+============================================================ */
+function getDayOfWeekStats() {
+  const u = cu(); if (!u) return null;
+  const days = [0,0,0,0,0,0,0];
+  const hours = [0,0,0,0,0,0,0];
+  Object.entries(u.shifts).forEach(([k, v]) => {
+    if (!v || !v.start || !v.end) return;
+    const p = parseDS(k); if (!p) return;
+    const dt = new Date(p.y, p.m, p.d);
+    let dow = dt.getDay(); dow = dow === 0 ? 6 : dow - 1;
+    const h = calcHr(v.start, v.end, v.break || 0);
+    if (h > 0) { days[dow]++; hours[dow] += h; }
+  });
+  return { days, hours };
+}
+
+/* ============================================================
    START
 ============================================================ */
 init();
+initSwipe();
 </script>
 </body>
 </html>
