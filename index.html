@@ -7,8 +7,11 @@
 <meta name="theme-color" content="#8b5cf6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -26,6 +29,8 @@ body.theme-forest{--p:#4ade80;--p2:#22c55e;--p3:#86efac;--p4:rgba(34,197,94,.12)
 body.theme-sunset{--p:#fb923c;--p2:#f97316;--p3:#fdba74;--p4:rgba(249,115,22,.12);--pg:linear-gradient(135deg,#ea580c,#f97316);--bg:#1a0f0a;--bg2:#261810;--bg3:#332117;--bg4:#40291e;--card:#261810;--card2:#332117;--glass:rgba(38,24,16,.88);--b1:#40291e;--b2:#4d3225;--t1:#faf0e8;--t2:#c49a78;--t3:#8a6a4e}
 body.theme-rose{--p:#fb7185;--p2:#f43f5e;--p3:#fda4af;--p4:rgba(244,63,94,.12);--pg:linear-gradient(135deg,#e11d48,#f43f5e);--bg:#1a0d12;--bg2:#26141b;--bg3:#331b24;--bg4:#40222d;--card:#26141b;--card2:#331b24;--glass:rgba(38,20,27,.88);--b1:#40222d;--b2:#4d2936;--t1:#fae8ed;--t2:#c4788a;--t3:#8a4e5e}
 body.theme-gold{--p:#fbbf24;--p2:#f59e0b;--p3:#fde68a;--p4:rgba(245,158,11,.12);--pg:linear-gradient(135deg,#d97706,#f59e0b);--bg:#161209;--bg2:#211b0f;--bg3:#2c2416;--bg4:#372d1d;--card:#211b0f;--card2:#2c2416;--glass:rgba(33,27,15,.88);--b1:#372d1d;--b2:#423624;--t1:#faf5e8;--t2:#c4a878;--t3:#8a7a4e}
+body.theme-light{--p:#7c3aed;--p2:#6d28d9;--p3:#5b21b6;--p4:rgba(124,58,237,.08);--pg:linear-gradient(135deg,#7c3aed,#6d28d9);--bg:#f8f7fc;--bg2:#ffffff;--bg3:#f0eef5;--bg4:#e8e5f0;--card:#ffffff;--card2:#f5f3fa;--glass:rgba(255,255,255,.92);--b1:#e2dff0;--b2:#d4d0e5;--t1:#1a1625;--t2:#6b6580;--t3:#9893a7;--acc:#d97706;--g:#059669;--r:#dc2626;--s:#0284c7;--sh1:0 2px 8px rgba(0,0,0,.06);--sh2:0 8px 24px rgba(0,0,0,.08);--sh3:0 16px 48px rgba(0,0,0,.12)}
+body.theme-light-ocean{--p:#0891b2;--p2:#0e7490;--p3:#155e75;--p4:rgba(8,145,178,.08);--pg:linear-gradient(135deg,#0891b2,#0e7490);--bg:#f0f9ff;--bg2:#ffffff;--bg3:#e0f2fe;--bg4:#bae6fd;--card:#ffffff;--card2:#f0f9ff;--glass:rgba(255,255,255,.92);--b1:#bae6fd;--b2:#7dd3fc;--t1:#0c4a6e;--t2:#0369a1;--t3:#7dd3fc;--acc:#d97706;--g:#059669;--r:#dc2626;--s:#0284c7;--sh1:0 2px 8px rgba(0,0,0,.06);--sh2:0 8px 24px rgba(0,0,0,.08);--sh3:0 16px 48px rgba(0,0,0,.12)}
 html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;transition:background var(--ts),color var(--ts)}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--p2);border-radius:10px}
@@ -397,6 +402,68 @@ tr:hover td{background:var(--bg3)}
 }
 @media(max-width:480px){.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.wt-grid{grid-template-columns:repeat(3,1fr)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* HEATMAP MINI CALENDAR */
+.heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.hm-cell{aspect-ratio:1;border-radius:3px;min-width:0;position:relative;cursor:default}
+.hm-cell.hm-0{background:var(--bg3);opacity:.3}
+.hm-cell.hm-1{background:var(--p);opacity:.3}
+.hm-cell.hm-2{background:var(--p);opacity:.5}
+.hm-cell.hm-3{background:var(--p);opacity:.7}
+.hm-cell.hm-4{background:var(--p);opacity:.9}
+.hm-cell.hm-today{outline:2px solid var(--acc);outline-offset:1px;border-radius:3px}
+.hm-cell.hm-leave{background:var(--s);opacity:.5}
+.hm-cell.hm-holiday{background:var(--r);opacity:.4}
+.hm-legend{display:flex;align-items:center;gap:3px;margin-top:6px;font-size:9px;color:var(--t3);justify-content:flex-end}
+.hm-legend span{width:10px;height:10px;border-radius:2px;display:inline-block}
+
+/* GOAL PROGRESS */
+.goal-wrap{margin-top:16px}
+.goal-bar{background:var(--bg3);border-radius:8px;height:22px;overflow:hidden;position:relative;border:1px solid var(--b1)}
+.goal-fill{height:100%;border-radius:8px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:800;color:#fff;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.goal-fill.gf-ok{background:var(--pg)}.goal-fill.gf-warn{background:linear-gradient(90deg,#f59e0b,#fbbf24)}.goal-fill.gf-over{background:linear-gradient(90deg,#ef4444,#f87171)}
+.goal-info{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--t3);font-weight:600}
+
+/* DRAG & DROP */
+.cal-cell.drag-over{border-color:var(--s)!important;background:rgba(56,189,248,.15)!important;transform:scale(1.03)}
+.cal-cell.dragging{opacity:.5;transform:scale(.95)}
+
+/* QR MODAL */
+.qr-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
+.qr-modal-overlay.show{display:flex}
+.qr-modal{background:var(--bg2);border-radius:var(--rad2);width:380px;max-width:100%;border:1px solid var(--b1);box-shadow:var(--sh3);animation:modalPop .3s cubic-bezier(.16,1,.3,1);padding:24px;text-align:center}
+.qr-modal h3{font-size:16px;font-weight:800;margin-bottom:16px}
+#qrCode{display:flex;justify-content:center;margin:16px 0}
+#qrCode canvas,#qrCode img{border-radius:12px;border:4px solid #fff}
+
+/* PIN MODAL */
+.pin-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;z-index:3000;padding:16px}
+.pin-overlay.show{display:flex}
+.pin-box{background:var(--bg2);border-radius:var(--rad2);padding:32px;max-width:320px;width:100%;text-align:center;border:1px solid var(--b1);box-shadow:var(--sh3);animation:modalPop .3s cubic-bezier(.16,1,.3,1)}
+.pin-dots{display:flex;gap:12px;justify-content:center;margin:20px 0}
+.pin-dot{width:16px;height:16px;border-radius:50%;background:var(--bg3);border:2px solid var(--b2);transition:background .2s,border-color .2s}
+.pin-dot.filled{background:var(--p);border-color:var(--p)}
+.pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:220px;margin:0 auto}
+.pin-key{padding:14px;border-radius:12px;border:1.5px solid var(--b1);background:var(--card2);cursor:pointer;font-family:inherit;font-size:20px;font-weight:800;color:var(--t1);transition:background .2s,border-color .2s}
+.pin-key:hover{background:var(--p4);border-color:var(--p)}
+.pin-key:active{transform:scale(.95)}
+.pin-key.pk-action{font-size:13px;color:var(--t3)}
+
+/* NOTIFICATION BELL */
+.notif-bell{position:relative}
+.notif-badge{position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--r);border:2px solid var(--glass)}
+
+/* INSTALL BANNER */
+.install-banner{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--pg);color:#fff;padding:12px 20px;border-radius:14px;box-shadow:var(--sh3);display:none;align-items:center;gap:10px;font-size:13px;font-weight:700;z-index:1500;animation:slideUp .5s cubic-bezier(.16,1,.3,1)}
+@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(30px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.install-banner button{padding:6px 14px;border-radius:8px;border:none;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.install-banner .ib-install{background:#fff;color:#7c3aed}
+.install-banner .ib-close{background:rgba(255,255,255,.2);color:#fff}
+
+/* ADD USER CARD */
+.login-card.add-user{border-style:dashed;border-color:var(--b2);opacity:.6}
+.login-card.add-user:hover{opacity:1;border-color:var(--p)}
+.login-card.add-user .avatar{background:var(--bg3);color:var(--t3);font-size:28px}
 </style>
 </head>
 <body>
@@ -476,6 +543,54 @@ tr:hover td{background:var(--bg3)}
   </div>
 </div>
 
+<!-- PIN MODAL -->
+<div class="pin-overlay" id="pinOverlay">
+  <div class="pin-box">
+    <h4 id="pinTitle">PIN Girin</h4>
+    <p style="font-size:12px;color:var(--t2);margin-top:6px" id="pinSubtitle"></p>
+    <div class="pin-dots" id="pinDots"><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div></div>
+    <div class="pin-keypad" id="pinKeypad">
+      <button class="pin-key" onclick="pinInput(1)">1</button><button class="pin-key" onclick="pinInput(2)">2</button><button class="pin-key" onclick="pinInput(3)">3</button>
+      <button class="pin-key" onclick="pinInput(4)">4</button><button class="pin-key" onclick="pinInput(5)">5</button><button class="pin-key" onclick="pinInput(6)">6</button>
+      <button class="pin-key" onclick="pinInput(7)">7</button><button class="pin-key" onclick="pinInput(8)">8</button><button class="pin-key" onclick="pinInput(9)">9</button>
+      <button class="pin-key pk-action" onclick="pinClear()"><i class="fas fa-backspace"></i></button><button class="pin-key" onclick="pinInput(0)">0</button>
+      <button class="pin-key pk-action" onclick="pinCancel()"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- QR MODAL -->
+<div class="qr-modal-overlay" id="qrOverlay">
+  <div class="qr-modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3><i class="fas fa-qrcode" style="color:var(--p);margin-right:6px"></i>Veri Transferi</h3>
+      <button class="modal-x" onclick="closeQR()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="mode-tabs" style="margin-bottom:12px">
+      <button class="mode-tab active" onclick="qrMode('export',this)"><i class="fas fa-upload"></i>Paylaş</button>
+      <button class="mode-tab" onclick="qrMode('import',this)"><i class="fas fa-download"></i>Al</button>
+    </div>
+    <div id="qrExportPane">
+      <p style="font-size:12px;color:var(--t2);margin-bottom:12px">QR kodu diğer cihazdan okutun</p>
+      <div id="qrCode"></div>
+      <button class="btn btn-soft btn-sm" onclick="copyShareLink()" style="margin-top:10px"><i class="fas fa-copy"></i>Linki Kopyala</button>
+    </div>
+    <div id="qrImportPane" style="display:none">
+      <p style="font-size:12px;color:var(--t2);margin-bottom:12px">Paylaşılan linki yapıştırın</p>
+      <div class="fg"><textarea id="qrImportData" placeholder="Paylaşım linkini veya veriyi yapıştırın..." rows="4" style="font-size:11px"></textarea></div>
+      <button class="btn btn-primary btn-sm" onclick="importFromQR()"><i class="fas fa-download"></i>İçe Aktar</button>
+    </div>
+  </div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div class="install-banner" id="installBanner">
+  <i class="fas fa-download"></i>
+  <span>Uygulamayı yükle</span>
+  <button class="ib-install" onclick="installPWA()">Yükle</button>
+  <button class="ib-close" onclick="dismissInstall()">×</button>
+</div>
+
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-container">
@@ -483,24 +598,9 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v4.4</span>
+      <span class="version">v5.0</span>
     </div>
-    <div class="login-cards">
-      <div class="login-card" onclick="login(1)">
-        <div class="avatar" id="la1">1</div>
-        <h3 id="ln1">Kullanıcı 1</h3>
-        <span>Giriş yap →</span>
-        <div class="user-theme-indicator" id="uti1"></div>
-        <span class="last-login" id="ll1"></span>
-      </div>
-      <div class="login-card" onclick="login(2)">
-        <div class="avatar" id="la2">2</div>
-        <h3 id="ln2">Kullanıcı 2</h3>
-        <span>Giriş yap →</span>
-        <div class="user-theme-indicator" id="uti2"></div>
-        <span class="last-login" id="ll2"></span>
-      </div>
-    </div>
+    <div class="login-cards" id="loginCards"></div>
   </div>
 </div>
 
@@ -509,6 +609,7 @@ tr:hover td{background:var(--bg3)}
   <header class="topbar">
     <div class="topbar-brand"><div class="ico"><i class="fas fa-clock"></i></div>ShiftTrack</div>
     <div class="topbar-right">
+      <button class="topbar-btn notif-bell" id="notifBtn" onclick="showNotifications()" title="Bildirimler"><i class="fas fa-bell"></i><span class="notif-badge" id="notifBadge" style="display:none"></span></button>
       <button class="topbar-btn" onclick="showShortcuts()" title="Kısayollar (?)"><i class="fas fa-keyboard"></i></button>
       <button class="topbar-btn" id="undoBtn" disabled onclick="undo()" title="Geri Al (Ctrl+Z)"><i class="fas fa-undo"></i></button>
       <div class="topbar-user" onclick="go('settings',document.querySelectorAll('.nav-tab')[5])">
@@ -535,6 +636,7 @@ tr:hover td{background:var(--bg3)}
         <div id="dashStreak"></div>
       </div>
       <div class="stats" id="statsEl"></div>
+      <div id="dashGoal" class="goal-wrap"></div>
       <div class="year-overview-wrap" id="yearOverviewWrap"></div>
       <div class="grid-2">
         <div class="card">
@@ -544,6 +646,7 @@ tr:hover td{background:var(--bg3)}
         <div class="card">
           <div class="card-head"><h3><i class="fas fa-info-circle"></i>Özet</h3></div>
           <div class="info-list" id="dashInfo"></div>
+          <div id="dashHeatmap" style="margin-top:14px"></div>
         </div>
       </div>
       <div id="dashEarnSummary"></div>
@@ -632,6 +735,7 @@ tr:hover td{background:var(--bg3)}
 
       <div class="card s-card">
         <h3><i class="fas fa-palette"></i>Tema</h3>
+        <div style="font-size:10px;font-weight:700;color:var(--t3);margin-bottom:6px;text-transform:uppercase">Karanlık</div>
         <div class="theme-picker" id="themePicker">
           <div class="theme-dot" data-t="default" onclick="setTheme('default')"></div>
           <div class="theme-dot" data-t="ocean" onclick="setTheme('ocean')"></div>
@@ -639,6 +743,11 @@ tr:hover td{background:var(--bg3)}
           <div class="theme-dot" data-t="sunset" onclick="setTheme('sunset')"></div>
           <div class="theme-dot" data-t="rose" onclick="setTheme('rose')"></div>
           <div class="theme-dot" data-t="gold" onclick="setTheme('gold')"></div>
+        </div>
+        <div style="font-size:10px;font-weight:700;color:var(--t3);margin:10px 0 6px;text-transform:uppercase">Aydınlık</div>
+        <div class="theme-picker">
+          <div class="theme-dot" data-t="light" onclick="setTheme('light')" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);border:2px solid #e2dff0"></div>
+          <div class="theme-dot" data-t="light-ocean" onclick="setTheme('light-ocean')" style="background:linear-gradient(135deg,#0891b2,#22d3ee);border:2px solid #bae6fd"></div>
         </div>
       </div>
 
@@ -671,6 +780,23 @@ tr:hover td{background:var(--bg3)}
       </div>
 
       <div class="card s-card">
+        <h3><i class="fas fa-bullseye"></i>Hedefler</h3>
+        <div class="hint"><i class="fas fa-lightbulb"></i><span>Aylık saat ve kazanç hedefi belirleyin. Dashboard'da ilerleme gösterilir.</span></div>
+        <div class="fg"><label>Aylık Saat Hedefi</label><input type="number" id="sGoalHours" placeholder="180" min="0" max="400" step="5" onchange="sSet('goalHours',this.value)"></div>
+        <div class="fg"><label>Aylık Kazanç Hedefi (₺)</label><input type="number" id="sGoalEarning" placeholder="30000" min="0" step="500" onchange="sSet('goalEarning',this.value)"></div>
+      </div>
+
+      <div class="card s-card">
+        <h3><i class="fas fa-lock"></i>Güvenlik</h3>
+        <div class="hint"><i class="fas fa-shield-alt"></i><span>4 haneli PIN ile hesabınızı koruyun.</span></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span id="pinStatus" style="font-size:12px;color:var(--t2)"></span>
+          <button class="btn btn-soft btn-sm" id="pinSetBtn" onclick="setupPIN()"><i class="fas fa-lock"></i>PIN Ayarla</button>
+          <button class="btn btn-danger btn-sm" id="pinDelBtn" onclick="removePIN()" style="display:none"><i class="fas fa-lock-open"></i>Kaldır</button>
+        </div>
+      </div>
+
+      <div class="card s-card">
         <h3><i class="fas fa-clock"></i>Vardiya Şablonları</h3>
         <div id="customPresets"></div>
         <button class="btn btn-soft btn-sm" onclick="openCPModal()" style="margin-top:8px"><i class="fas fa-plus"></i>Ekle</button>
@@ -696,9 +822,12 @@ tr:hover td{background:var(--bg3)}
         <div class="data-btns">
           <button class="btn btn-outline" onclick="exportD()"><i class="fas fa-download"></i>Yedekle</button>
           <button class="btn btn-outline" onclick="exportCSV()"><i class="fas fa-file-csv"></i>CSV</button>
+          <button class="btn btn-outline" onclick="exportPDF()"><i class="fas fa-file-pdf"></i>PDF</button>
+          <button class="btn btn-outline" onclick="openQR()"><i class="fas fa-qrcode"></i>QR Transfer</button>
           <button class="btn btn-outline" onclick="document.getElementById('impF').click()"><i class="fas fa-upload"></i>Yükle</button>
           <input type="file" id="impF" style="display:none" accept=".json" onchange="importD(event)">
           <button class="btn btn-danger" onclick="clearD()"><i class="fas fa-trash"></i>Sıfırla</button>
+          <button class="btn btn-danger" onclick="deleteCurrentUser()"><i class="fas fa-user-minus"></i>Hesabı Sil</button>
         </div>
       </div>
     </div>
@@ -773,7 +902,7 @@ tr:hover td{background:var(--bg3)}
 /* ============================================================
    CONSTANTS
 ============================================================ */
-const DATA_VERSION = '4.4';
+const DATA_VERSION = '5.0';
 const MTR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 const DFL = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
@@ -803,9 +932,11 @@ const RH = {
 const THEME_COLORS = {
   default:'linear-gradient(135deg,#7c3aed,#8b5cf6)',ocean:'linear-gradient(135deg,#0891b2,#06b6d4)',
   forest:'linear-gradient(135deg,#16a34a,#22c55e)',sunset:'linear-gradient(135deg,#ea580c,#f97316)',
-  rose:'linear-gradient(135deg,#e11d48,#f43f5e)',gold:'linear-gradient(135deg,#d97706,#f59e0b)'
+  rose:'linear-gradient(135deg,#e11d48,#f43f5e)',gold:'linear-gradient(135deg,#d97706,#f59e0b)',
+  light:'linear-gradient(135deg,#7c3aed,#a78bfa)',['light-ocean']:'linear-gradient(135deg,#0891b2,#22d3ee)'
 };
-const THEME_NAMES = {default:'Mor',ocean:'Okyanus',forest:'Orman',sunset:'Gün Batımı',rose:'Gül',gold:'Altın'};
+const MIN_REST_HOURS = 11; // Minimum dinlenme süresi (saat)
+const THEME_NAMES = {default:'Mor',ocean:'Okyanus',forest:'Orman',sunset:'Gün Batımı',rose:'Gül',gold:'Altın',light:'Aydınlık',['light-ocean']:'Aydınlık Okyanus'};
 const PRESET_EMOJIS = ['⏰','🌅','🌇','🌙','⭐','🌞','🔥','💼','🏭','🏥','🚀','⚡','🎯','🌈','🦉','🌊'];
 
 /* ============================================================
@@ -826,6 +957,7 @@ let S = {
   selectedDates: [],
   wtEditDay: null,
   cpSelectedEmoji: '⏰',
+  nextUid: 3,
   u: { 1: mkUser(1), 2: mkUser(2) }
 };
 
@@ -842,7 +974,10 @@ function mkUser(i) {
     notes: '',
     lastLogin: null,
     theme: 'default',
-    monthlyHours: 225
+    monthlyHours: 225,
+    goalHours: 0,
+    goalEarning: 0,
+    pin: null
   };
 }
 
@@ -1361,6 +1496,8 @@ function init() {
     if (e.key === 'Escape') {
       closeM(); closeWTModal(); closeCPModal();
       $('confirmOverlay').classList.remove('show');
+      $('pinOverlay').classList.remove('show');
+      $('qrOverlay').classList.remove('show');
     }
     if ($('modal').classList.contains('show') || $('wtModal').classList.contains('show') || $('cpModal').classList.contains('show')) return;
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
@@ -1401,17 +1538,43 @@ function init() {
    LOGIN / LOGOUT
 ============================================================ */
 function updLogin() {
-  [1, 2].forEach(i => {
+  const container = $('loginCards'); if (!container) return;
+  let h = '';
+  Object.keys(S.u).sort((a,b) => parseInt(a) - parseInt(b)).forEach(k => {
+    const i = parseInt(k);
     const u = S.u[i]; if (!u) return;
-    setTxt('ln' + i, u.name || 'Kullanıcı ' + i);
-    const la = $('la' + i); if (la) la.textContent = (u.name || 'K')[0].toUpperCase();
-    const ll = $('ll' + i);
-    if (ll) ll.textContent = u.lastLogin
+    const name = escHtml(u.name || 'Kullanıcı ' + i);
+    const initial = (u.name || 'K')[0].toUpperCase();
+    const lastLogin = u.lastLogin
       ? 'Son: ' + new Date(u.lastLogin).toLocaleDateString('tr-TR', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })
       : '';
-    const uti = $('uti' + i);
-    if (uti) uti.innerHTML = `<span class="uti-dot" style="background:${THEME_COLORS[u.theme||'default']}"></span><span class="uti-text">${THEME_NAMES[u.theme||'default']}</span>`;
+    const themeColor = THEME_COLORS[u.theme||'default'];
+    const themeName = THEME_NAMES[u.theme||'default'];
+    const hasPin = u.pin ? '<i class="fas fa-lock" style="font-size:9px;color:var(--t3);margin-left:4px" title="PIN korumalı"></i>' : '';
+    h += `<div class="login-card" onclick="loginAttempt(${i})">
+      <div class="avatar">${initial}</div>
+      <h3>${name}${hasPin}</h3>
+      <span>Giriş yap →</span>
+      <div class="user-theme-indicator"><span class="uti-dot" style="background:${themeColor}"></span><span class="uti-text">${themeName}</span></div>
+      <span class="last-login">${lastLogin}</span>
+    </div>`;
   });
+  h += `<div class="login-card add-user" onclick="addNewUser()">
+    <div class="avatar"><i class="fas fa-plus"></i></div>
+    <h3>Yeni Kullanıcı</h3>
+    <span>Ekle →</span>
+  </div>`;
+  container.innerHTML = h;
+}
+
+function loginAttempt(id) {
+  const u = S.u[id]; if (!u) return;
+  if (u.pin) {
+    openPIN('PIN Girin', u.name, pin => {
+      if (pin === u.pin) { login(id); }
+      else { toast('Yanlış PIN!', 'error'); }
+    });
+  } else { login(id); }
 }
 
 function login(id) {
@@ -1428,6 +1591,7 @@ function login(id) {
   undoStack.length = 0;
   updUndoBtn();
   renderAll();
+  scheduleNotifications();
   toast(`Hoş geldin, ${escHtml(u.name)}!`, 'success');
 }
 
@@ -1543,7 +1707,20 @@ function renderDash() {
     <div class="info-row"><span class="k"><i class="fas fa-coins"></i>Saatlik</span><span class="v">${u.netSalary ? fm(d.hr) : '—'}</span></div>
     <div class="info-row"><span class="k"><i class="fas fa-chart-line"></i>İş Günü Dol.</span><span class="v">${d.dim > 0 ? workdays + '/' + d.dim : '—'}</span></div>
   `;
+  // Year comparison
+  info += renderYearComparison();
+
+  // Month projection
+  const proj = getMonthProjection();
+  if (proj) {
+    info += `<div class="info-row"><span class="k"><i class="fas fa-chart-area"></i>Ay Sonu Tahmini</span><span class="v">${proj.projected}s${proj.projectedEarning > 0 ? ' / ' + fm(proj.projectedEarning) : ''}</span></div>`;
+  }
+
   setHtml('dashInfo', info);
+
+  // Render heatmap & goals
+  renderDashHeatmap();
+  renderGoals();
 
   const deb = $('dashEarnSummary');
   if (deb) {
@@ -1704,7 +1881,8 @@ function renderCal() {
     e.dataset.date = s;
     e.setAttribute('tabindex', '0');
     e.setAttribute('role', 'button');
-    e.setAttribute('aria-label', `${d} ${MTR[m]}`);
+    e.setAttribute('aria-label', `${d} ${MTR[m]} ${sh ? calcHr(sh.start,sh.end,sh.break||0).toFixed(1)+' saat' : lv ? 'İzinli' : hol || ''}`);
+    if (sh && sh.start) e.draggable = true;
     g.appendChild(e);
   }
 
@@ -2002,11 +2180,37 @@ function saveEntry() {
     if (gross > MAX_GROSS_HOURS) { toast(`Vardiya ${MAX_GROSS_HOURS}s brüt aşamaz`, 'error'); return; }
     const hrs = calcHr(st, en, br);
     if (hrs <= 0) { toast('Mola vardiya süresinden uzun olamaz', 'error'); return; }
-    pushUndo('Vardiya');
-    const note = ($('iShiftNote').value || '').trim().substring(0, 100);
-    u.shifts[S.sd] = { start:st, end:en, break:br, note };
-    delete u.leaves[S.sd];
-    toast(`${hrs.toFixed(1)}s kaydedildi`, 'success');
+
+    const doSave = () => {
+      pushUndo('Vardiya');
+      const note = ($('iShiftNote').value || '').trim().substring(0, 100);
+      u.shifts[S.sd] = { start:st, end:en, break:br, note };
+      delete u.leaves[S.sd];
+      toast(`${hrs.toFixed(1)}s kaydedildi`, 'success');
+      invalidateMDCache(); saveLS(); closeM(); renderActivePage();
+    };
+
+    // Rest time check
+    const restWarn = checkRestTime(S.sd, st);
+    if (restWarn) {
+      showConfirm('Dinlenme Uyarısı',
+        `Önceki vardiya (${restWarn.prevDate}) ${restWarn.prevEnd}'de bitti. Dinlenme: ${restWarn.restHours}s (min ${restWarn.required}s). Devam?`,
+        () => {
+          if (checkHolidayWork(S.sd)) {
+            showConfirm('Tatil Vardiyası', `Bu gün resmi tatil! Tatilde çalışma kaydı eklenecek. Devam?`, doSave);
+          } else { doSave(); }
+        }
+      );
+      return;
+    }
+
+    if (checkHolidayWork(S.sd)) {
+      showConfirm('Tatil Vardiyası', `Bu gün resmi tatil! Tatilde çalışma kaydı eklenecek. Devam?`, doSave);
+      return;
+    }
+
+    doSave();
+    return;
   } else {
     if (!S.lt) { toast('İzin türü seçin', 'error'); return; }
     if (S.lt === 'annual') {
@@ -2385,8 +2589,11 @@ function loadSet() {
   if (sL) sL.value = u.annualLeave != null ? u.annualLeave : 14;
   const sMH = $('sMH'); if (sMH) sMH.value = u.monthlyHours || 225;
   const uN = $('userNotes'); if (uN) uN.value = u.notes || '';
+  const sGH = $('sGoalHours'); if (sGH) sGH.value = u.goalHours || '';
+  const sGE = $('sGoalEarning'); if (sGE) sGE.value = u.goalEarning || '';
   updSal();
   updSeniority();
+  updPinStatus();
   renderCustomPresets();
   renderWeeklyTemplate();
   renderDataUsage();
@@ -2398,6 +2605,8 @@ function sSet(k, v) {
   if (k === 'netSalary') { v = parseFloat(v); if (isNaN(v) || v < 0) v = 0; }
   if (k === 'annualLeave') { v = parseInt(v); if (isNaN(v) || v < 0) v = 0; if (v > 40) v = 40; }
   if (k === 'monthlyHours') { v = parseInt(v); if (isNaN(v) || v < 100) v = 100; if (v > 400) v = 400; MH = v; }
+  if (k === 'goalHours') { v = parseFloat(v); if (isNaN(v) || v < 0) v = 0; }
+  if (k === 'goalEarning') { v = parseFloat(v); if (isNaN(v) || v < 0) v = 0; }
   if (k === 'name') {
     v = (v || '').trim();
     if (!v) { toast('İsim boş olamaz', 'error'); return; }
@@ -2653,7 +2862,7 @@ function clearWeeklyTemplate() {
 ============================================================ */
 function saveLS() {
   try {
-    const d = JSON.stringify({ users:S.u, version:DATA_VERSION });
+    const d = JSON.stringify({ users:S.u, version:DATA_VERSION, nextUid:S.nextUid });
     if (d.length > 4 * 1024 * 1024) toast('Veri büyük, yedekleme önerilir', 'warning');
     localStorage.setItem('st_data', d);
   } catch(e) {
@@ -2668,20 +2877,26 @@ function loadLS() {
     if (!s) return;
     const p = JSON.parse(s);
     if (!p || !p.users) return;
-    [1, 2].forEach(i => {
-      if (!p.users[i]) return;
-      S.u[i] = Object.assign(mkUser(i), p.users[i]);
+    if (p.nextUid) S.nextUid = p.nextUid;
+    S.u = {};
+    Object.keys(p.users).forEach(k => {
+      const i = parseInt(k);
+      if (!p.users[k]) return;
+      S.u[i] = Object.assign(mkUser(i), p.users[k]);
       if (typeof S.u[i].shifts !== 'object' || !S.u[i].shifts) S.u[i].shifts = {};
       if (typeof S.u[i].leaves !== 'object' || !S.u[i].leaves) S.u[i].leaves = {};
       if (!Array.isArray(S.u[i].customPresets)) S.u[i].customPresets = [];
       S.u[i].netSalary = parseFloat(S.u[i].netSalary) || 0;
       S.u[i].annualLeave = parseInt(S.u[i].annualLeave) || 14;
       if (typeof S.u[i].notes !== 'string') S.u[i].notes = '';
-      const bs = Object.keys(S.u[i].shifts).filter(k => !parseDS(k) || !S.u[i].shifts[k] || !S.u[i].shifts[k].start);
-      bs.forEach(k => delete S.u[i].shifts[k]);
-      const bl = Object.keys(S.u[i].leaves).filter(k => !parseDS(k) || !S.u[i].leaves[k] || !S.u[i].leaves[k].type);
-      bl.forEach(k => delete S.u[i].leaves[k]);
+      S.u[i].goalHours = parseFloat(S.u[i].goalHours) || 0;
+      S.u[i].goalEarning = parseFloat(S.u[i].goalEarning) || 0;
+      const bs = Object.keys(S.u[i].shifts).filter(k2 => !parseDS(k2) || !S.u[i].shifts[k2] || !S.u[i].shifts[k2].start);
+      bs.forEach(k2 => delete S.u[i].shifts[k2]);
+      const bl = Object.keys(S.u[i].leaves).filter(k2 => !parseDS(k2) || !S.u[i].leaves[k2] || !S.u[i].leaves[k2].type);
+      bl.forEach(k2 => delete S.u[i].leaves[k2]);
     });
+    if (Object.keys(S.u).length === 0) { S.u = { 1: mkUser(1), 2: mkUser(2) }; }
   } catch(e) {
     console.error('loadLS error:', e);
     toast('Veri yükleme hatası', 'error');
@@ -2709,9 +2924,11 @@ function importD(e) {
     try {
       const p = JSON.parse(ev.target.result);
       if (!p || !p.users) { toast('Geçersiz format', 'error'); return; }
-      [1, 2].forEach(i => {
-        if (!p.users[i]) return;
-        S.u[i] = Object.assign(mkUser(i), p.users[i]);
+      if (p.nextUid) S.nextUid = p.nextUid;
+      Object.keys(p.users).forEach(k => {
+        const i = parseInt(k);
+        if (!p.users[k]) return;
+        S.u[i] = Object.assign(mkUser(i), p.users[k]);
         if (typeof S.u[i].shifts !== 'object') S.u[i].shifts = {};
         if (typeof S.u[i].leaves !== 'object') S.u[i].leaves = {};
         if (!Array.isArray(S.u[i].customPresets)) S.u[i].customPresets = [];
@@ -2879,10 +3096,557 @@ function getDayOfWeekStats() {
 }
 
 /* ============================================================
+   PIN SYSTEM
+============================================================ */
+let pinCallback = null, pinBuffer = '';
+
+function openPIN(title, subtitle, cb) {
+  pinCallback = cb; pinBuffer = '';
+  $('pinTitle').textContent = title;
+  $('pinSubtitle').textContent = subtitle || '';
+  updPinDots();
+  $('pinOverlay').classList.add('show');
+}
+
+function pinInput(n) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += String(n);
+  updPinDots();
+  if (pinBuffer.length === 4) {
+    setTimeout(() => {
+      $('pinOverlay').classList.remove('show');
+      if (pinCallback) pinCallback(pinBuffer);
+      pinCallback = null; pinBuffer = '';
+    }, 200);
+  }
+}
+
+function pinClear() { if (pinBuffer.length > 0) pinBuffer = pinBuffer.slice(0, -1); updPinDots(); }
+function pinCancel() { $('pinOverlay').classList.remove('show'); pinCallback = null; pinBuffer = ''; }
+function updPinDots() {
+  const dots = $('pinDots'); if (!dots) return;
+  const d = dots.children;
+  for (let i = 0; i < 4; i++) { d[i].classList.toggle('filled', i < pinBuffer.length); }
+}
+
+function setupPIN() {
+  openPIN('Yeni PIN Belirleyin', 'Hesabınızı koruyun', pin1 => {
+    openPIN('PIN Tekrar', 'Doğrulama', pin2 => {
+      if (pin1 === pin2) {
+        const u = cu(); if (u) { u.pin = pin1; saveLS(); updPinStatus(); toast('PIN ayarlandı!', 'success'); }
+      } else { toast('PIN eşleşmedi!', 'error'); }
+    });
+  });
+}
+
+function removePIN() {
+  const u = cu(); if (!u || !u.pin) return;
+  openPIN('Mevcut PIN', 'Kaldırmak için PIN girin', pin => {
+    if (pin === u.pin) { u.pin = null; saveLS(); updPinStatus(); toast('PIN kaldırıldı', 'info'); }
+    else { toast('Yanlış PIN!', 'error'); }
+  });
+}
+
+function updPinStatus() {
+  const u = cu(); if (!u) return;
+  const st = $('pinStatus'), sb = $('pinSetBtn'), db = $('pinDelBtn');
+  if (!st) return;
+  if (u.pin) {
+    st.innerHTML = '<i class="fas fa-check-circle" style="color:var(--g)"></i> PIN aktif';
+    if (sb) sb.style.display = 'none';
+    if (db) db.style.display = '';
+  } else {
+    st.innerHTML = '<i class="fas fa-shield-alt" style="color:var(--t3)"></i> PIN yok';
+    if (sb) sb.style.display = '';
+    if (db) db.style.display = 'none';
+  }
+}
+
+/* ============================================================
+   USER MANAGEMENT
+============================================================ */
+function addNewUser() {
+  const name = prompt('Yeni kullanıcı adı:');
+  if (!name || !name.trim()) return;
+  const id = S.nextUid++;
+  S.u[id] = mkUser(id);
+  S.u[id].name = name.trim();
+  saveLS();
+  updLogin();
+  toast(`${escHtml(name.trim())} eklendi`, 'success');
+}
+
+function deleteCurrentUser() {
+  const u = cu(); if (!u) return;
+  const userIds = Object.keys(S.u);
+  if (userIds.length <= 1) { toast('Son kullanıcı silinemez', 'error'); return; }
+  showConfirm('Hesabı Sil', `"${escHtml(u.name)}" hesabı ve tüm verileri silinecek!`, () => {
+    delete S.u[S.cu];
+    saveLS();
+    logout();
+    toast('Hesap silindi', 'info');
+  });
+}
+
+/* ============================================================
+   PDF EXPORT
+============================================================ */
+function exportPDF() {
+  const u = cu(); if (!u) { toast('Giriş yapın', 'error'); return; }
+  if (typeof window.jspdf === 'undefined') { toast('PDF kütüphanesi yüklenemedi', 'error'); return; }
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    const mStr = MTR[S.cm] + ' ' + S.cy;
+    let y = 15;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(18);
+    doc.text('ShiftTrack Pro - Vardiya Raporu', 15, y); y += 8;
+    doc.setFontSize(12); doc.setFont('helvetica', 'normal');
+    doc.text(`${u.name} | ${mStr}`, 15, y); y += 10;
+
+    doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+    const cols = ['Tarih','Gün','Tür','Giriş','Çıkış','Net Saat'];
+    const colW = [28, 22, 28, 20, 20, 22];
+    let x = 15;
+    doc.setFillColor(124, 58, 237); doc.setTextColor(255, 255, 255);
+    doc.rect(15, y, 140, 7, 'F');
+    cols.forEach((c, i) => { doc.text(c, x + 2, y + 5); x += colW[i]; });
+    y += 9; doc.setFont('helvetica', 'normal'); doc.setTextColor(30, 30, 30);
+
+    const dim = new Date(S.cy, S.cm + 1, 0).getDate();
+    let totalHrs = 0, totalDays = 0;
+    for (let d = 1; d <= dim; d++) {
+      const ds = `${S.cy}-${String(S.cm+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const dt = new Date(S.cy, S.cm, d);
+      let dow = dt.getDay(); dow = dow === 0 ? 6 : dow - 1;
+      const dayName = DFS[dow];
+      const sh = u.shifts[ds], lv = u.leaves[ds];
+      x = 15;
+      if (y > 270) { doc.addPage(); y = 15; }
+      if (d % 2 === 0) { doc.setFillColor(245, 243, 255); doc.rect(15, y - 4, 140, 6, 'F'); }
+      if (sh && sh.start && sh.end) {
+        const hrs = calcHr(sh.start, sh.end, sh.break || 0);
+        totalHrs += hrs; totalDays++;
+        doc.text(ds, x + 2, y); x += colW[0];
+        doc.text(dayName, x + 2, y); x += colW[1];
+        doc.text('Vardiya', x + 2, y); x += colW[2];
+        doc.text(sh.start, x + 2, y); x += colW[3];
+        doc.text(sh.end, x + 2, y); x += colW[4];
+        doc.text(hrs.toFixed(1) + 's', x + 2, y);
+      } else if (lv && lv.type) {
+        const tl = {annual:'Yıllık',weekly:'Hafta T.',sick:'Rapor',unpaid:'Ücretsiz'};
+        doc.text(ds, x + 2, y); x += colW[0];
+        doc.text(dayName, x + 2, y); x += colW[1];
+        doc.text(tl[lv.type]||lv.type, x + 2, y);
+      } else if (isH(ds)) {
+        doc.text(ds, x + 2, y); x += colW[0];
+        doc.text(dayName, x + 2, y); x += colW[1];
+        doc.setTextColor(220, 38, 38); doc.text('R.Tatil', x + 2, y); doc.setTextColor(30, 30, 30);
+      } else { continue; }
+      y += 6;
+    }
+
+    y += 8;
+    if (y > 260) { doc.addPage(); y = 15; }
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+    doc.text(`Toplam: ${totalDays} gün, ${totalHrs.toFixed(1)} saat`, 15, y); y += 6;
+    if (u.netSalary > 0) {
+      const md = getMonthData(S.cy, S.cm, u);
+      doc.text(`Tahmini Kazanç: ${fmtMoney(md.earning)}`, 15, y);
+    }
+
+    doc.setFontSize(7); doc.setTextColor(150, 150, 150);
+    doc.text(`ShiftTrack Pro | ${new Date().toLocaleString('tr-TR')}`, 15, 290);
+
+    doc.save(`shifttrack_${u.name}_${mStr}.pdf`);
+    toast('PDF indirildi!', 'success');
+  } catch(e) { console.error(e); toast('PDF hatası: ' + e.message, 'error'); }
+}
+
+/* ============================================================
+   DASHBOARD HEATMAP
+============================================================ */
+function renderDashHeatmap() {
+  const el = $('dashHeatmap'); if (!el) return;
+  const u = cu(); if (!u) { el.innerHTML = ''; return; }
+  const now = new Date();
+  const y = S.cy, m = S.cm;
+  const dim = new Date(y, m + 1, 0).getDate();
+  const firstDow = new Date(y, m, 1).getDay();
+  const offset = firstDow === 0 ? 6 : firstDow - 1;
+
+  let h = '<div style="font-size:10px;font-weight:800;color:var(--t2);margin-bottom:6px"><i class="fas fa-th" style="color:var(--p);margin-right:4px"></i>Aylık Aktivite</div>';
+  h += '<div style="display:flex;gap:2px;margin-bottom:3px;font-size:8px;color:var(--t3);font-weight:700">';
+  DFS.forEach(d => { h += `<div style="flex:1;text-align:center">${d}</div>`; });
+  h += '</div><div class="heatmap">';
+
+  for (let i = 0; i < offset; i++) h += '<div class="hm-cell" style="visibility:hidden"></div>';
+  for (let d = 1; d <= dim; d++) {
+    const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const sh = u.shifts[ds], lv = u.leaves[ds];
+    const isToday = d === now.getDate() && m === now.getMonth() && y === now.getFullYear();
+    let cls = 'hm-cell';
+    if (isToday) cls += ' hm-today';
+    if (lv && lv.type) {
+      cls += lv.type === 'annual' || lv.type === 'unpaid' ? ' hm-leave' : ' hm-holiday';
+    } else if (sh && sh.start) {
+      const hrs = calcHr(sh.start, sh.end, sh.break || 0);
+      cls += hrs > 10 ? ' hm-4' : hrs > 8 ? ' hm-3' : hrs > 4 ? ' hm-2' : ' hm-1';
+    } else if (isH(ds)) { cls += ' hm-holiday'; }
+    else { cls += ' hm-0'; }
+    h += `<div class="${cls}" title="${d} ${MTR[m]} - ${sh ? calcHr(sh.start,sh.end,sh.break||0).toFixed(1)+'s' : lv ? 'İzin' : ''}"></div>`;
+  }
+  h += '</div>';
+  h += '<div class="hm-legend"><span style="background:var(--bg3);opacity:.3"></span>Boş <span style="background:var(--p);opacity:.5"></span>Vardiya <span style="background:var(--s);opacity:.5"></span>İzin <span style="background:var(--r);opacity:.4"></span>Tatil</div>';
+  el.innerHTML = h;
+}
+
+/* ============================================================
+   GOAL TRACKING
+============================================================ */
+function renderGoals() {
+  const el = $('dashGoal'); if (!el) return;
+  const u = cu(); if (!u) { el.innerHTML = ''; return; }
+  if (!u.goalHours && !u.goalEarning) { el.innerHTML = ''; return; }
+
+  const md = getMonthData(S.cy, S.cm, u);
+  let h = '<div class="card" style="margin-bottom:12px"><div class="card-head"><h3><i class="fas fa-bullseye"></i>Hedefler</h3><span style="font-size:10px;color:var(--t3)">' + MTR[S.cm] + '</span></div>';
+
+  if (u.goalHours > 0) {
+    const pct = Math.min(150, (md.totalHrs / u.goalHours) * 100);
+    const cls = pct > 110 ? 'gf-over' : pct > 80 ? 'gf-ok' : 'gf-warn';
+    h += `<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:4px"><i class="fas fa-clock" style="color:var(--p);margin-right:4px"></i>Saat Hedefi</div>`;
+    h += `<div class="goal-bar"><div class="goal-fill ${cls}" style="width:${Math.min(100, pct)}%">${pct.toFixed(0)}%</div></div>`;
+    h += `<div class="goal-info"><span>${md.totalHrs.toFixed(1)}s / ${u.goalHours}s</span><span>${pct >= 100 ? 'Hedefe ulaşıldı!' : (u.goalHours - md.totalHrs).toFixed(1) + 's kaldı'}</span></div></div>`;
+  }
+
+  if (u.goalEarning > 0 && u.netSalary > 0) {
+    const pct = Math.min(150, (md.earning / u.goalEarning) * 100);
+    const cls = pct > 110 ? 'gf-over' : pct > 80 ? 'gf-ok' : 'gf-warn';
+    h += `<div><div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:4px"><i class="fas fa-lira-sign" style="color:var(--g);margin-right:4px"></i>Kazanç Hedefi</div>`;
+    h += `<div class="goal-bar"><div class="goal-fill ${cls}" style="width:${Math.min(100, pct)}%">${pct.toFixed(0)}%</div></div>`;
+    h += `<div class="goal-info"><span>${fmtMoney(md.earning)} / ${fmtMoney(u.goalEarning)}</span><span>${pct >= 100 ? 'Hedefe ulaşıldı!' : fmtMoney(u.goalEarning - md.earning) + ' kaldı'}</span></div></div>`;
+  }
+
+  h += '</div>';
+  el.innerHTML = h;
+}
+
+/* ============================================================
+   REST TIME VALIDATION (11-HOUR RULE)
+============================================================ */
+function checkRestTime(ds, startTime) {
+  const u = cu(); if (!u) return null;
+  const d = dsToDate(ds);
+  const prev = new Date(d); prev.setDate(prev.getDate() - 1);
+  const prevDs = dStr(prev);
+  const prevShift = u.shifts[prevDs];
+  if (!prevShift || !prevShift.end) return null;
+
+  const prevEnd = prevShift.end.split(':').map(Number);
+  const curStart = startTime.split(':').map(Number);
+  let prevEndMin = prevEnd[0] * 60 + prevEnd[1];
+  let curStartMin = curStart[0] * 60 + curStart[1];
+
+  // Handle overnight shifts
+  if (prevEndMin > 12 * 60) {
+    const restMinutes = (24 * 60 - prevEndMin) + curStartMin;
+    const restHours = restMinutes / 60;
+    if (restHours < MIN_REST_HOURS) {
+      return { restHours: restHours.toFixed(1), required: MIN_REST_HOURS, prevEnd: prevShift.end, prevDate: prevDs };
+    }
+  } else {
+    const restMinutes = curStartMin - prevEndMin + 24 * 60;
+    const restHours = Math.min(restMinutes, (24 * 60 - prevEndMin + curStartMin)) / 60;
+    if (restHours < MIN_REST_HOURS) {
+      return { restHours: restHours.toFixed(1), required: MIN_REST_HOURS, prevEnd: prevShift.end, prevDate: prevDs };
+    }
+  }
+  return null;
+}
+
+function checkHolidayWork(ds) {
+  if (!isH(ds)) return false;
+  return true;
+}
+
+/* ============================================================
+   DRAG & DROP
+============================================================ */
+let dragData = null;
+
+function initDragDrop() {
+  const cg = $('calGrid'); if (!cg) return;
+  cg.addEventListener('dragstart', function(e) {
+    const cell = e.target.closest('.cal-cell');
+    if (!cell || cell.classList.contains('out')) return;
+    const ds = cell.dataset.date; if (!ds) return;
+    const u = cu(); if (!u || !u.shifts[ds]) { e.preventDefault(); return; }
+    dragData = { date: ds, shift: JSON.parse(JSON.stringify(u.shifts[ds])) };
+    cell.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', ds);
+  });
+  cg.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    const cell = e.target.closest('.cal-cell');
+    if (cell && !cell.classList.contains('out')) {
+      e.dataTransfer.dropEffect = 'move';
+      cell.classList.add('drag-over');
+    }
+  });
+  cg.addEventListener('dragleave', function(e) {
+    const cell = e.target.closest('.cal-cell');
+    if (cell) cell.classList.remove('drag-over');
+  });
+  cg.addEventListener('drop', function(e) {
+    e.preventDefault();
+    document.querySelectorAll('.drag-over').forEach(c => c.classList.remove('drag-over'));
+    if (!dragData) return;
+    const cell = e.target.closest('.cal-cell');
+    if (!cell || cell.classList.contains('out')) return;
+    const targetDs = cell.dataset.date; if (!targetDs || targetDs === dragData.date) return;
+    const u = cu(); if (!u) return;
+    pushUndo('Sürükle bırak');
+    u.shifts[targetDs] = JSON.parse(JSON.stringify(dragData.shift));
+    delete u.shifts[dragData.date];
+    invalidateMDCache(); saveLS(); renderCal();
+    toast(`Vardiya ${dragData.date} → ${targetDs}`, 'success');
+    dragData = null;
+  });
+  cg.addEventListener('dragend', function() {
+    document.querySelectorAll('.dragging').forEach(c => c.classList.remove('dragging'));
+    document.querySelectorAll('.drag-over').forEach(c => c.classList.remove('drag-over'));
+    dragData = null;
+  });
+}
+
+/* ============================================================
+   QR CODE DATA SYNC
+============================================================ */
+function openQR() {
+  $('qrOverlay').classList.add('show');
+  generateQR();
+}
+function closeQR() { $('qrOverlay').classList.remove('show'); }
+function qrMode(mode, btn) {
+  btn.parentElement.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  $('qrExportPane').style.display = mode === 'export' ? '' : 'none';
+  $('qrImportPane').style.display = mode === 'import' ? '' : 'none';
+  if (mode === 'export') generateQR();
+}
+
+function generateQR() {
+  const el = $('qrCode'); if (!el) return;
+  el.innerHTML = '';
+  try {
+    const data = JSON.stringify({ users: S.u, version: DATA_VERSION, nextUid: S.nextUid });
+    const compressed = btoa(encodeURIComponent(data));
+    if (compressed.length > 2900) {
+      el.innerHTML = '<p style="font-size:11px;color:var(--acc)"><i class="fas fa-exclamation-triangle"></i> Veri çok büyük, linki kopyalayıp paylaşın.</p>';
+    }
+    if (typeof QRCode !== 'undefined') {
+      new QRCode(el, { text: compressed.substring(0, 2900), width: 200, height: 200, colorDark: '#1a1625', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.L });
+    }
+  } catch(e) { el.innerHTML = '<p style="color:var(--r);font-size:11px">QR oluşturulamadı</p>'; }
+}
+
+function copyShareLink() {
+  try {
+    const data = JSON.stringify({ users: S.u, version: DATA_VERSION, nextUid: S.nextUid });
+    const encoded = btoa(encodeURIComponent(data));
+    navigator.clipboard.writeText(encoded).then(() => toast('Veri kopyalandı!', 'success')).catch(() => {
+      const ta = document.createElement('textarea'); ta.value = encoded;
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); toast('Kopyalandı!', 'success');
+    });
+  } catch(e) { toast('Kopyalama hatası', 'error'); }
+}
+
+function importFromQR() {
+  const raw = $('qrImportData').value.trim();
+  if (!raw) { toast('Veri girin', 'error'); return; }
+  try {
+    const decoded = decodeURIComponent(atob(raw));
+    const p = JSON.parse(decoded);
+    if (!p || !p.users) { toast('Geçersiz veri', 'error'); return; }
+    showConfirm('Veri İçe Aktar', 'Mevcut veriler üzerine yazılacak. Devam?', () => {
+      if (p.nextUid) S.nextUid = p.nextUid;
+      Object.keys(p.users).forEach(k => {
+        const i = parseInt(k);
+        S.u[i] = Object.assign(mkUser(i), p.users[k]);
+      });
+      invalidateMDCache(); saveLS();
+      if (cu()) { applyTheme(cu().theme || 'default'); renderAll(); updTop(); }
+      closeQR();
+      toast('Veriler içe aktarıldı!', 'success');
+    });
+  } catch(e) { toast('Geçersiz format', 'error'); }
+}
+
+/* ============================================================
+   NOTIFICATIONS
+============================================================ */
+let notifications = [];
+
+function scheduleNotifications() {
+  notifications = [];
+  const u = cu(); if (!u) return;
+  const now = new Date();
+  const todayDs = dStr(now);
+  const tmrw = new Date(now); tmrw.setDate(tmrw.getDate() + 1);
+  const tmrwDs = dStr(tmrw);
+
+  // Check tomorrow's shift
+  if (u.shifts[tmrwDs]) {
+    const sh = u.shifts[tmrwDs];
+    notifications.push({ icon: 'fa-clock', text: `Yarın vardiya: ${sh.start} - ${sh.end}`, type: 'info' });
+  }
+
+  // Check rest time
+  if (u.shifts[todayDs] && u.shifts[tmrwDs]) {
+    const rest = checkRestTime(tmrwDs, u.shifts[tmrwDs].start);
+    if (rest) {
+      notifications.push({ icon: 'fa-exclamation-triangle', text: `Dikkat: Dinlenme süresi ${rest.restHours}s (min ${rest.required}s)`, type: 'warning' });
+    }
+  }
+
+  // Holiday work warnings
+  if (u.shifts[todayDs] && isH(todayDs)) {
+    notifications.push({ icon: 'fa-star', text: 'Bugün resmi tatilde çalıştınız', type: 'warning' });
+  }
+
+  // Goal progress
+  const md = getMonthData(S.cy, S.cm, u);
+  if (u.goalHours > 0) {
+    const pct = (md.totalHrs / u.goalHours) * 100;
+    if (pct >= 100) notifications.push({ icon: 'fa-trophy', text: 'Saat hedefine ulaştınız!', type: 'success' });
+    else if (pct >= 80) notifications.push({ icon: 'fa-fire', text: `Saat hedefine %${(100 - pct).toFixed(0)} kaldı!`, type: 'info' });
+  }
+
+  // Annual leave reminder
+  const usedLeave = Object.values(u.leaves).filter(l => l.type === 'annual').length;
+  const remaining = u.annualLeave - usedLeave;
+  if (remaining <= 3 && remaining > 0) {
+    notifications.push({ icon: 'fa-umbrella-beach', text: `Yıllık izin: ${remaining} gün kaldı`, type: 'warning' });
+  }
+
+  // Update badge
+  const badge = $('notifBadge');
+  if (badge) badge.style.display = notifications.length > 0 ? '' : 'none';
+}
+
+function showNotifications() {
+  if (notifications.length === 0) { toast('Bildirim yok', 'info'); return; }
+  let h = '<div style="padding:16px"><h3 style="font-size:16px;font-weight:800;margin-bottom:14px"><i class="fas fa-bell" style="color:var(--p);margin-right:6px"></i>Bildirimler</h3>';
+  notifications.forEach(n => {
+    const color = n.type === 'warning' ? 'var(--acc)' : n.type === 'success' ? 'var(--g)' : 'var(--p)';
+    h += `<div style="display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:6px;background:var(--bg3);border-radius:10px;border:1px solid var(--b1)">
+      <i class="fas ${n.icon}" style="color:${color};font-size:14px"></i>
+      <span style="font-size:12px;color:var(--t1);font-weight:600">${escHtml(n.text)}</span>
+    </div>`;
+  });
+  h += '</div>';
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:2000;padding:16px';
+  overlay.onclick = function(e) { if (e.target === this) this.remove(); };
+  const box = document.createElement('div');
+  box.style.cssText = 'background:var(--bg2);border-radius:var(--rad2);max-width:400px;width:100%;border:1px solid var(--b1);box-shadow:var(--sh3);animation:modalPop .3s cubic-bezier(.16,1,.3,1)';
+  box.innerHTML = h;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+}
+
+/* ============================================================
+   YEAR COMPARISON STATS
+============================================================ */
+function renderYearComparison() {
+  const u = cu(); if (!u) return '';
+  const cy = S.cy, py = cy - 1;
+  let cyHrs = 0, pyHrs = 0, cyDays = 0, pyDays = 0;
+  Object.entries(u.shifts).forEach(([k, v]) => {
+    if (!v || !v.start || !v.end) return;
+    const p = parseDS(k); if (!p) return;
+    const hrs = calcHr(v.start, v.end, v.break || 0);
+    if (p.y === cy) { cyHrs += hrs; cyDays++; }
+    else if (p.y === py) { pyHrs += hrs; pyDays++; }
+  });
+  if (pyDays === 0) return '';
+
+  const hrsDiff = cyHrs - pyHrs;
+  const hrsIcon = hrsDiff >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+  const hrsColor = hrsDiff >= 0 ? 'var(--g)' : 'var(--r)';
+
+  return `<div class="info-item"><span class="info-label"><i class="fas fa-chart-line"></i>Geçen Yıl Karşılaştırma</span>
+    <span class="info-value" style="font-size:10px"><i class="fas ${hrsIcon}" style="color:${hrsColor}"></i> ${Math.abs(hrsDiff).toFixed(0)}s ${hrsDiff >= 0 ? 'fazla' : 'az'} (${py}: ${pyHrs.toFixed(0)}s)</span></div>`;
+}
+
+/* ============================================================
+   MONTH PROJECTION
+============================================================ */
+function getMonthProjection() {
+  const u = cu(); if (!u) return null;
+  const now = new Date();
+  if (S.cm !== now.getMonth() || S.cy !== now.getFullYear()) return null;
+
+  const today = now.getDate();
+  const dim = new Date(S.cy, S.cm + 1, 0).getDate();
+  if (today < 5) return null;
+
+  const md = getMonthData(S.cy, S.cm, u);
+  if (md.totalHrs <= 0) return null;
+
+  const avgDaily = md.totalHrs / today;
+  const remainDays = dim - today;
+  const projected = md.totalHrs + (avgDaily * remainDays * 0.7); // conservative estimate
+  const projectedEarning = u.netSalary > 0 ? (projected / MH) * u.netSalary : 0;
+
+  return { projected: projected.toFixed(1), projectedEarning, remaining: remainDays };
+}
+
+/* ============================================================
+   PWA INSTALL
+============================================================ */
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const dismissed = localStorage.getItem('st_install_dismissed');
+  if (!dismissed) {
+    const banner = $('installBanner');
+    if (banner) banner.style.display = 'flex';
+  }
+});
+
+function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(r => {
+      if (r.outcome === 'accepted') toast('Uygulama yüklendi!', 'success');
+      deferredPrompt = null;
+      $('installBanner').style.display = 'none';
+    });
+  }
+}
+
+function dismissInstall() {
+  $('installBanner').style.display = 'none';
+  localStorage.setItem('st_install_dismissed', '1');
+}
+
+/* ============================================================
    START
 ============================================================ */
+// Register service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
 init();
 initSwipe();
+initDragDrop();
 </script>
 </body>
 </html>
