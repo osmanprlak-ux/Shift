@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShiftTrack Pro</title>
 <script>
-// Cache buster v8 — eski service worker'ı temizle
+// Cache buster — eski service worker'ı temizle
 (function(){
-  var CV = 'stv10';
+  var CV = 'stv11';
   if (localStorage.getItem('st_cache_ver') !== CV) {
     localStorage.setItem('st_cache_ver', CV);
     if ('serviceWorker' in navigator) {
@@ -3073,6 +3073,8 @@ function importD(e) {
         S.u[i] = Object.assign(mkUser(i), p.users[k]);
         if (typeof S.u[i].shifts !== 'object') S.u[i].shifts = {};
         if (typeof S.u[i].leaves !== 'object') S.u[i].leaves = {};
+        if (typeof S.u[i].deletedShifts !== 'object' || !S.u[i].deletedShifts) S.u[i].deletedShifts = {};
+        if (typeof S.u[i].deletedLeaves !== 'object' || !S.u[i].deletedLeaves) S.u[i].deletedLeaves = {};
         if (!Array.isArray(S.u[i].customPresets)) S.u[i].customPresets = [];
         S.u[i].netSalary = parseFloat(S.u[i].netSalary) || 0;
         S.u[i].notes = typeof S.u[i].notes === 'string' ? S.u[i].notes : '';
@@ -3486,15 +3488,25 @@ function checkRestTime(ds, startTime) {
   const prev = new Date(d); prev.setDate(prev.getDate() - 1);
   const prevDs = dStr(prev);
   const prevShift = u.shifts[prevDs];
-  if (!prevShift || !prevShift.end) return null;
+  if (!prevShift || !prevShift.end || !prevShift.start) return null;
 
-  const prevEnd = prevShift.end.split(':').map(Number);
-  const curStart = startTime.split(':').map(Number);
-  let prevEndMin = prevEnd[0] * 60 + prevEnd[1];
-  let curStartMin = curStart[0] * 60 + curStart[1];
+  const prevEndMin = parseTime(prevShift.end);
+  const prevStartMin = parseTime(prevShift.start);
+  const curStartMin = parseTime(startTime);
+  if (prevEndMin === null || curStartMin === null || prevStartMin === null) return null;
 
-  // Önceki gün bitiş → bugün başlama arası dinlenme süresi
-  const restMinutes = (24 * 60 - prevEndMin) + curStartMin;
+  // Gece vardiyası tespiti: bitiş < giriş → ertesi güne taşıyor
+  let restMinutes;
+  if (prevEndMin < prevStartMin) {
+    // Gece vardiyası — bitiş saati bugüne taşıyor (ör: 22:00-06:00)
+    // Gerçek bitiş bugün prevEndMin'de, bugün başlama curStartMin'de
+    restMinutes = curStartMin - prevEndMin;
+  } else {
+    // Normal vardiya — bitiş dün, başlama bugün
+    restMinutes = (1440 - prevEndMin) + curStartMin;
+  }
+
+  if (restMinutes < 0) restMinutes += 1440;
   const restHours = restMinutes / 60;
   if (restHours < MIN_REST_HOURS) {
     return { restHours: restHours.toFixed(1), required: MIN_REST_HOURS, prevEnd: prevShift.end, prevDate: prevDs };
@@ -3547,6 +3559,12 @@ function initDragDrop() {
     pushUndo('Sürükle bırak');
     u.shifts[targetDs] = JSON.parse(JSON.stringify(dragData.shift));
     u.shifts[targetDs].updatedAt = Date.now();
+    // Hedef tarihte izin varsa kaldır
+    if (u.leaves[targetDs]) {
+      if (!u.deletedLeaves) u.deletedLeaves = {};
+      u.deletedLeaves[targetDs] = Date.now();
+      delete u.leaves[targetDs];
+    }
     if (!u.deletedShifts) u.deletedShifts = {};
     u.deletedShifts[dragData.date] = Date.now();
     delete u.shifts[dragData.date];
@@ -3584,10 +3602,11 @@ function generateQR() {
     const data = JSON.stringify({ users: S.u, version: DATA_VERSION, nextUid: S.nextUid });
     const compressed = btoa(encodeURIComponent(data));
     if (compressed.length > 2900) {
-      el.innerHTML = '<p style="font-size:11px;color:var(--acc)"><i class="fas fa-exclamation-triangle"></i> Veri çok büyük, linki kopyalayıp paylaşın.</p>';
+      el.innerHTML = '<p style="font-size:11px;color:var(--acc)"><i class="fas fa-exclamation-triangle" style="margin-right:4px"></i> Veri QR kod için çok büyük (' + Math.round(compressed.length/1024) + ' KB). Aşağıdaki "Linki Kopyala" butonunu kullanın.</p>';
+      return;
     }
     if (typeof QRCode !== 'undefined') {
-      new QRCode(el, { text: compressed.substring(0, 2900), width: 200, height: 200, colorDark: '#1a1625', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.L });
+      new QRCode(el, { text: compressed, width: 200, height: 200, colorDark: '#1a1625', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.L });
     }
   } catch(e) { el.innerHTML = '<p style="color:var(--r);font-size:11px">QR oluşturulamadı</p>'; }
 }
@@ -3665,8 +3684,13 @@ function scheduleNotifications() {
     else if (pct >= 80) notifications.push({ icon: 'fa-fire', text: `Saat hedefine %${(100 - pct).toFixed(0)} kaldı!`, type: 'info' });
   }
 
-  // Annual leave reminder
-  const usedLeave = Object.values(u.leaves).filter(l => l.type === 'annual').length;
+  // Annual leave reminder — sadece bu yılın izinlerini say
+  const currentYear = now.getFullYear();
+  const usedLeave = Object.entries(u.leaves).filter(([k, l]) => {
+    if (!l || l.type !== 'annual') return false;
+    const p = parseDS(k);
+    return p && p.y === currentYear;
+  }).length;
   const remaining = u.annualLeave - usedLeave;
   if (remaining <= 3 && remaining > 0) {
     notifications.push({ icon: 'fa-umbrella-beach', text: `Yıllık izin: ${remaining} gün kaldı`, type: 'warning' });
@@ -3718,8 +3742,8 @@ function renderYearComparison() {
   const hrsIcon = hrsDiff >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
   const hrsColor = hrsDiff >= 0 ? 'var(--g)' : 'var(--r)';
 
-  return `<div class="info-item"><span class="info-label"><i class="fas fa-chart-line"></i>Geçen Yıl Karşılaştırma</span>
-    <span class="info-value" style="font-size:10px"><i class="fas ${hrsIcon}" style="color:${hrsColor}"></i> ${Math.abs(hrsDiff).toFixed(0)}s ${hrsDiff >= 0 ? 'fazla' : 'az'} (${py}: ${pyHrs.toFixed(0)}s)</span></div>`;
+  return `<div class="info-row"><span class="k"><i class="fas fa-chart-line"></i>Geçen Yıl Karşılaştırma</span>
+    <span class="v" style="font-size:10px"><i class="fas ${hrsIcon}" style="color:${hrsColor}"></i> ${Math.abs(hrsDiff).toFixed(0)}s ${hrsDiff >= 0 ? 'fazla' : 'az'} (${py}: ${pyHrs.toFixed(0)}s)</span></div>`;
 }
 
 /* ============================================================
