@@ -1595,29 +1595,31 @@ function init() {
   loadLS();
   applyTheme('default');
   // Auth ekranı yönetimi — Firebase init sonra halleder
-  $('loginScreen').style.display = 'none';
-  $('authScreen').style.display = 'flex';
+  const ls = $('loginScreen'); if (ls) ls.style.display = 'none';
+  const as = $('authScreen'); if (as) as.style.display = 'flex';
   updLogin();
 
-  $('iStart').addEventListener('input', updResult);
-  $('iEnd').addEventListener('input', updResult);
-  $('iBreak').addEventListener('change', updResult);
-  $('wtStart').addEventListener('input', updWTPreview);
-  $('wtEnd').addEventListener('input', updWTPreview);
-  $('wtBreak').addEventListener('change', updWTPreview);
-  $('cpStart').addEventListener('input', updCPPreview);
-  $('cpEnd').addEventListener('input', updCPPreview);
-  $('cpBreak').addEventListener('change', updCPPreview);
+  // Input event listeners — null-safe
+  const iStart = $('iStart'); if (iStart) iStart.addEventListener('input', updResult);
+  const iEnd = $('iEnd'); if (iEnd) iEnd.addEventListener('input', updResult);
+  const iBrk = $('iBreak'); if (iBrk) iBrk.addEventListener('change', updResult);
+  const wtS = $('wtStart'); if (wtS) wtS.addEventListener('input', updWTPreview);
+  const wtE = $('wtEnd'); if (wtE) wtE.addEventListener('input', updWTPreview);
+  const wtB = $('wtBreak'); if (wtB) wtB.addEventListener('change', updWTPreview);
+  const cpS = $('cpStart'); if (cpS) cpS.addEventListener('input', updCPPreview);
+  const cpE = $('cpEnd'); if (cpE) cpE.addEventListener('input', updCPPreview);
+  const cpB = $('cpBreak'); if (cpB) cpB.addEventListener('change', updCPPreview);
 
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); return; }
     if (e.key === 'Escape') {
       closeM(); closeWTModal(); closeCPModal();
-      $('confirmOverlay').classList.remove('show');
-      $('pinOverlay').classList.remove('show');
-      $('qrOverlay').classList.remove('show');
+      const co = $('confirmOverlay'); if (co) co.classList.remove('show');
+      const po = $('pinOverlay'); if (po) po.classList.remove('show');
+      const qo = $('qrOverlay'); if (qo) qo.classList.remove('show');
     }
-    if ($('modal').classList.contains('show') || $('wtModal').classList.contains('show') || $('cpModal').classList.contains('show')) return;
+    const modal = $('modal'), wtModal = $('wtModal'), cpModal = $('cpModal');
+    if ((modal && modal.classList.contains('show')) || (wtModal && wtModal.classList.contains('show')) || (cpModal && cpModal.classList.contains('show'))) return;
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
     const pg = document.querySelector('.page.active'); if (!pg) return;
     if (e.key === 'ArrowLeft') { if (pg.id === 'pg-calendar') chgM(-1); else if (pg.id === 'pg-earnings') chgE(-1); }
@@ -1647,9 +1649,9 @@ function init() {
     });
   }
 
-  $('modal').addEventListener('click', function(e) { if (e.target === this) closeM(); });
-  $('wtModal').addEventListener('click', function(e) { if (e.target === this) closeWTModal(); });
-  $('cpModal').addEventListener('click', function(e) { if (e.target === this) closeCPModal(); });
+  const modalEl = $('modal'); if (modalEl) modalEl.addEventListener('click', function(e) { if (e.target === this) closeM(); });
+  const wtModalEl = $('wtModal'); if (wtModalEl) wtModalEl.addEventListener('click', function(e) { if (e.target === this) closeWTModal(); });
+  const cpModalEl = $('cpModal'); if (cpModalEl) cpModalEl.addEventListener('click', function(e) { if (e.target === this) closeCPModal(); });
 }
 
 /* ============================================================
@@ -2149,29 +2151,32 @@ function openM(ds) {
   mMode('shift', document.querySelectorAll('.mode-tab')[0]);
   S.lt = null;
   document.querySelectorAll('.lt-opt').forEach(o => o.classList.remove('active'));
-  $('iNote').value = '';
-  $('iShiftNote').value = '';
+  const iNote = $('iNote'), iShiftNote = $('iShiftNote');
+  const iStart = $('iStart'), iEnd = $('iEnd'), iBreak = $('iBreak');
+  const mDel = $('mDel'), mCopy = $('mCopy');
+  if (iNote) iNote.value = '';
+  if (iShiftNote) iShiftNote.value = '';
   renderModalPresets();
   const mP = $('mPaste'); if (mP) mP.style.display = S.clipboard ? 'inline-flex' : 'none';
 
   if (sh && sh.start && sh.end) {
-    $('iStart').value = sh.start;
-    $('iEnd').value = sh.end;
-    $('iBreak').value = String(sh.break || 0);
-    $('iShiftNote').value = sh.note || '';
-    $('mDel').style.display = 'inline-flex';
-    $('mCopy').style.display = 'inline-flex';
+    if (iStart) iStart.value = sh.start;
+    if (iEnd) iEnd.value = sh.end;
+    if (iBreak) iBreak.value = String(sh.break || 0);
+    if (iShiftNote) iShiftNote.value = sh.note || '';
+    if (mDel) mDel.style.display = 'inline-flex';
+    if (mCopy) mCopy.style.display = 'inline-flex';
     hlPreset(sh);
   } else if (lv && lv.type) {
     mMode('leave', document.querySelectorAll('.mode-tab')[1]);
     const el2 = document.querySelector(`.lt-opt[data-t="${lv.type}"]`);
     if (el2) selLT(lv.type, el2);
-    $('iNote').value = lv.note || '';
-    $('mDel').style.display = 'inline-flex';
-    $('mCopy').style.display = 'none';
+    if (iNote) iNote.value = lv.note || '';
+    if (mDel) mDel.style.display = 'inline-flex';
+    if (mCopy) mCopy.style.display = 'none';
   } else {
-    $('iStart').value = '08:00'; $('iEnd').value = '16:00'; $('iBreak').value = '30';
-    $('mDel').style.display = 'none'; $('mCopy').style.display = 'none';
+    if (iStart) iStart.value = '08:00'; if (iEnd) iEnd.value = '16:00'; if (iBreak) iBreak.value = '30';
+    if (mDel) mDel.style.display = 'none'; if (mCopy) mCopy.style.display = 'none';
     const mp = document.querySelector('.preset[data-key="morning"]');
     if (mp) applyPreset('morning', mp);
   }
@@ -3825,7 +3830,6 @@ const SYNC_TIMEOUT = 15000; // 15 saniye timeout
 function initFirebase() {
   try {
     if (FIREBASE_CONFIG.apiKey === 'AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX') {
-      console.log('Firebase yapılandırılmamış — çevrimdışı mod');
       skipAuth();
       return;
     }
@@ -3835,7 +3839,7 @@ function initFirebase() {
 
     // Offline persistence
     fbDb.enablePersistence({ synchronizeTabs: true }).catch(err => {
-      if (err.code === 'unimplemented') console.log('Tarayıcı offline desteği yok');
+      // unimplemented — sessizce devam et
     });
 
     // Auth state listener
