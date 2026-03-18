@@ -4,6 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShiftTrack Pro</title>
+<script>
+// Cache buster v8 — eski service worker'ı temizle
+(function(){
+  var CV = 'stv8';
+  if (localStorage.getItem('st_cache_ver') !== CV) {
+    localStorage.setItem('st_cache_ver', CV);
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        regs.forEach(function(r) { r.unregister(); });
+        caches.keys().then(function(keys) {
+          Promise.all(keys.map(function(k) { return caches.delete(k); })).then(function() {
+            location.reload(true);
+          });
+        });
+      });
+    }
+  }
+})();
+</script>
 <meta name="theme-color" content="#8b5cf6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
