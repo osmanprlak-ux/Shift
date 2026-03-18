@@ -3861,12 +3861,13 @@ function firebaseRegister() {
       if (existing) {
         pushToCloud();
       }
-      showAuthSuccess('Hesap oluşturuldu!');
+      // Direkt ekranı geçir
+      $('authScreen').style.display = 'none';
+      $('loginScreen').style.display = 'flex';
+      updLogin();
     })
     .catch(err => {
       showAuthError(fbErrMsg(err));
-    })
-    .finally(() => {
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:6px"></i>Kayıt Ol';
     });
@@ -3887,12 +3888,13 @@ function firebaseLogin() {
 
   fbAuth.signInWithEmailAndPassword(email, pass)
     .then(() => {
-      // onAuthStateChanged handler will handle the rest
+      // Direkt ekranı geçir — onAuthStateChanged'a güvenme
+      $('authScreen').style.display = 'none';
+      $('loginScreen').style.display = 'flex';
+      updLogin();
     })
     .catch(err => {
       showAuthError(fbErrMsg(err));
-    })
-    .finally(() => {
       btn.disabled = false;
       btn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right:6px"></i>Giriş Yap';
     });
