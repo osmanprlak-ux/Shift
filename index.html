@@ -7,7 +7,7 @@
 <script>
 // Cache buster v8 — eski service worker'ı temizle
 (function(){
-  var CV = 'stv9';
+  var CV = 'stv10';
   if (localStorage.getItem('st_cache_ver') !== CV) {
     localStorage.setItem('st_cache_ver', CV);
     if ('serviceWorker' in navigator) {
@@ -1892,7 +1892,7 @@ function multiApplyShift() {
   if (h <= 0) { toast('Geçersiz varsayılan vardiya', 'error'); return; }
   pushUndo('Çoklu vardiya');
   S.selectedDates.forEach(ds => {
-    u.shifts[ds] = { start:defaultStart, end:defaultEnd, break:defaultBreak };
+    u.shifts[ds] = { start:defaultStart, end:defaultEnd, break:defaultBreak, updatedAt:Date.now() };
     delete u.leaves[ds];
   });
   toast(S.selectedDates.length + 'g vardiya eklendi', 'success');
@@ -1924,7 +1924,7 @@ function multiApplyLeave(t) {
   }
   pushUndo('Çoklu izin');
   S.selectedDates.forEach(ds => {
-    u.leaves[ds] = { type:t, note:'' };
+    u.leaves[ds] = { type:t, note:'', updatedAt:Date.now() };
     delete u.shifts[ds];
   });
   toast(S.selectedDates.length + 'g izin eklendi', 'success');
@@ -2061,7 +2061,7 @@ function copyShift() {
 function pasteShift(ds) {
   const u = cu(); if (!u || !S.clipboard) return;
   pushUndo('Yapıştır');
-  u.shifts[ds] = { ...S.clipboard };
+  u.shifts[ds] = { ...S.clipboard, updatedAt:Date.now() };
   delete u.leaves[ds];
   invalidateMDCache();
   saveLS();
@@ -2296,7 +2296,7 @@ function saveEntry() {
     const doSave = () => {
       pushUndo('Vardiya');
       const note = ($('iShiftNote').value || '').trim().substring(0, 100);
-      u.shifts[S.sd] = { start:st, end:en, break:br, note };
+      u.shifts[S.sd] = { start:st, end:en, break:br, note, updatedAt:Date.now() };
       delete u.leaves[S.sd];
       toast(`${hrs.toFixed(1)}s kaydedildi`, 'success');
       invalidateMDCache(); saveLS(); closeM(); renderActivePage();
@@ -2335,7 +2335,7 @@ function saveEntry() {
       }
     }
     pushUndo('İzin');
-    u.leaves[S.sd] = { type:S.lt, note:($('iNote').value || '').trim().substring(0, 100) };
+    u.leaves[S.sd] = { type:S.lt, note:($('iNote').value || '').trim().substring(0, 100), updatedAt:Date.now() };
     delete u.shifts[S.sd];
     toast('Kaydedildi', 'success');
   }
@@ -2947,11 +2947,11 @@ function applyWeeklyTemplate() {
       if (isH(ds)) continue;
       if (!conf || conf.type === 'off') {
         if (dow >= 5) {
-          u.leaves[ds] = { type:'weekly', note:'Şablon' };
+          u.leaves[ds] = { type:'weekly', note:'Şablon', updatedAt:Date.now() };
         }
         continue;
       }
-      u.shifts[ds] = { start:conf.start, end:conf.end, break:conf.break || 30 };
+      u.shifts[ds] = { start:conf.start, end:conf.end, break:conf.break || 30, updatedAt:Date.now() };
       count++;
     }
     invalidateMDCache();
@@ -2977,6 +2977,11 @@ function saveLS() {
     const d = JSON.stringify({ users:S.u, version:DATA_VERSION, nextUid:S.nextUid });
     if (d.length > 4 * 1024 * 1024) toast('Veri büyük, yedekleme önerilir', 'warning');
     localStorage.setItem('st_data', d);
+    // Cloud'dan gelen veri ise geri push etme
+    if (skipNextPush) {
+      skipNextPush = false;
+      return;
+    }
     // Buluta da gönder (debounced)
     debouncedPush();
   } catch(e) {
@@ -3763,7 +3768,9 @@ const FIREBASE_CONFIG = {
 
 let fbApp = null, fbAuth = null, fbDb = null, fbUser = null;
 let syncInProgress = false, lastSyncTime = 0;
+let skipNextPush = false; // cloud'dan gelen veriyi geri push etmeyi engeller
 const SYNC_DEBOUNCE = 3000; // 3 saniye debounce
+const SYNC_TIMEOUT = 15000; // 15 saniye timeout
 
 function initFirebase() {
   try {
@@ -3981,19 +3988,86 @@ function pushToCloud(callback) {
     deviceId: getDeviceId()
   };
 
+  // Timeout — takılmayı engelle
+  const timeoutId = setTimeout(() => {
+    if (syncInProgress) {
+      console.warn('Push timeout — syncInProgress sıfırlandı');
+      syncInProgress = false;
+      setSyncState('error');
+    }
+  }, SYNC_TIMEOUT);
+
   fbDb.collection('userData').doc(fbUser.uid).set(data, { merge: true })
     .then(() => {
+      clearTimeout(timeoutId);
       lastSyncTime = Date.now();
       setSyncState('online');
       syncInProgress = false;
       if (callback) callback();
     })
     .catch(err => {
+      clearTimeout(timeoutId);
       console.error('Push hatası:', err);
       setSyncState('error');
       syncInProgress = false;
       if (callback) callback();
     });
+}
+
+// Deep merge — iki kullanıcı verisini birleştirir (shift, leave, note seviyesinde)
+function deepMergeUser(local, cloud) {
+  const merged = Object.assign(mkUser(local ? local.id : cloud.id), local || {});
+  if (!cloud) return merged;
+
+  // Shift merge — her iki tarafın shift'lerini birleştir
+  const allShiftKeys = new Set([
+    ...Object.keys(merged.shifts || {}),
+    ...Object.keys(cloud.shifts || {})
+  ]);
+  allShiftKeys.forEach(k => {
+    const ls = merged.shifts[k], cs = cloud.shifts ? cloud.shifts[k] : null;
+    if (!ls && cs) merged.shifts[k] = cs; // sadece cloud'da var
+    else if (ls && cs) {
+      // İkisi de var — daha yeni olanı al (updatedAt varsa), yoksa cloud kazanır
+      const lTime = ls.updatedAt || 0, cTime = cs.updatedAt || 0;
+      if (cTime >= lTime) merged.shifts[k] = cs;
+    }
+  });
+
+  // Leave merge
+  const allLeaveKeys = new Set([
+    ...Object.keys(merged.leaves || {}),
+    ...Object.keys(cloud.leaves || {})
+  ]);
+  allLeaveKeys.forEach(k => {
+    if (!merged.leaves[k] && cloud.leaves && cloud.leaves[k]) merged.leaves[k] = cloud.leaves[k];
+    else if (cloud.leaves && cloud.leaves[k]) {
+      const lTime = (merged.leaves[k] || {}).updatedAt || 0;
+      const cTime = (cloud.leaves[k] || {}).updatedAt || 0;
+      if (cTime >= lTime) merged.leaves[k] = cloud.leaves[k];
+    }
+  });
+
+  // Note merge
+  const allNoteKeys = new Set([
+    ...Object.keys(merged.notes || {}),
+    ...Object.keys(cloud.notes || {})
+  ]);
+  allNoteKeys.forEach(k => {
+    if (!merged.notes[k] && cloud.notes && cloud.notes[k]) merged.notes[k] = cloud.notes[k];
+  });
+
+  // Ayarları cloud'dan al (en son güncellenen kazansın)
+  if (cloud.netSalary !== undefined) merged.netSalary = cloud.netSalary;
+  if (cloud.annualLeave !== undefined) merged.annualLeave = cloud.annualLeave;
+  if (cloud.pin !== undefined) merged.pin = cloud.pin;
+  if (cloud.weeklyTemplate) merged.weeklyTemplate = cloud.weeklyTemplate;
+  if (cloud.customPresets) merged.customPresets = cloud.customPresets;
+  if (cloud.goalHours !== undefined) merged.goalHours = cloud.goalHours;
+  if (cloud.goalEarning !== undefined) merged.goalEarning = cloud.goalEarning;
+  if (cloud.theme) merged.theme = cloud.theme;
+
+  return merged;
 }
 
 // Pull data from Firestore
@@ -4006,42 +4080,21 @@ function pullFromCloud(callback) {
       if (doc.exists) {
         const data = doc.data();
         if (data && data.users) {
-          // Merge: bulut verisi ile lokal veriyi karşılaştır
           if (data.nextUid) S.nextUid = Math.max(S.nextUid, data.nextUid);
-          Object.keys(data.users).forEach(k => {
+
+          // Tüm kullanıcıları deep merge ile birleştir
+          const allKeys = new Set([
+            ...Object.keys(S.u || {}),
+            ...Object.keys(data.users || {})
+          ]);
+          allKeys.forEach(k => {
             const i = parseInt(k);
-            const cloudUser = data.users[i];
-            const localUser = S.u[i];
-            if (!cloudUser) return;
-
-            if (!localUser) {
-              // Bulutta var, lokalde yok — buluttan al
-              S.u[i] = Object.assign(mkUser(i), cloudUser);
-            } else {
-              // İkisi de var — daha fazla verisi olanı al (shift sayısına bak)
-              const cloudShifts = Object.keys(cloudUser.shifts || {}).length;
-              const localShifts = Object.keys(localUser.shifts || {}).length;
-
-              if (cloudShifts > localShifts) {
-                // Bulut daha zengin — buluttan al ama ismi koru
-                const name = localUser.name;
-                S.u[i] = Object.assign(mkUser(i), cloudUser);
-                if (name && name !== 'Kullanıcı ' + i) S.u[i].name = name;
-              } else if (localShifts > cloudShifts) {
-                // Lokal daha zengin — lokali koru, sonra buluta gönder
-              }
-              // Eşitse bir şey yapma
-            }
+            if (isNaN(i)) return;
+            S.u[i] = deepMergeUser(S.u[i] || null, data.users[i] || null);
           });
 
-          // Lokalde olmayıp bulutta olan kullanıcıları da ekle
-          Object.keys(data.users).forEach(k => {
-            const i = parseInt(k);
-            if (!S.u[i] && data.users[i]) {
-              S.u[i] = Object.assign(mkUser(i), data.users[i]);
-            }
-          });
-
+          // saveLS ama push etme (cloud'dan aldık, geri göndermeye gerek yok)
+          skipNextPush = true;
           saveLS();
         }
       }
@@ -4058,6 +4111,7 @@ function pullFromCloud(callback) {
 
 // Realtime listener — cihazlar arası anlık senkronizasyon
 let unsubscribeSnapshot = null;
+let lastSnapshotJson = ''; // Aynı veriyi tekrar işlemeyi engelle
 
 function startRealtimeSync() {
   if (!fbDb || !fbUser || unsubscribeSnapshot) return;
@@ -4070,18 +4124,28 @@ function startRealtimeSync() {
 
       // Başka cihazdan gelen güncellemeyi kontrol et
       if (data.deviceId && data.deviceId !== getDeviceId()) {
-        // Başka cihaz güncellemiş — veriyi al
+        // Veri değişmiş mi kontrol et (gereksiz render'ı engelle)
+        const newJson = JSON.stringify(data.users);
+        if (newJson === lastSnapshotJson) return;
+        lastSnapshotJson = newJson;
+
+        // Deep merge ile birleştir (veri kaybını engelle)
         if (data.nextUid) S.nextUid = Math.max(S.nextUid, data.nextUid);
         Object.keys(data.users).forEach(k => {
           const i = parseInt(k);
+          if (isNaN(i)) return;
           if (data.users[i]) {
-            S.u[i] = Object.assign(mkUser(i), data.users[i]);
+            S.u[i] = deepMergeUser(S.u[i] || null, data.users[i]);
           }
         });
+
+        // Cloud'dan gelen veriyi geri push etme
+        skipNextPush = true;
         saveLS();
         invalidateMDCache();
         if (cu()) { renderAll(); updTop(); }
         setSyncState('online');
+        toast('Diğer cihazdan güncelleme alındı', 'info');
       }
     }, err => {
       console.error('Realtime sync hatası:', err);
@@ -4124,6 +4188,37 @@ function debouncedPush() {
   if (syncTimer) clearTimeout(syncTimer);
   syncTimer = setTimeout(() => { pushToCloud(); }, SYNC_DEBOUNCE);
 }
+
+// Sekme aktif olunca veya online olunca sync yap
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible' && fbDb && fbUser) {
+    // Sekme tekrar aktif olunca cloud'dan çek
+    const timeSinceSync = Date.now() - lastSyncTime;
+    if (timeSinceSync > 10000) { // 10 saniyeden fazla geçtiyse
+      pullFromCloud(function() {
+        invalidateMDCache();
+        if (cu()) { renderAll(); updTop(); }
+      });
+    }
+  }
+});
+
+// Online olunca sync
+window.addEventListener('online', function() {
+  if (fbDb && fbUser) {
+    setSyncState('syncing');
+    pushToCloud(function() {
+      pullFromCloud(function() {
+        invalidateMDCache();
+        if (cu()) { renderAll(); updTop(); }
+      });
+    });
+  }
+});
+
+window.addEventListener('offline', function() {
+  setSyncState('offline');
+});
 
 /* ============================================================
    SYNC UI
