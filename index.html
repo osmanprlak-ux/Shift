@@ -3767,6 +3767,7 @@ function initFirebase() {
       if (user) {
         // Giriş yapılmış
         $('authScreen').style.display = 'none';
+        $('loginScreen').style.display = 'flex';
         updSyncUI();
         updCloudAccountUI();
         // Buluttan veri çek
