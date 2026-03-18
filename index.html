@@ -3782,31 +3782,30 @@ function initFirebase() {
 
     // Auth state listener
     fbAuth.onAuthStateChanged(user => {
-      fbUser = user;
-      if (user) {
-        // Giriş yapılmış
+      try {
+        fbUser = user;
+        if (user) {
+          // Sayfa yenilendiğinde zaten giriş yapılmış kullanıcı
+          enterAppAfterAuth();
+        } else {
+          // Giriş yapılmamış — auth ekranını göster
+          const skipped = localStorage.getItem('st_auth_skipped');
+          if (skipped) {
+            $('authScreen').style.display = 'none';
+            $('loginScreen').style.display = 'flex';
+          } else {
+            $('authScreen').style.display = 'flex';
+            $('loginScreen').style.display = 'none';
+          }
+          updSyncUI();
+          updCloudAccountUI();
+        }
+      } catch(e) {
+        console.error('Auth state hatası:', e);
+        // Hata olursa loginScreen'i göster
         $('authScreen').style.display = 'none';
         $('loginScreen').style.display = 'flex';
         updLogin();
-        updSyncUI();
-        updCloudAccountUI();
-        // Buluttan veri çek — tamamlanınca güncelle
-        pullFromCloud(() => {
-          loadLS();
-          applyTheme('default');
-          updLogin();
-        });
-      } else {
-        // Giriş yapılmamış — auth ekranını göster
-        const skipped = localStorage.getItem('st_auth_skipped');
-        if (skipped) {
-          $('authScreen').style.display = 'none';
-        } else {
-          $('authScreen').style.display = 'flex';
-          $('loginScreen').style.display = 'none';
-        }
-        updSyncUI();
-        updCloudAccountUI();
       }
     });
   } catch(e) {
@@ -3876,14 +3875,9 @@ function firebaseRegister() {
   fbAuth.createUserWithEmailAndPassword(email, pass)
     .then(cred => {
       // İlk kayıtta mevcut lokal veriyi buluta yükle
-      const existing = localStorage.getItem('st_data');
-      if (existing) {
-        pushToCloud();
-      }
-      // Direkt ekranı geçir
-      $('authScreen').style.display = 'none';
-      $('loginScreen').style.display = 'flex';
-      updLogin();
+      try { const existing = localStorage.getItem('st_data'); if (existing) pushToCloud(); } catch(e) {}
+      // Direkt uygulamaya geç
+      enterAppAfterAuth();
     })
     .catch(err => {
       showAuthError(fbErrMsg(err));
@@ -3907,10 +3901,7 @@ function firebaseLogin() {
 
   fbAuth.signInWithEmailAndPassword(email, pass)
     .then(() => {
-      // Direkt ekranı geçir — onAuthStateChanged'a güvenme
-      $('authScreen').style.display = 'none';
-      $('loginScreen').style.display = 'flex';
-      updLogin();
+      enterAppAfterAuth();
     })
     .catch(err => {
       showAuthError(fbErrMsg(err));
@@ -3942,6 +3933,18 @@ function firebaseLogout() {
 }
 
 // Skip auth — offline only
+function enterAppAfterAuth() {
+  $('authScreen').style.display = 'none';
+  $('loginScreen').style.display = 'flex';
+  loadLS();
+  applyTheme('default');
+  updLogin();
+  updSyncUI();
+  updCloudAccountUI();
+  // Buluttan veri çek — arka planda
+  try { pullFromCloud(() => { loadLS(); updLogin(); }); } catch(e) {}
+}
+
 function skipAuth() {
   localStorage.setItem('st_auth_skipped', '1');
   $('authScreen').style.display = 'none';
