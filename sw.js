@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shifttrack-v5';
+const CACHE_NAME = 'shifttrack-v8';
 const ASSETS = [
   './',
   './index.html',
@@ -22,13 +22,26 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request).then(res => {
-      if (res.status === 200 && e.request.url.startsWith('http')) {
-        const clone = res.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
-      }
-      return res;
-    }).catch(() => caches.match('./index.html')))
-  );
+  // Network-first for HTML pages, cache-first for assets
+  if (e.request.mode === 'navigate' || e.request.url.endsWith('.html')) {
+    e.respondWith(
+      fetch(e.request).then(res => {
+        if (res.status === 200) {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+        }
+        return res;
+      }).catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
+    );
+  } else {
+    e.respondWith(
+      caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+        if (res.status === 200 && e.request.url.startsWith('http')) {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+        }
+        return res;
+      }).catch(() => caches.match('./index.html')))
+    );
+  }
 });
