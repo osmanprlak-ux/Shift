@@ -1,15 +1,18 @@
 const CACHE_NAME = 'shifttrack-v11';
-const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
+const CORE_ASSETS = ['./', './index.html', './manifest.json'];
+const CDN_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
 ];
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(cache =>
+      // Önce kritik dosyaları cache'le, sonra CDN'leri tek tek dene (başarısız olursa atla)
+      cache.addAll(CORE_ASSETS).then(() =>
+        Promise.allSettled(CDN_ASSETS.map(url => cache.add(url)))
+      )
+    ).then(() => self.skipWaiting())
   );
 });
 
