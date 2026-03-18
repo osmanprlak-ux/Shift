@@ -7,7 +7,7 @@
 <script>
 // Cache buster v8 — eski service worker'ı temizle
 (function(){
-  var CV = 'stv8';
+  var CV = 'stv9';
   if (localStorage.getItem('st_cache_ver') !== CV) {
     localStorage.setItem('st_cache_ver', CV);
     if ('serviceWorker' in navigator) {
@@ -107,10 +107,10 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 
 /* APP SHELL */
 #mainApp{display:none;min-height:100vh}
-.topbar{position:fixed;top:0;left:0;right:0;height:56px;background:var(--glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 20px;z-index:100}
+.topbar{position:fixed;top:0;left:0;right:0;height:56px;background:var(--glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 12px;z-index:100;gap:6px}
 .topbar-brand{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:var(--p)}
 .topbar-brand .ico{width:32px;height:32px;background:var(--pg);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0;overflow:visible}
 .topbar-user{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:50px;background:var(--p4);cursor:pointer;transition:background-color .2s}
 .topbar-user:hover{background:rgba(139,92,246,.2)}
 .topbar-user .av{width:28px;height:28px;border-radius:50%;background:var(--pg);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:11px}
@@ -422,6 +422,11 @@ tr:hover td{background:var(--bg3)}
 .login-cards{flex-direction:column;align-items:center}.year-overview{grid-template-columns:repeat(6,1fr)}
 .page-head{flex-direction:column;align-items:flex-start}.cal-earn-bar{flex-direction:column;align-items:flex-start}.result-box .rb-val{font-size:13px}
 .wt-grid{grid-template-columns:repeat(4,1fr)}
+.topbar{padding:0 8px}.topbar-brand{font-size:14px}.topbar-brand .ico{width:28px;height:28px;font-size:11px}
+.topbar-right{gap:4px}.topbar-btn{width:28px;height:28px;font-size:11px}
+.topbar-user span{display:none}.topbar-user{padding:3px}.topbar-user .av{width:26px;height:26px;font-size:10px}
+.topbar-btn.tb-desktop{display:none}
+.sync-status span{display:none}
 }
 @media(max-width:480px){.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.wt-grid{grid-template-columns:repeat(3,1fr)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -703,8 +708,8 @@ tr:hover td{background:var(--bg3)}
     <div class="topbar-right">
       <div class="sync-status" id="syncStatus" title="Senkronizasyon durumu"><div class="sync-dot offline" id="syncDot"></div><span id="syncText">Çevrimdışı</span></div>
       <button class="topbar-btn notif-bell" id="notifBtn" onclick="showNotifications()" title="Bildirimler"><i class="fas fa-bell"></i><span class="notif-badge" id="notifBadge" style="display:none"></span></button>
-      <button class="topbar-btn" onclick="showShortcuts()" title="Kısayollar (?)"><i class="fas fa-keyboard"></i></button>
-      <button class="topbar-btn" id="undoBtn" disabled onclick="undo()" title="Geri Al (Ctrl+Z)"><i class="fas fa-undo"></i></button>
+      <button class="topbar-btn tb-desktop" onclick="showShortcuts()" title="Kısayollar (?)"><i class="fas fa-keyboard"></i></button>
+      <button class="topbar-btn tb-desktop" id="undoBtn" disabled onclick="undo()" title="Geri Al (Ctrl+Z)"><i class="fas fa-undo"></i></button>
       <div class="topbar-user" onclick="go('settings',document.querySelectorAll('.nav-tab')[5])">
         <div class="av" id="topAv">U</div>
         <span id="topName">Kullanıcı</span>
@@ -1008,6 +1013,7 @@ tr:hover td{background:var(--bg3)}
 const DATA_VERSION = '5.0';
 const MTR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+const DFS = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 const DFL = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
 let MH = 225;
 const MAX_GROSS_HOURS = 16;
@@ -3359,8 +3365,8 @@ function exportPDF() {
     doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
     doc.text(`Toplam: ${totalDays} gün, ${totalHrs.toFixed(1)} saat`, 15, y); y += 6;
     if (u.netSalary > 0) {
-      const md = getMonthData(S.cy, S.cm, u);
-      doc.text(`Tahmini Kazanç: ${fmtMoney(md.earning)}`, 15, y);
+      const earn = calcEarningForMonth(S.cy, S.cm, u.netSalary);
+      if (earn) doc.text(`Tahmini Kazanç: ${fm(earn.totalEarning)}`, 15, y);
     }
 
     doc.setFontSize(7); doc.setTextColor(150, 150, 150);
@@ -3417,23 +3423,26 @@ function renderGoals() {
   const u = cu(); if (!u) { el.innerHTML = ''; return; }
   if (!u.goalHours && !u.goalEarning) { el.innerHTML = ''; return; }
 
-  const md = getMonthData(S.cy, S.cm, u);
+  const md = getMD(S.cy, S.cm);
+  const earn = calcEarningForMonth(S.cy, S.cm, u.netSalary);
+  const totalHrs = md.th;
+  const totalEarning = earn ? earn.totalEarning : 0;
   let h = '<div class="card" style="margin-bottom:12px"><div class="card-head"><h3><i class="fas fa-bullseye"></i>Hedefler</h3><span style="font-size:10px;color:var(--t3)">' + MTR[S.cm] + '</span></div>';
 
   if (u.goalHours > 0) {
-    const pct = Math.min(150, (md.totalHrs / u.goalHours) * 100);
+    const pct = Math.min(150, (totalHrs / u.goalHours) * 100);
     const cls = pct > 110 ? 'gf-over' : pct > 80 ? 'gf-ok' : 'gf-warn';
     h += `<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:4px"><i class="fas fa-clock" style="color:var(--p);margin-right:4px"></i>Saat Hedefi</div>`;
     h += `<div class="goal-bar"><div class="goal-fill ${cls}" style="width:${Math.min(100, pct)}%">${pct.toFixed(0)}%</div></div>`;
-    h += `<div class="goal-info"><span>${md.totalHrs.toFixed(1)}s / ${u.goalHours}s</span><span>${pct >= 100 ? 'Hedefe ulaşıldı!' : (u.goalHours - md.totalHrs).toFixed(1) + 's kaldı'}</span></div></div>`;
+    h += `<div class="goal-info"><span>${totalHrs.toFixed(1)}s / ${u.goalHours}s</span><span>${pct >= 100 ? 'Hedefe ulaşıldı!' : (u.goalHours - totalHrs).toFixed(1) + 's kaldı'}</span></div></div>`;
   }
 
   if (u.goalEarning > 0 && u.netSalary > 0) {
-    const pct = Math.min(150, (md.earning / u.goalEarning) * 100);
+    const pct = Math.min(150, (totalEarning / u.goalEarning) * 100);
     const cls = pct > 110 ? 'gf-over' : pct > 80 ? 'gf-ok' : 'gf-warn';
     h += `<div><div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:4px"><i class="fas fa-lira-sign" style="color:var(--g);margin-right:4px"></i>Kazanç Hedefi</div>`;
     h += `<div class="goal-bar"><div class="goal-fill ${cls}" style="width:${Math.min(100, pct)}%">${pct.toFixed(0)}%</div></div>`;
-    h += `<div class="goal-info"><span>${fmtMoney(md.earning)} / ${fmtMoney(u.goalEarning)}</span><span>${pct >= 100 ? 'Hedefe ulaşıldı!' : fmtMoney(u.goalEarning - md.earning) + ' kaldı'}</span></div></div>`;
+    h += `<div class="goal-info"><span>${fm(totalEarning)} / ${fm(u.goalEarning)}</span><span>${pct >= 100 ? 'Hedefe ulaşıldı!' : fm(u.goalEarning - totalEarning) + ' kaldı'}</span></div></div>`;
   }
 
   h += '</div>';
@@ -3456,19 +3465,11 @@ function checkRestTime(ds, startTime) {
   let prevEndMin = prevEnd[0] * 60 + prevEnd[1];
   let curStartMin = curStart[0] * 60 + curStart[1];
 
-  // Handle overnight shifts
-  if (prevEndMin > 12 * 60) {
-    const restMinutes = (24 * 60 - prevEndMin) + curStartMin;
-    const restHours = restMinutes / 60;
-    if (restHours < MIN_REST_HOURS) {
-      return { restHours: restHours.toFixed(1), required: MIN_REST_HOURS, prevEnd: prevShift.end, prevDate: prevDs };
-    }
-  } else {
-    const restMinutes = curStartMin - prevEndMin + 24 * 60;
-    const restHours = Math.min(restMinutes, (24 * 60 - prevEndMin + curStartMin)) / 60;
-    if (restHours < MIN_REST_HOURS) {
-      return { restHours: restHours.toFixed(1), required: MIN_REST_HOURS, prevEnd: prevShift.end, prevDate: prevDs };
-    }
+  // Önceki gün bitiş → bugün başlama arası dinlenme süresi
+  const restMinutes = (24 * 60 - prevEndMin) + curStartMin;
+  const restHours = restMinutes / 60;
+  if (restHours < MIN_REST_HOURS) {
+    return { restHours: restHours.toFixed(1), required: MIN_REST_HOURS, prevEnd: prevShift.end, prevDate: prevDs };
   }
   return null;
 }
@@ -3626,9 +3627,9 @@ function scheduleNotifications() {
   }
 
   // Goal progress
-  const md = getMonthData(S.cy, S.cm, u);
+  const md = getMD(S.cy, S.cm);
   if (u.goalHours > 0) {
-    const pct = (md.totalHrs / u.goalHours) * 100;
+    const pct = (md.th / u.goalHours) * 100;
     if (pct >= 100) notifications.push({ icon: 'fa-trophy', text: 'Saat hedefine ulaştınız!', type: 'success' });
     else if (pct >= 80) notifications.push({ icon: 'fa-fire', text: `Saat hedefine %${(100 - pct).toFixed(0)} kaldı!`, type: 'info' });
   }
@@ -3702,12 +3703,12 @@ function getMonthProjection() {
   const dim = new Date(S.cy, S.cm + 1, 0).getDate();
   if (today < 5) return null;
 
-  const md = getMonthData(S.cy, S.cm, u);
-  if (md.totalHrs <= 0) return null;
+  const md = getMD(S.cy, S.cm);
+  if (md.th <= 0) return null;
 
-  const avgDaily = md.totalHrs / today;
+  const avgDaily = md.th / today;
   const remainDays = dim - today;
-  const projected = md.totalHrs + (avgDaily * remainDays * 0.7); // conservative estimate
+  const projected = md.th + (avgDaily * remainDays * 0.7); // conservative estimate
   const projectedEarning = u.netSalary > 0 ? (projected / MH) * u.netSalary : 0;
 
   return { projected: projected.toFixed(1), projectedEarning, remaining: remainDays };
