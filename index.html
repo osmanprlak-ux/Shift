@@ -1078,6 +1078,8 @@ function mkUser(i) {
     annualLeave: 14,
     shifts: {},
     leaves: {},
+    deletedShifts: {},
+    deletedLeaves: {},
     customPresets: [],
     weeklyTemplate: null,
     notes: '',
@@ -1105,6 +1107,8 @@ function pushUndo(label) {
     label,
     shifts: JSON.parse(JSON.stringify(u.shifts)),
     leaves: JSON.parse(JSON.stringify(u.leaves)),
+    deletedShifts: JSON.parse(JSON.stringify(u.deletedShifts || {})),
+    deletedLeaves: JSON.parse(JSON.stringify(u.deletedLeaves || {})),
     ts: Date.now()
   });
   if (undoStack.length > MAX_UNDO) undoStack.shift();
@@ -1117,6 +1121,8 @@ function undo() {
   const snap = undoStack.pop();
   u.shifts = snap.shifts;
   u.leaves = snap.leaves;
+  u.deletedShifts = snap.deletedShifts || {};
+  u.deletedLeaves = snap.deletedLeaves || {};
   invalidateMDCache();
   saveLS();
   renderActivePage();
@@ -1893,6 +1899,8 @@ function multiApplyShift() {
   pushUndo('Çoklu vardiya');
   S.selectedDates.forEach(ds => {
     u.shifts[ds] = { start:defaultStart, end:defaultEnd, break:defaultBreak, updatedAt:Date.now() };
+    if (u.deletedShifts) delete u.deletedShifts[ds];
+    if (u.leaves[ds]) { if (!u.deletedLeaves) u.deletedLeaves = {}; u.deletedLeaves[ds] = Date.now(); }
     delete u.leaves[ds];
   });
   toast(S.selectedDates.length + 'g vardiya eklendi', 'success');
@@ -1925,6 +1933,8 @@ function multiApplyLeave(t) {
   pushUndo('Çoklu izin');
   S.selectedDates.forEach(ds => {
     u.leaves[ds] = { type:t, note:'', updatedAt:Date.now() };
+    if (u.deletedLeaves) delete u.deletedLeaves[ds];
+    if (u.shifts[ds]) { if (!u.deletedShifts) u.deletedShifts = {}; u.deletedShifts[ds] = Date.now(); }
     delete u.shifts[ds];
   });
   toast(S.selectedDates.length + 'g izin eklendi', 'success');
@@ -2062,6 +2072,8 @@ function pasteShift(ds) {
   const u = cu(); if (!u || !S.clipboard) return;
   pushUndo('Yapıştır');
   u.shifts[ds] = { ...S.clipboard, updatedAt:Date.now() };
+  if (u.deletedShifts) delete u.deletedShifts[ds];
+  if (u.leaves[ds]) { if (!u.deletedLeaves) u.deletedLeaves = {}; u.deletedLeaves[ds] = Date.now(); }
   delete u.leaves[ds];
   invalidateMDCache();
   saveLS();
@@ -2297,6 +2309,8 @@ function saveEntry() {
       pushUndo('Vardiya');
       const note = ($('iShiftNote').value || '').trim().substring(0, 100);
       u.shifts[S.sd] = { start:st, end:en, break:br, note, updatedAt:Date.now() };
+      if (u.deletedShifts) delete u.deletedShifts[S.sd];
+      if (u.leaves[S.sd]) { if (!u.deletedLeaves) u.deletedLeaves = {}; u.deletedLeaves[S.sd] = Date.now(); }
       delete u.leaves[S.sd];
       toast(`${hrs.toFixed(1)}s kaydedildi`, 'success');
       invalidateMDCache(); saveLS(); closeM(); renderActivePage();
@@ -2336,6 +2350,8 @@ function saveEntry() {
     }
     pushUndo('İzin');
     u.leaves[S.sd] = { type:S.lt, note:($('iNote').value || '').trim().substring(0, 100), updatedAt:Date.now() };
+    if (u.deletedLeaves) delete u.deletedLeaves[S.sd];
+    if (u.shifts[S.sd]) { if (!u.deletedShifts) u.deletedShifts = {}; u.deletedShifts[S.sd] = Date.now(); }
     delete u.shifts[S.sd];
     toast('Kaydedildi', 'success');
   }
@@ -2349,6 +2365,9 @@ function delEntry() {
   showConfirm('Sil', 'Bu girdiyi silmek istiyor musunuz?', () => {
     const u = cu(); if (!u || !S.sd) return;
     pushUndo('Silme');
+    const now = Date.now();
+    if (u.shifts[S.sd]) { if (!u.deletedShifts) u.deletedShifts = {}; u.deletedShifts[S.sd] = now; }
+    if (u.leaves[S.sd]) { if (!u.deletedLeaves) u.deletedLeaves = {}; u.deletedLeaves[S.sd] = now; }
     delete u.shifts[S.sd];
     delete u.leaves[S.sd];
     invalidateMDCache();
@@ -2588,6 +2607,8 @@ function delLv(k) {
   showConfirm('Sil', 'İzni silmek istiyor musunuz?', () => {
     const u = cu(); if (!u) return;
     pushUndo('İzin silme');
+    if (!u.deletedLeaves) u.deletedLeaves = {};
+    u.deletedLeaves[k] = Date.now();
     delete u.leaves[k];
     invalidateMDCache();
     saveLS();
@@ -3004,6 +3025,8 @@ function loadLS() {
       S.u[i] = Object.assign(mkUser(i), p.users[k]);
       if (typeof S.u[i].shifts !== 'object' || !S.u[i].shifts) S.u[i].shifts = {};
       if (typeof S.u[i].leaves !== 'object' || !S.u[i].leaves) S.u[i].leaves = {};
+      if (typeof S.u[i].deletedShifts !== 'object' || !S.u[i].deletedShifts) S.u[i].deletedShifts = {};
+      if (typeof S.u[i].deletedLeaves !== 'object' || !S.u[i].deletedLeaves) S.u[i].deletedLeaves = {};
       if (!Array.isArray(S.u[i].customPresets)) S.u[i].customPresets = [];
       S.u[i].netSalary = parseFloat(S.u[i].netSalary) || 0;
       S.u[i].annualLeave = parseInt(S.u[i].annualLeave) || 14;
@@ -3523,6 +3546,9 @@ function initDragDrop() {
     const u = cu(); if (!u) return;
     pushUndo('Sürükle bırak');
     u.shifts[targetDs] = JSON.parse(JSON.stringify(dragData.shift));
+    u.shifts[targetDs].updatedAt = Date.now();
+    if (!u.deletedShifts) u.deletedShifts = {};
+    u.deletedShifts[dragData.date] = Date.now();
     delete u.shifts[dragData.date];
     invalidateMDCache(); saveLS(); renderCal();
     toast(`Vardiya ${dragData.date} → ${targetDs}`, 'success');
@@ -3931,8 +3957,12 @@ function firebaseResetPass() {
 function firebaseLogout() {
   if (!fbAuth) return;
   showConfirm('Bulut Çıkış', 'Bulut hesabından çıkış yapılacak. Lokal veriler kalır ama senkronizasyon durur.', () => {
+    // Bekleyen sync timer'ı temizle
+    if (syncTimer) { clearTimeout(syncTimer); syncTimer = null; }
+    stopRealtimeSync();
     fbAuth.signOut().then(() => {
       fbUser = null;
+      syncInProgress = false;
       updSyncUI();
       updCloudAccountUI();
       toast('Bulut hesabından çıkış yapıldı', 'info');
@@ -4019,6 +4049,18 @@ function deepMergeUser(local, cloud) {
   const merged = Object.assign(mkUser(local ? local.id : cloud.id), local || {});
   if (!cloud) return merged;
 
+  // Silme kayıtlarını birleştir (her iki taraftan en yeni silme zamanını al)
+  if (!merged.deletedShifts) merged.deletedShifts = {};
+  if (!merged.deletedLeaves) merged.deletedLeaves = {};
+  const cloudDelShifts = cloud.deletedShifts || {};
+  const cloudDelLeaves = cloud.deletedLeaves || {};
+  Object.keys(cloudDelShifts).forEach(k => {
+    merged.deletedShifts[k] = Math.max(merged.deletedShifts[k] || 0, cloudDelShifts[k]);
+  });
+  Object.keys(cloudDelLeaves).forEach(k => {
+    merged.deletedLeaves[k] = Math.max(merged.deletedLeaves[k] || 0, cloudDelLeaves[k]);
+  });
+
   // Shift merge — her iki tarafın shift'lerini birleştir
   const allShiftKeys = new Set([
     ...Object.keys(merged.shifts || {}),
@@ -4031,6 +4073,18 @@ function deepMergeUser(local, cloud) {
       // İkisi de var — daha yeni olanı al (updatedAt varsa), yoksa cloud kazanır
       const lTime = ls.updatedAt || 0, cTime = cs.updatedAt || 0;
       if (cTime >= lTime) merged.shifts[k] = cs;
+    }
+  });
+
+  // Silme kayıtlarını uygula — silme zamanından daha eski shift'leri kaldır
+  Object.keys(merged.deletedShifts).forEach(k => {
+    const delTime = merged.deletedShifts[k];
+    const sh = merged.shifts[k];
+    if (sh && (sh.updatedAt || 0) <= delTime) {
+      delete merged.shifts[k];
+    } else if (sh && (sh.updatedAt || 0) > delTime) {
+      // Shift silindikten sonra yeniden oluşturulmuş, silme kaydını temizle
+      delete merged.deletedShifts[k];
     }
   });
 
@@ -4048,14 +4102,30 @@ function deepMergeUser(local, cloud) {
     }
   });
 
-  // Note merge
-  const allNoteKeys = new Set([
-    ...Object.keys(merged.notes || {}),
-    ...Object.keys(cloud.notes || {})
-  ]);
-  allNoteKeys.forEach(k => {
-    if (!merged.notes[k] && cloud.notes && cloud.notes[k]) merged.notes[k] = cloud.notes[k];
+  // Silme kayıtlarını uygula — silme zamanından daha eski leave'leri kaldır
+  Object.keys(merged.deletedLeaves).forEach(k => {
+    const delTime = merged.deletedLeaves[k];
+    const lv = merged.leaves[k];
+    if (lv && (lv.updatedAt || 0) <= delTime) {
+      delete merged.leaves[k];
+    } else if (lv && (lv.updatedAt || 0) > delTime) {
+      delete merged.deletedLeaves[k];
+    }
   });
+
+  // Eski silme kayıtlarını temizle (30 günden eski)
+  const cleanupThreshold = Date.now() - (30 * 24 * 60 * 60 * 1000);
+  Object.keys(merged.deletedShifts).forEach(k => {
+    if (merged.deletedShifts[k] < cleanupThreshold) delete merged.deletedShifts[k];
+  });
+  Object.keys(merged.deletedLeaves).forEach(k => {
+    if (merged.deletedLeaves[k] < cleanupThreshold) delete merged.deletedLeaves[k];
+  });
+
+  // Note merge — notes bir string, cloud'daki boş değilse cloud'dan al
+  if (cloud.notes && typeof cloud.notes === 'string' && cloud.notes.trim()) {
+    merged.notes = cloud.notes;
+  }
 
   // Ayarları cloud'dan al (en son güncellenen kazansın)
   if (cloud.netSalary !== undefined) merged.netSalary = cloud.netSalary;
@@ -4072,8 +4142,13 @@ function deepMergeUser(local, cloud) {
 
 // Pull data from Firestore
 function pullFromCloud(callback) {
-  if (!fbDb || !fbUser) { if (callback) callback(); return; }
+  if (!fbDb || !fbUser || syncInProgress) { if (callback) callback(); return; }
+  syncInProgress = true;
   setSyncState('syncing');
+
+  var pullTimeout = setTimeout(function() {
+    if (syncInProgress) { syncInProgress = false; setSyncState('error'); }
+  }, SYNC_TIMEOUT);
 
   fbDb.collection('userData').doc(fbUser.uid).get()
     .then(doc => {
@@ -4098,12 +4173,16 @@ function pullFromCloud(callback) {
           saveLS();
         }
       }
+      clearTimeout(pullTimeout);
       lastSyncTime = Date.now();
+      syncInProgress = false;
       setSyncState('online');
       if (callback) callback();
     })
     .catch(err => {
+      clearTimeout(pullTimeout);
       console.error('Pull hatası:', err);
+      syncInProgress = false;
       setSyncState('error');
       if (callback) callback();
     });
@@ -4139,7 +4218,8 @@ function startRealtimeSync() {
           }
         });
 
-        // Cloud'dan gelen veriyi geri push etme
+        // Cloud'dan gelen veriyi geri push etme — bekleyen timer'ı da iptal et
+        if (syncTimer) { clearTimeout(syncTimer); syncTimer = null; }
         skipNextPush = true;
         saveLS();
         invalidateMDCache();

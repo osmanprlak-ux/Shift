@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shifttrack-v10';
+const CACHE_NAME = 'shifttrack-v11';
 const ASSETS = [
   './',
   './index.html',
