@@ -3768,9 +3768,10 @@ function initFirebase() {
         // Giriş yapılmış
         $('authScreen').style.display = 'none';
         $('loginScreen').style.display = 'flex';
+        updLogin();
         updSyncUI();
         updCloudAccountUI();
-        // Buluttan veri çek
+        // Buluttan veri çek — tamamlanınca güncelle
         pullFromCloud(() => {
           loadLS();
           applyTheme('default');
