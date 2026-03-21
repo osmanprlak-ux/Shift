@@ -213,8 +213,26 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .cal-cell .leave-label.ll-sick{background:rgba(251,146,60,.15);color:#fb923c}
 .cal-cell .leave-label.ll-unpaid{background:rgba(148,163,184,.15);color:#94a3b8}
 .cal-cell .hol-tag{font-size:7px;font-weight:700;padding:1px 4px;border-radius:3px;background:rgba(248,113,113,.15);color:var(--r);display:inline-block;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.cal-cell .shift-icon{display:none;font-size:14px;line-height:1;margin-top:1px}
 .cal-cell.selecting{border-color:var(--s)!important;background:rgba(56,189,248,.1)!important}
 .cal-legend{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}
+/* Shift Stats */
+.shift-stats{margin-top:16px;background:var(--card2);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.06)}
+.shift-stats h3{font-size:13px;font-weight:700;color:var(--t);margin:0 0 12px;display:flex;align-items:center;gap:6px}
+.shift-stats h3 i{color:var(--p3);font-size:12px}
+.ss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.ss-card{background:var(--card);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.04);transition:transform .2s}
+.ss-card:hover{transform:translateY(-1px)}
+.ss-card .ss-icon{font-size:20px;line-height:1;margin-bottom:4px}
+.ss-card .ss-name{font-size:10px;font-weight:700;color:var(--t2);margin-bottom:2px}
+.ss-card .ss-count{font-size:18px;font-weight:900;color:var(--t)}
+.ss-card .ss-hours{font-size:9px;color:var(--t3);font-weight:600}
+.ss-card.ss-top{border-color:var(--g);background:rgba(52,211,153,.06)}
+.ss-card.ss-top .ss-count{color:var(--g)}
+.ss-tabs{display:flex;gap:6px;margin-bottom:12px}
+.ss-tab{padding:5px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.08);background:var(--card);color:var(--t2);transition:all .2s}
+.ss-tab.active{background:var(--p4);color:var(--p3);border-color:var(--p3)}
+.ss-empty{text-align:center;padding:16px;font-size:12px;color:var(--t3);font-weight:600}
 .cal-legend span{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--t2)}
 .cal-legend span i{font-size:8px}
 
@@ -417,7 +435,7 @@ tr:hover td{background:var(--bg3)}
 /* RESPONSIVE */
 @media(max-width:768px){
 .content{padding:122px 12px 28px}.grid-2,.grid-3{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}
-.cal-cell{min-height:56px;padding:4px 5px}.cal-cell .shift-time,.cal-cell .leave-label,.cal-cell .hol-tag{display:none}.cal-cell .hrs-display{font-size:13px}.cal-cell .leave-display{font-size:9px}
+.cal-cell{min-height:56px;padding:4px 5px}.cal-cell .shift-time,.cal-cell .leave-label,.cal-cell .hol-tag{display:none}.cal-cell .hrs-display{font-size:13px}.cal-cell .leave-display{font-size:9px}.cal-cell .shift-icon{display:block}.ss-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
 .earn-hero .amt{font-size:24px}.nav-tab span{display:none}.nav-tab{padding:10px 12px}.nav-tab i{font-size:17px}
 .login-cards{flex-direction:column;align-items:center}.year-overview{grid-template-columns:repeat(6,1fr)}
 .page-head{flex-direction:column;align-items:flex-start}.cal-earn-bar{flex-direction:column;align-items:flex-start}.result-box .rb-val{font-size:13px}
@@ -779,6 +797,7 @@ tr:hover td{background:var(--bg3)}
           <span><i class="fas fa-circle" style="color:#60a5fa"></i>Y.İzin</span>
           <span><i class="fas fa-circle" style="color:#fb923c"></i>Rapor</span>
         </div>
+        <div id="shiftStats"></div>
       </div>
     </div>
 
@@ -1987,7 +2006,9 @@ function renderCal() {
     if (sh && sh.start && sh.end) {
       const h = calcHr(sh.start, sh.end, sh.break || 0);
       if (h > 0) { mH += h; mD++; }
+      const sType = getShiftType(sh);
       inner += `<div class="hrs-display ${h > 7.5 ? 'overtime' : ''}">${h.toFixed(1)}s</div>`;
+      inner += `<div class="shift-icon">${sType.icon}</div>`;
       inner += `<div class="shift-time">${escHtml(sh.start)}–${escHtml(sh.end)}${isNightShift(sh.start, sh.end) ? ' 🌙' : ''}</div>`;
       if (sh.note) inner += `<div class="shift-time" style="color:var(--p3);opacity:.7">📝 ${escHtml(sh.note.substring(0,20))}</div>`;
       if (hol) inner += `<span class="hol-tag">🏛️ ${escHtml(hol)}</span>`;
@@ -2040,6 +2061,7 @@ function renderCal() {
   }
   renderCopyBar();
   renderMultiBar();
+  renderShiftStats();
 }
 
 function chgM(d) {
@@ -2090,6 +2112,94 @@ function pasteAndClose() {
 }
 
 function clearClipboard() { S.clipboard = null; renderCopyBar(); }
+
+/* Vardiya tipini belirle */
+function getShiftType(sh) {
+  if (!sh || !sh.start || !sh.end) return { key:'unknown', name:'Bilinmiyor', icon:'⏰' };
+  const ps = getAllPresets();
+  for (const [k, v] of Object.entries(ps)) {
+    if (v.start === sh.start && v.end === sh.end) {
+      if (k === 'morning') return { key:k, name:'Sabah', icon:'🌅' };
+      if (k === 'afternoon') return { key:k, name:'Öğlen', icon:'🌇' };
+      if (k === 'evening') return { key:k, name:'Akşam', icon:'🌙' };
+      return { key:k, name:v.name||'Özel', icon:v.icon||'⏰' };
+    }
+  }
+  if (isNightShift(sh.start, sh.end)) return { key:'night', name:'Gece', icon:'🌙' };
+  const h = parseInt(sh.start.split(':')[0], 10);
+  if (h < 12) return { key:'morning_custom', name:'Sabah', icon:'🌅' };
+  if (h < 17) return { key:'afternoon_custom', name:'Öğlen', icon:'🌇' };
+  return { key:'evening_custom', name:'Akşam', icon:'🌙' };
+}
+
+/* Vardiya dağılım istatistiklerini render et */
+function renderShiftStats() {
+  const el = $('shiftStats'); if (!el) return;
+  const u = cu(); if (!u) { el.innerHTML = ''; return; }
+
+  /* Aylık verileri topla */
+  const y = S.cy, m = S.cm;
+  const mPrefix = `${y}-${String(m+1).padStart(2,'0')}`;
+  const monthData = {}, yearData = {};
+
+  for (const [ds, sh] of Object.entries(u.shifts)) {
+    if (!sh || !sh.start || !sh.end) continue;
+    const sType = getShiftType(sh);
+    const groupKey = sType.name;
+    const h = calcHr(sh.start, sh.end, sh.break || 0);
+
+    /* Yıllık */
+    if (ds.startsWith(String(y) + '-')) {
+      if (!yearData[groupKey]) yearData[groupKey] = { icon:sType.icon, days:0, hours:0 };
+      yearData[groupKey].days++;
+      yearData[groupKey].hours += h;
+    }
+    /* Aylık */
+    if (ds.startsWith(mPrefix)) {
+      if (!monthData[groupKey]) monthData[groupKey] = { icon:sType.icon, days:0, hours:0 };
+      monthData[groupKey].days++;
+      monthData[groupKey].hours += h;
+    }
+  }
+
+  if (Object.keys(monthData).length === 0 && Object.keys(yearData).length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+
+  function buildCards(data) {
+    if (Object.keys(data).length === 0) return '<div class="ss-empty">Henüz vardiya verisi yok</div>';
+    const sorted = Object.entries(data).sort((a, b) => b[1].days - a[1].days);
+    const topKey = sorted[0][0];
+    return '<div class="ss-grid">' + sorted.map(([name, d]) =>
+      `<div class="ss-card ${name === topKey ? 'ss-top' : ''}">
+        <div class="ss-icon">${d.icon}</div>
+        <div class="ss-name">${escHtml(name)}${name === topKey ? ' <i class="fas fa-crown" style="color:var(--g);font-size:8px"></i>' : ''}</div>
+        <div class="ss-count">${d.days} <small style="font-size:10px;font-weight:600">gün</small></div>
+        <div class="ss-hours">${d.hours.toFixed(1)} saat</div>
+      </div>`
+    ).join('') + '</div>';
+  }
+
+  el.innerHTML = `
+    <div class="shift-stats">
+      <h3><i class="fas fa-chart-pie"></i>Vardiya Dağılımı</h3>
+      <div class="ss-tabs">
+        <div class="ss-tab active" onclick="switchSSTab('month',this)">Bu Ay</div>
+        <div class="ss-tab" onclick="switchSSTab('year',this)">Yıllık (${y})</div>
+      </div>
+      <div id="ssMonth">${buildCards(monthData)}</div>
+      <div id="ssYear" style="display:none">${buildCards(yearData)}</div>
+    </div>`;
+}
+
+function switchSSTab(tab, btn) {
+  document.querySelectorAll('.ss-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const mEl = $('ssMonth'), yEl = $('ssYear');
+  if (mEl) mEl.style.display = tab === 'month' ? 'block' : 'none';
+  if (yEl) yEl.style.display = tab === 'year' ? 'block' : 'none';
+}
 
 function renderCopyBar() {
   const el = $('copyBar'); if (!el) return;
