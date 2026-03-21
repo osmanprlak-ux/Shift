@@ -233,6 +233,39 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .ss-tab{padding:5px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.08);background:var(--card);color:var(--t2);transition:all .2s}
 .ss-tab.active{background:var(--p4);color:var(--p3);border-color:var(--p3)}
 .ss-empty{text-align:center;padding:16px;font-size:12px;color:var(--t3);font-weight:600}
+/* Dashboard Mini Reports */
+.dash-reports{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+.dash-report{background:var(--card2);border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,.06)}
+.dash-report h4{font-size:11px;font-weight:800;color:var(--t3);margin:0 0 10px;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
+.dash-report h4 i{font-size:11px;color:var(--p3)}
+.dr-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(255,255,255,.03)}
+.dr-row:last-child{border:none}
+.dr-row .drk{color:var(--t2);font-weight:600;display:flex;align-items:center;gap:5px}
+.dr-row .drv{font-weight:800;color:var(--t)}
+.dr-row .drv.pos{color:var(--g)}.dr-row .drv.neg{color:var(--r)}.dr-row .drv.accent{color:var(--acc)}
+.dr-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:6px;font-size:9px;font-weight:700}
+.dr-mini-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.06);margin-top:6px;overflow:hidden;position:relative}
+.dr-mini-bar .dr-fill{height:100%;border-radius:3px;transition:width .3s}
+/* Earnings Extras */
+.earn-section{background:var(--card2);border-radius:12px;padding:16px;margin-top:16px;border:1px solid rgba(255,255,255,.06)}
+.earn-section h3{font-size:13px;font-weight:700;color:var(--t);margin:0 0 12px;display:flex;align-items:center;gap:6px}
+.earn-section h3 i{color:var(--p3);font-size:12px}
+.earn-wk-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
+.earn-wk-row:last-child{border:none}
+.earn-wk-row .ewk-label{font-weight:700;color:var(--t2);min-width:60px}
+.earn-wk-row .ewk-bar{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.earn-wk-row .ewk-fill{height:100%;border-radius:4px;background:var(--pg)}
+.earn-wk-row .ewk-val{font-weight:800;min-width:60px;text-align:right}
+.earn-type-card{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--card);border-radius:10px;border:1px solid rgba(255,255,255,.04)}
+.earn-type-card .etc-icon{font-size:20px}
+.earn-type-card .etc-info{flex:1}
+.earn-type-card .etc-name{font-size:10px;font-weight:700;color:var(--t2)}
+.earn-type-card .etc-detail{font-size:9px;color:var(--t3)}
+.earn-type-card .etc-val{font-size:14px;font-weight:900;color:var(--g)}
+.earn-cumul-bar{display:flex;align-items:flex-end;gap:3px;height:80px}
+.earn-cumul-col{flex:1;background:var(--pg);border-radius:4px 4px 0 0;position:relative;min-width:0;cursor:default;transition:opacity .2s}
+.earn-cumul-col:hover{opacity:.8}
+.earn-cumul-col .ecl{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:700;color:var(--t3);white-space:nowrap}
 .cal-legend span{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--t2)}
 .cal-legend span i{font-size:8px}
 
@@ -446,7 +479,7 @@ tr:hover td{background:var(--bg3)}
 .topbar-btn.tb-desktop{display:none}
 .sync-status span{display:none}
 }
-@media(max-width:480px){.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.wt-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.wt-grid{grid-template-columns:repeat(3,1fr)}.dash-reports{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
 /* HEATMAP MINI CALENDAR */
@@ -766,6 +799,7 @@ tr:hover td{background:var(--bg3)}
         </div>
       </div>
       <div id="dashEarnSummary"></div>
+      <div id="dashReports"></div>
     </div>
 
     <!-- CALENDAR -->
@@ -1877,6 +1911,91 @@ function renderDash() {
       </div>`;
     } else { deb.innerHTML = ''; }
   }
+  renderDashReports(u, d, e);
+}
+
+/* Dashboard Mini Reports — tüm bölümlerin kısa özetleri */
+function renderDashReports(u, d, e) {
+  const el = $('dashReports'); if (!el) return;
+  const y = S.cy, m = S.cm;
+
+  /* 1. Vardiya Dağılımı Mini */
+  const shiftDist = {};
+  for (const [ds, sh] of Object.entries(u.shifts)) {
+    if (!sh || !sh.start || !sh.end) continue;
+    const p = parseDS(ds); if (!p || p.y !== y || p.m !== m) continue;
+    const st = getShiftType(sh);
+    if (!shiftDist[st.name]) shiftDist[st.name] = { icon:st.icon, days:0, hours:0 };
+    shiftDist[st.name].days++;
+    shiftDist[st.name].hours += calcHr(sh.start, sh.end, sh.break||0);
+  }
+  let shiftHtml = '';
+  const sdSorted = Object.entries(shiftDist).sort((a,b) => b[1].days - a[1].days);
+  if (sdSorted.length) {
+    sdSorted.forEach(([name, v]) => {
+      const pct = d.wd > 0 ? (v.days / d.wd * 100).toFixed(0) : 0;
+      shiftHtml += `<div class="dr-row"><span class="drk">${v.icon} ${escHtml(name)}</span><span class="drv">${v.days}g · ${v.hours.toFixed(1)}s <small style="color:var(--t3);font-weight:600">(${pct}%)</small></span></div>`;
+    });
+  } else {
+    shiftHtml = '<div style="font-size:11px;color:var(--t3);text-align:center;padding:8px">Veri yok</div>';
+  }
+
+  /* 2. İzin Durumu Mini */
+  const al = u.annualLeave || 14, ar = Math.max(0, al - d.yau);
+  const alPct = al > 0 ? Math.min(100, (d.yau / al) * 100) : 0;
+  let leaveMini = `
+    <div class="dr-row"><span class="drk"><i class="fas fa-umbrella-beach" style="color:#60a5fa"></i>Y.İzin</span><span class="drv">${ar}/${al}g kalan</span></div>
+    <div class="dr-mini-bar"><div class="dr-fill" style="width:${alPct}%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div></div>
+    <div class="dr-row" style="margin-top:4px"><span class="drk"><i class="fas fa-notes-medical" style="color:#fb923c"></i>Rapor</span><span class="drv">${d.ysd}g</span></div>
+    <div class="dr-row"><span class="drk"><i class="fas fa-couch" style="color:var(--p)"></i>H.Tatil (ay)</span><span class="drv">${d.wr}g</span></div>
+    <div class="dr-row"><span class="drk"><i class="fas fa-ban" style="color:var(--r)"></i>Ücretsiz</span><span class="drv ${d.ud > 0 ? 'neg' : ''}">${d.ud}g</span></div>`;
+
+  /* 3. Kazanç Detay Mini */
+  let earnMini = '';
+  if (e) {
+    const otPct = e.totalEarning > 0 ? (e.overtimePay / e.totalEarning * 100).toFixed(1) : 0;
+    const holPct = e.totalEarning > 0 ? (e.holidayPay / e.totalEarning * 100).toFixed(1) : 0;
+    earnMini = `
+      <div class="dr-row"><span class="drk"><i class="fas fa-money-bill" style="color:var(--g)"></i>Maaş (baz)</span><span class="drv pos">${fm(e.basePay)}</span></div>
+      <div class="dr-row"><span class="drk"><i class="fas fa-fire" style="color:var(--acc)"></i>FM Eki</span><span class="drv accent">${fm(e.overtimePay)} <small style="color:var(--t3)">(${otPct}%)</small></span></div>
+      <div class="dr-row"><span class="drk"><i class="fas fa-flag" style="color:var(--r)"></i>Tatil Eki</span><span class="drv accent">${fm(e.holidayPay)} <small style="color:var(--t3)">(${holPct}%)</small></span></div>
+      <div class="dr-row"><span class="drk"><i class="fas fa-coins" style="color:var(--p)"></i>Günlük</span><span class="drv">${fm(e.dailyRate)}</span></div>
+      <div class="dr-row"><span class="drk"><i class="fas fa-clock" style="color:var(--p)"></i>Saatlik</span><span class="drv">${fm(e.hourlyRate)}</span></div>`;
+  } else {
+    earnMini = '<div style="font-size:11px;color:var(--t3);text-align:center;padding:8px">Maaş bilgisi girilmemiş</div>';
+  }
+
+  /* 4. Performans Mini */
+  const avgDaily = d.wd > 0 ? d.th / d.wd : 0;
+  const proj2 = getMonthProjection();
+  let perfMini = `
+    <div class="dr-row"><span class="drk"><i class="fas fa-tachometer-alt" style="color:var(--p)"></i>Gün Ort.</span><span class="drv">${avgDaily.toFixed(1)}s</span></div>
+    <div class="dr-row"><span class="drk"><i class="fas fa-percentage" style="color:var(--acc)"></i>FM Oranı</span><span class="drv ${d.oh > 0 ? 'accent' : ''}">${d.th > 0 ? (d.oh / d.th * 100).toFixed(1) : 0}%</span></div>
+    <div class="dr-row"><span class="drk"><i class="fas fa-calendar-day" style="color:var(--g)"></i>Tatil Çalışma</span><span class="drv">${d.hdw}g · ${d.hh.toFixed(1)}s</span></div>`;
+  if (proj2) {
+    perfMini += `<div class="dr-row"><span class="drk"><i class="fas fa-chart-area" style="color:var(--s)"></i>Ay Sonu Tah.</span><span class="drv">${proj2.projected}s</span></div>`;
+  }
+  // Son 5 vardiya
+  const recentShifts = Object.entries(u.shifts)
+    .filter(([ds, sh]) => sh && sh.start && sh.end && ds.startsWith(`${y}-${String(m+1).padStart(2,'0')}`))
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .slice(0, 5);
+  if (recentShifts.length) {
+    perfMini += '<div style="margin-top:8px;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase">Son Vardiyalar</div>';
+    recentShifts.forEach(([ds, sh]) => {
+      const dd = dsToDate(ds);
+      const h = calcHr(sh.start, sh.end, sh.break||0);
+      const st = getShiftType(sh);
+      perfMini += `<div class="dr-row"><span class="drk">${st.icon} ${dd.getDate()} ${MTR[dd.getMonth()].substring(0,3)}</span><span class="drv">${sh.start}–${sh.end} <small style="color:var(--t3)">${h.toFixed(1)}s</small></span></div>`;
+    });
+  }
+
+  el.innerHTML = `<div class="dash-reports">
+    <div class="dash-report"><h4><i class="fas fa-chart-pie"></i>Vardiya Dağılımı</h4>${shiftHtml}</div>
+    <div class="dash-report"><h4><i class="fas fa-umbrella-beach"></i>İzin Durumu</h4>${leaveMini}</div>
+    <div class="dash-report"><h4><i class="fas fa-wallet"></i>Kazanç Detayı</h4>${earnMini}</div>
+    <div class="dash-report"><h4><i class="fas fa-chart-line"></i>Performans</h4>${perfMini}</div>
+  </div>`;
 }
 
 /* ============================================================
@@ -2602,7 +2721,9 @@ function renderStats() {
       </tr>`).join('')}</tbody>
     </table></div>
   </div>
-  ${renderDayOfWeekChart()}`;
+  ${renderDayOfWeekChart()}
+  ${renderStatsShiftDist(data)}
+  ${renderStatsProductivity(data)}`;
 }
 
 function renderDayOfWeekChart() {
@@ -2622,6 +2743,97 @@ function renderDayOfWeekChart() {
   return `<div class="card" style="margin-top:16px">
     <div class="card-head"><h3><i class="fas fa-calendar-day"></i>Gün Bazlı Dağılım</h3><span style="font-size:10px;color:var(--t3)">Tüm zamanlar</span></div>
     ${bars}
+  </div>`;
+}
+
+/* Stats — 6 Aylık Vardiya Tipi Dağılımı */
+function renderStatsShiftDist(trendData) {
+  const u = cu(); if (!u) return '';
+  const allTypes = {};
+  const monthTypes = {};
+  trendData.forEach(td => {
+    const prefix = `${td.y}-${String(td.m+1).padStart(2,'0')}`;
+    monthTypes[td.label] = {};
+    for (const [ds, sh] of Object.entries(u.shifts)) {
+      if (!sh || !sh.start || !sh.end || !ds.startsWith(prefix)) continue;
+      const st = getShiftType(sh);
+      if (!allTypes[st.name]) allTypes[st.name] = { icon: st.icon, total: 0 };
+      allTypes[st.name].total++;
+      if (!monthTypes[td.label][st.name]) monthTypes[td.label][st.name] = 0;
+      monthTypes[td.label][st.name]++;
+    }
+  });
+  const typeNames = Object.keys(allTypes).sort((a, b) => allTypes[b].total - allTypes[a].total);
+  if (!typeNames.length) return '';
+
+  const colors = ['var(--p)', 'var(--g)', 'var(--acc)', 'var(--s)', '#fb923c', '#f43f5e'];
+  let rows = '';
+  trendData.forEach(td => {
+    const mt = monthTypes[td.label] || {};
+    const total = Object.values(mt).reduce((a, v) => a + v, 0) || 1;
+    let segs = '';
+    typeNames.forEach((tn, ti) => {
+      const cnt = mt[tn] || 0;
+      if (cnt === 0) return;
+      const pct = (cnt / total * 100).toFixed(1);
+      segs += `<div style="width:${pct}%;background:${colors[ti % colors.length]};height:100%;border-radius:3px" title="${tn}: ${cnt}g (${pct}%)"></div>`;
+    });
+    rows += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <span style="min-width:40px;font-size:11px;font-weight:700;color:var(--t2)">${escHtml(td.label)}</span>
+      <div style="flex:1;height:14px;border-radius:3px;background:rgba(255,255,255,.04);display:flex;gap:1px;overflow:hidden">${segs}</div>
+      <span style="min-width:30px;font-size:10px;font-weight:800;color:var(--t3);text-align:right">${Object.values(mt).reduce((a,v)=>a+v,0)}g</span>
+    </div>`;
+  });
+  let legend = '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">';
+  typeNames.forEach((tn, ti) => {
+    legend += `<span style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--t2)">
+      <span style="width:10px;height:10px;border-radius:3px;background:${colors[ti % colors.length]};display:inline-block"></span>
+      ${allTypes[tn].icon} ${escHtml(tn)} (${allTypes[tn].total}g)
+    </span>`;
+  });
+  legend += '</div>';
+  return `<div class="card" style="margin-top:16px">
+    <div class="card-head"><h3><i class="fas fa-chart-pie"></i>Vardiya Tipi Dağılımı</h3><span style="font-size:10px;color:var(--t3)">6 aylık trend</span></div>
+    ${rows}${legend}
+  </div>`;
+}
+
+/* Stats — Verimlilik Analizi */
+function renderStatsProductivity(trendData) {
+  const u = cu(); if (!u) return '';
+  const nonZero = trendData.filter(d => d.days > 0);
+  if (nonZero.length < 2) return '';
+  const avgDailyHrs = nonZero.map(d => d.days > 0 ? d.hours / d.days : 0);
+  const maxAvg = Math.max(1, ...avgDailyHrs);
+  const otRatios = nonZero.map(d => d.hours > 0 ? (d.overtime / d.hours * 100) : 0);
+
+  let rows = '';
+  nonZero.forEach((d, i) => {
+    const dAvg = avgDailyHrs[i];
+    const otR = otRatios[i];
+    const pct = maxAvg > 0 ? (dAvg / maxAvg * 100).toFixed(1) : 0;
+    rows += `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px">
+      <span style="min-width:40px;font-weight:700;color:var(--t2)">${escHtml(d.label)}</span>
+      <div style="flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden">
+        <div style="width:${pct}%;height:100%;border-radius:4px;background:var(--pg)"></div>
+      </div>
+      <span style="min-width:45px;font-weight:800;text-align:right">${dAvg.toFixed(1)}s/g</span>
+      <span style="min-width:45px;font-weight:700;text-align:right;color:${otR > 15 ? 'var(--acc)' : 'var(--t3)'}">${otR.toFixed(0)}% FM</span>
+    </div>`;
+  });
+
+  const overallAvg = nonZero.reduce((a, d) => a + d.hours, 0) / nonZero.reduce((a, d) => a + d.days, 0);
+  const bestMonth = nonZero.reduce((best, d, i) => avgDailyHrs[i] > (best.avg || 0) ? { label: d.label, avg: avgDailyHrs[i] } : best, {});
+  const mostOT = nonZero.reduce((best, d, i) => otRatios[i] > (best.ratio || 0) ? { label: d.label, ratio: otRatios[i] } : best, {});
+
+  return `<div class="card" style="margin-top:16px">
+    <div class="card-head"><h3><i class="fas fa-tachometer-alt"></i>Verimlilik Analizi</h3></div>
+    <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="font-size:10px;color:var(--t3)">Genel Ort: <b style="color:var(--t)">${overallAvg.toFixed(1)}s/g</b></div>
+      <div style="font-size:10px;color:var(--t3)">En Verimli: <b style="color:var(--g)">${escHtml(bestMonth.label||'—')} (${(bestMonth.avg||0).toFixed(1)}s/g)</b></div>
+      <div style="font-size:10px;color:var(--t3)">En Yoğun FM: <b style="color:var(--acc)">${escHtml(mostOT.label||'—')} (${(mostOT.ratio||0).toFixed(0)}%)</b></div>
+    </div>
+    ${rows}
   </div>`;
 }
 
@@ -2815,7 +3027,105 @@ function renderEarn() {
       <div class="esd total"><span class="ek"><i class="fas fa-wallet"></i><b>TOPLAM</b></span><span class="ev">${fm(e.totalEarning)}</span></div>
     </div>
   </div>
-  ${dgHtml}`;
+  ${dgHtml}
+  ${renderEarnWeekly(u, y, m, d, e)}
+  ${renderEarnShiftTypes(u, y, m, e)}
+  ${renderEarnYearlyCumul(u, y, e)}`;
+}
+
+/* Kazanç — Haftalık Kırılım */
+function renderEarnWeekly(u, y, m, d, e) {
+  const wks = Object.entries(d.wh).sort((a, b) => {
+    const wa = parseInt(a[0].split('-W')[1] || a[0].split('W')[1] || 0);
+    const wb = parseInt(b[0].split('-W')[1] || b[0].split('W')[1] || 0);
+    return wa - wb;
+  });
+  if (!wks.length) return '';
+  const maxH = Math.max(1, ...wks.map(([, h]) => h));
+  let rows = '';
+  wks.forEach(([wk, h], i) => {
+    const pct = maxH > 0 ? (h / maxH * 100).toFixed(1) : 0;
+    const wkEarn = h * e.hourlyRate;
+    const isOT = (d.weekTotalHrs[wk] || h) > 45;
+    rows += `<div class="earn-wk-row">
+      <span class="ewk-label">${i+1}. Hafta</span>
+      <div class="ewk-bar"><div class="ewk-fill" style="width:${pct}%;background:${isOT ? 'var(--acc-grad, linear-gradient(90deg,var(--acc),#f97316))' : 'var(--pg)'}"></div></div>
+      <span class="ewk-val">${h.toFixed(1)}s</span>
+      <span class="ewk-val" style="color:var(--g)">${fm(wkEarn)}</span>
+    </div>`;
+  });
+  return `<div class="earn-section">
+    <h3><i class="fas fa-calendar-week"></i>Haftalık Kazanç Dağılımı</h3>
+    ${rows}
+  </div>`;
+}
+
+/* Kazanç — Vardiya Tipi Bazında Kazanç */
+function renderEarnShiftTypes(u, y, m, e) {
+  const prefix = `${y}-${String(m+1).padStart(2,'0')}`;
+  const types = {};
+  for (const [ds, sh] of Object.entries(u.shifts)) {
+    if (!sh || !sh.start || !sh.end || !ds.startsWith(prefix)) continue;
+    const st = getShiftType(sh);
+    const h = calcHr(sh.start, sh.end, sh.break || 0);
+    if (!types[st.name]) types[st.name] = { icon: st.icon, days: 0, hours: 0, earn: 0 };
+    types[st.name].days++;
+    types[st.name].hours += h;
+    types[st.name].earn += h * e.hourlyRate;
+  }
+  const sorted = Object.entries(types).sort((a, b) => b[1].earn - a[1].earn);
+  if (!sorted.length) return '';
+  let cards = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">';
+  sorted.forEach(([name, v]) => {
+    const dayAvg = v.days > 0 ? (v.hours / v.days).toFixed(1) : '0';
+    cards += `<div class="earn-type-card">
+      <div class="etc-icon">${v.icon}</div>
+      <div class="etc-info">
+        <div class="etc-name">${escHtml(name)}</div>
+        <div class="etc-detail">${v.days}g · ${v.hours.toFixed(1)}s · ort ${dayAvg}s/g</div>
+      </div>
+      <div class="etc-val">${fm(v.earn)}</div>
+    </div>`;
+  });
+  cards += '</div>';
+  return `<div class="earn-section">
+    <h3><i class="fas fa-chart-pie"></i>Vardiya Tipi Bazında Kazanç</h3>
+    ${cards}
+  </div>`;
+}
+
+/* Kazanç — Yıllık Kümülatif Kazanç Grafiği */
+function renderEarnYearlyCumul(u, y, e) {
+  if (!u.netSalary) return '';
+  let cumul = 0, maxCumul = 0;
+  const months = [];
+  for (let mi = 0; mi < 12; mi++) {
+    const me = calcEarningForMonth(y, mi, u.netSalary);
+    const mEarn = (me && !me.isFutureMonth) ? me.totalEarning : 0;
+    cumul += mEarn;
+    months.push({ label: MTR[mi].substring(0, 3), earn: mEarn, cumul, isCurrent: mi === e.isCurrentMonth && y === new Date().getFullYear() });
+    if (cumul > maxCumul) maxCumul = cumul;
+  }
+  if (maxCumul === 0) return '';
+  let bars = '';
+  months.forEach((mo, i) => {
+    const h = maxCumul > 0 ? (mo.cumul / maxCumul * 100) : 0;
+    const isSel = i === S.em;
+    bars += `<div class="earn-cumul-col" style="height:${Math.max(2, h)}%;background:${isSel ? 'var(--pg)' : 'rgba(255,255,255,.08)'}" title="${mo.label}: ${fm(mo.earn)} / Toplam: ${fm(mo.cumul)}">
+      <span class="ecl">${mo.label}</span>
+    </div>`;
+  });
+  const totalYear = months.reduce((a, m2) => a + m2.earn, 0);
+  const avgMonth = months.filter(m2 => m2.earn > 0).length;
+  const avg = avgMonth > 0 ? totalYear / avgMonth : 0;
+  return `<div class="earn-section">
+    <h3><i class="fas fa-chart-bar"></i>Yıllık Kazanç Grafiği (${y})</h3>
+    <div style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="font-size:11px;color:var(--t2)"><span style="font-weight:800;color:var(--g);font-size:14px">${fm(totalYear)}</span> yıl toplam</div>
+      <div style="font-size:11px;color:var(--t2)"><span style="font-weight:800;color:var(--p3);font-size:14px">${fm(avg)}</span> aylık ort.</div>
+    </div>
+    <div class="earn-cumul-bar" style="margin-bottom:20px">${bars}</div>
+  </div>`;
 }
 
 function chgE(d) {
