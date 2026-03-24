@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ShiftTrack Pro</title>
 <script>
 // Cache buster — eski service worker'ı temizle
@@ -54,9 +54,9 @@ body.theme-rose{--p:#fb7185;--p2:#f43f5e;--p3:#fda4af;--p4:rgba(244,63,94,.12);-
 body.theme-gold{--p:#fbbf24;--p2:#f59e0b;--p3:#fde68a;--p4:rgba(245,158,11,.12);--pg:linear-gradient(135deg,#d97706,#f59e0b);--bg:#161209;--bg2:#211b0f;--bg3:#2c2416;--bg4:#372d1d;--card:#211b0f;--card2:#2c2416;--glass:rgba(33,27,15,.88);--b1:#372d1d;--b2:#423624;--t1:#faf5e8;--t2:#c4a878;--t3:#8a7a4e}
 body.theme-light{--p:#7c3aed;--p2:#6d28d9;--p3:#5b21b6;--p4:rgba(124,58,237,.08);--pg:linear-gradient(135deg,#7c3aed,#6d28d9);--bg:#f8f7fc;--bg2:#ffffff;--bg3:#f0eef5;--bg4:#e8e5f0;--card:#ffffff;--card2:#f5f3fa;--glass:rgba(255,255,255,.92);--b1:#e2dff0;--b2:#d4d0e5;--t1:#1a1625;--t2:#6b6580;--t3:#9893a7;--acc:#d97706;--g:#059669;--r:#dc2626;--s:#0284c7;--sh1:0 2px 8px rgba(0,0,0,.06);--sh2:0 8px 24px rgba(0,0,0,.08);--sh3:0 16px 48px rgba(0,0,0,.12)}
 body.theme-light-ocean{--p:#0891b2;--p2:#0e7490;--p3:#155e75;--p4:rgba(8,145,178,.08);--pg:linear-gradient(135deg,#0891b2,#0e7490);--bg:#f0f9ff;--bg2:#ffffff;--bg3:#e0f2fe;--bg4:#bae6fd;--card:#ffffff;--card2:#f0f9ff;--glass:rgba(255,255,255,.92);--b1:#bae6fd;--b2:#7dd3fc;--t1:#0c4a6e;--t2:#0369a1;--t3:#7dd3fc;--acc:#d97706;--g:#059669;--r:#dc2626;--s:#0284c7;--sh1:0 2px 8px rgba(0,0,0,.06);--sh2:0 8px 24px rgba(0,0,0,.08);--sh3:0 16px 48px rgba(0,0,0,.12)}
-html{scroll-behavior:smooth;overflow-x:hidden}
+html{scroll-behavior:smooth;overflow-x:hidden;width:100%;max-width:100%}
 *,*::before,*::after{box-sizing:border-box}
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;width:100%;max-width:100vw;transition:background var(--ts),color var(--ts)}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;width:100%;max-width:100%;position:relative;transition:background var(--ts),color var(--ts)}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--p2);border-radius:10px}
 
 /* TOAST */
@@ -111,7 +111,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .topbar{position:fixed;top:0;left:0;right:0;height:56px;background:var(--glass);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 12px;z-index:100;gap:6px}
 .topbar-brand{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:var(--p)}
 .topbar-brand .ico{width:32px;height:32px;background:var(--pg);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
-.topbar-right{margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0;overflow:visible}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:6px;flex-shrink:0;overflow:hidden}
 .topbar-user{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:50px;background:var(--p4);cursor:pointer;transition:background-color .2s}
 .topbar-user:hover{background:rgba(139,92,246,.2)}
 .topbar-user .av{width:28px;height:28px;border-radius:50%;background:var(--pg);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:11px}
@@ -125,8 +125,8 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .nav-tab:hover{background:var(--p4);color:var(--p)}
 .nav-tab.active{background:var(--p2);color:#fff;box-shadow:0 2px 12px rgba(0,0,0,.3)}
 .nav-tab i{font-size:15px}.nav-tab span{font-size:11px;font-weight:700}
-.content{padding:126px 24px 36px;max-width:1200px;margin:0 auto}
-.page{display:none;animation:pageIn .35s cubic-bezier(.16,1,.3,1)}
+.content{padding:126px 24px 36px;max-width:1200px;margin:0 auto;overflow-x:hidden;width:100%}
+.page{display:none;animation:pageIn .35s cubic-bezier(.16,1,.3,1);max-width:100%;overflow-x:hidden}
 .page.active{display:block}
 @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .page-head{margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
@@ -139,7 +139,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
 .card-head h3{font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px}
 .card-head h3 i{color:var(--p);font-size:14px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(160px,100%),1fr));gap:12px;margin-bottom:20px}
 .stat{background:var(--card);border-radius:var(--rad);padding:16px;box-shadow:var(--sh1);border:1px solid var(--b1);transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
 .stat:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
 .stat .ribbon{position:absolute;top:0;left:0;right:0;height:2px;background:var(--pg)}
@@ -159,7 +159,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .wk-row .limit-line{position:absolute;top:0;bottom:0;width:2px;background:rgba(248,113,113,.5);z-index:1}
 .wk-row .fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:700;color:#fff;transition:width .8s cubic-bezier(.16,1,.3,1);min-width:0}
 .wk-row .fill.ok{background:var(--pg)}.wk-row .fill.ot{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
-.wk-row .hrs{min-width:44px;text-align:right;font-size:12px;font-weight:800}
+.wk-row .hrs{min-width:44px;text-align:right;font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
 .wk-row .hrs.overtime{color:var(--acc)}
 
 /* INFO LIST */
@@ -401,8 +401,8 @@ tr:hover td{background:var(--bg3)}
 .year-month .ym-name{color:var(--t3);font-size:9px;display:block;margin-bottom:2px}
 
 /* TREND CHART */
-.trend-chart-wrap{position:relative;width:100%;overflow:visible}
-.trend-chart-wrap svg{display:block;width:100%;overflow:visible}
+.trend-chart-wrap{position:relative;width:100%;overflow:hidden}
+.trend-chart-wrap svg{display:block;width:100%;overflow:hidden}
 .trend-line{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .trend-label{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;fill:var(--t2)}
 .trend-val{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;fill:var(--t1)}
@@ -751,7 +751,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v5.3 Cloud</span>
+      <span class="version">v5.4 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
