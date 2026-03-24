@@ -217,15 +217,15 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .cal-cell.selecting{border-color:var(--s)!important;background:rgba(56,189,248,.1)!important}
 .cal-legend{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}
 /* Shift Stats */
-.shift-stats{margin-top:16px;background:var(--card2);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,.06)}
-.shift-stats h3{font-size:13px;font-weight:700;color:var(--t);margin:0 0 12px;display:flex;align-items:center;gap:6px}
+.shift-stats{margin-top:16px;background:var(--card2);border-radius:12px;padding:16px;border:1px solid var(--b1)}
+.shift-stats h3{font-size:13px;font-weight:700;color:var(--t1);margin:0 0 12px;display:flex;align-items:center;gap:6px}
 .shift-stats h3 i{color:var(--p3);font-size:12px}
 .ss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
-.ss-card{background:var(--card);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.04);transition:transform .2s}
+.ss-card{background:var(--card);border-radius:10px;padding:10px;text-align:center;border:1px solid var(--b1);transition:transform .2s}
 .ss-card:hover{transform:translateY(-1px)}
 .ss-card .ss-icon{font-size:20px;line-height:1;margin-bottom:4px}
 .ss-card .ss-name{font-size:10px;font-weight:700;color:var(--t2);margin-bottom:2px}
-.ss-card .ss-count{font-size:18px;font-weight:900;color:var(--t)}
+.ss-card .ss-count{font-size:18px;font-weight:900;color:var(--t1)}
 .ss-card .ss-hours{font-size:9px;color:var(--t3);font-weight:600}
 .ss-card.ss-top{border-color:var(--g);background:rgba(52,211,153,.06)}
 .ss-card.ss-top .ss-count{color:var(--g)}
@@ -235,28 +235,28 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .ss-empty{text-align:center;padding:16px;font-size:12px;color:var(--t3);font-weight:600}
 /* Dashboard Mini Reports */
 .dash-reports{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
-.dash-report{background:var(--card2);border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,.06)}
+.dash-report{background:var(--card2);border-radius:12px;padding:14px;border:1px solid var(--b1)}
 .dash-report h4{font-size:11px;font-weight:800;color:var(--t3);margin:0 0 10px;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
 .dash-report h4 i{font-size:11px;color:var(--p3)}
-.dr-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(255,255,255,.03)}
+.dr-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:11px;border-bottom:1px solid var(--b1)}
 .dr-row:last-child{border:none}
 .dr-row .drk{color:var(--t2);font-weight:600;display:flex;align-items:center;gap:5px}
-.dr-row .drv{font-weight:800;color:var(--t)}
+.dr-row .drv{font-weight:800;color:var(--t1)}
 .dr-row .drv.pos{color:var(--g)}.dr-row .drv.neg{color:var(--r)}.dr-row .drv.accent{color:var(--acc)}
 .dr-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:6px;font-size:9px;font-weight:700}
-.dr-mini-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.06);margin-top:6px;overflow:hidden;position:relative}
+.dr-mini-bar{height:6px;border-radius:3px;background:var(--bg3);margin-top:6px;overflow:hidden;position:relative}
 .dr-mini-bar .dr-fill{height:100%;border-radius:3px;transition:width .3s}
 /* Earnings Extras */
-.earn-section{background:var(--card2);border-radius:12px;padding:16px;margin-top:16px;border:1px solid rgba(255,255,255,.06)}
-.earn-section h3{font-size:13px;font-weight:700;color:var(--t);margin:0 0 12px;display:flex;align-items:center;gap:6px}
+.earn-section{background:var(--card2);border-radius:12px;padding:16px;margin-top:16px;border:1px solid var(--b1)}
+.earn-section h3{font-size:13px;font-weight:700;color:var(--t1);margin:0 0 12px;display:flex;align-items:center;gap:6px}
 .earn-section h3 i{color:var(--p3);font-size:12px}
-.earn-wk-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
+.earn-wk-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--b1);font-size:11px}
 .earn-wk-row:last-child{border:none}
 .earn-wk-row .ewk-label{font-weight:700;color:var(--t2);min-width:60px}
-.earn-wk-row .ewk-bar{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.earn-wk-row .ewk-bar{flex:1;height:8px;border-radius:4px;background:var(--bg3);overflow:hidden}
 .earn-wk-row .ewk-fill{height:100%;border-radius:4px;background:var(--pg)}
 .earn-wk-row .ewk-val{font-weight:800;min-width:60px;text-align:right}
-.earn-type-card{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--card);border-radius:10px;border:1px solid rgba(255,255,255,.04)}
+.earn-type-card{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--card);border-radius:10px;border:1px solid var(--b1)}
 .earn-type-card .etc-icon{font-size:20px}
 .earn-type-card .etc-info{flex:1}
 .earn-type-card .etc-name{font-size:10px;font-weight:700;color:var(--t2)}
@@ -478,6 +478,10 @@ tr:hover td{background:var(--bg3)}
 .topbar-user span{display:none}.topbar-user{padding:3px}.topbar-user .av{width:26px;height:26px;font-size:10px}
 .topbar-btn.tb-desktop{display:none}
 .sync-status span{display:none}
+.dash-reports{grid-template-columns:1fr 1fr}
+.earn-wk-row .ewk-val{min-width:50px;font-size:10px}
+.earn-cumul-bar{height:60px}
+.earn-cumul-col .ecl{font-size:7px}
 }
 @media(max-width:480px){.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.wt-grid{grid-template-columns:repeat(3,1fr)}.dash-reports{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -536,7 +540,7 @@ tr:hover td{background:var(--bg3)}
 .install-banner{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--pg);color:#fff;padding:12px 20px;border-radius:14px;box-shadow:var(--sh3);display:none;align-items:center;gap:10px;font-size:13px;font-weight:700;z-index:1500;animation:slideUp .5s cubic-bezier(.16,1,.3,1)}
 @keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(30px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .install-banner button{padding:6px 14px;border-radius:8px;border:none;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}
-.install-banner .ib-install{background:#fff;color:#7c3aed}
+.install-banner .ib-install{background:#fff;color:var(--p2,#7c3aed)}
 .install-banner .ib-close{background:rgba(255,255,255,.2);color:#fff}
 
 /* ADD USER CARD */
@@ -1250,15 +1254,15 @@ function showConfirm(title, msg, cb) {
   setTxt('confirmTitle', title);
   setTxt('confirmMsg', msg);
   confirmCallback = cb;
-  $('confirmOverlay').classList.add('show');
+  const co = $('confirmOverlay'); if (co) co.classList.add('show');
 }
 function confirmOk() {
-  $('confirmOverlay').classList.remove('show');
+  const co = $('confirmOverlay'); if (co) co.classList.remove('show');
   if (typeof confirmCallback === 'function') confirmCallback();
   confirmCallback = null;
 }
 function confirmCancel() {
-  $('confirmOverlay').classList.remove('show');
+  const co = $('confirmOverlay'); if (co) co.classList.remove('show');
   confirmCallback = null;
 }
 
@@ -2448,14 +2452,14 @@ function hlPreset(sh) {
   if (c) c.classList.add('active');
 }
 
-function closeM() { $('modal').classList.remove('show'); }
+function closeM() { const m = $('modal'); if (m) m.classList.remove('show'); }
 
 function mMode(t, btn) {
   S.mt = t;
   document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  $('mShift').style.display = t === 'shift' ? 'block' : 'none';
-  $('mLeave').style.display = t === 'leave' ? 'block' : 'none';
+  const mSh = $('mShift'); if (mSh) mSh.style.display = t === 'shift' ? 'block' : 'none';
+  const mLv = $('mLeave'); if (mLv) mLv.style.display = t === 'leave' ? 'block' : 'none';
   const cw = $('mConflictWarn');
   if (cw && S.sd) {
     const u = cu();
@@ -2483,15 +2487,18 @@ function applyPreset(key, el) {
   if (el) el.classList.add('active');
   const ps = getAllPresets();
   if (key !== 'custom' && ps[key]) {
-    $('iStart').value = ps[key].start;
-    $('iEnd').value = ps[key].end;
-    $('iBreak').value = String(ps[key].break || 0);
+    const is2 = $('iStart'), ie2 = $('iEnd'), ib2 = $('iBreak');
+    if (is2) is2.value = ps[key].start;
+    if (ie2) ie2.value = ps[key].end;
+    if (ib2) ib2.value = String(ps[key].break || 0);
   }
   updResult();
 }
 
 function updResult() {
-  const s = $('iStart').value, e = $('iEnd').value, b = parseInt($('iBreak').value) || 0;
+  const isEl = $('iStart'), ieEl = $('iEnd'), ibEl = $('iBreak');
+  if (!isEl || !ieEl || !ibEl) return;
+  const s = isEl.value, e = ieEl.value, b = parseInt(ibEl.value) || 0;
   if (!s || !e) return;
   const net = calcHr(s, e, b), gross = grossHr(s, e);
   setTxt('rbGross', gross.toFixed(1) + 's');
@@ -2530,7 +2537,9 @@ function saveEntry() {
   const u = cu(); if (!u || !S.sd) return;
 
   if (S.mt === 'shift') {
-    const st = $('iStart').value, en = $('iEnd').value, br = parseInt($('iBreak').value) || 0;
+    const isE = $('iStart'), ieE = $('iEnd'), ibE = $('iBreak');
+    if (!isE || !ieE || !ibE) return;
+    const st = isE.value, en = ieE.value, br = parseInt(ibE.value) || 0;
     if (!st || !en) { toast('Saatleri girin', 'error'); return; }
     if (st === en) { toast('Giriş ve çıkış aynı olamaz', 'error'); return; }
     const gross = grossHr(st, en);
@@ -2541,7 +2550,8 @@ function saveEntry() {
 
     const doSave = () => {
       pushUndo('Vardiya');
-      const note = ($('iShiftNote').value || '').trim().substring(0, 100);
+      const snEl = $('iShiftNote');
+      const note = (snEl ? snEl.value : '').trim().substring(0, 100);
       u.shifts[S.sd] = { start:st, end:en, break:br, note, updatedAt:Date.now() };
       if (u.deletedShifts) delete u.deletedShifts[S.sd];
       if (u.leaves[S.sd]) { if (!u.deletedLeaves) u.deletedLeaves = {}; u.deletedLeaves[S.sd] = Date.now(); }
@@ -2583,7 +2593,8 @@ function saveEntry() {
       }
     }
     pushUndo('İzin');
-    u.leaves[S.sd] = { type:S.lt, note:($('iNote').value || '').trim().substring(0, 100), updatedAt:Date.now() };
+    const inEl = $('iNote');
+    u.leaves[S.sd] = { type:S.lt, note:(inEl ? inEl.value : '').trim().substring(0, 100), updatedAt:Date.now() };
     if (u.deletedLeaves) delete u.deletedLeaves[S.sd];
     if (u.shifts[S.sd]) { if (!u.deletedShifts) u.deletedShifts = {}; u.deletedShifts[S.sd] = Date.now(); }
     delete u.shifts[S.sd];
@@ -2829,7 +2840,7 @@ function renderStatsProductivity(trendData) {
   return `<div class="card" style="margin-top:16px">
     <div class="card-head"><h3><i class="fas fa-tachometer-alt"></i>Verimlilik Analizi</h3></div>
     <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
-      <div style="font-size:10px;color:var(--t3)">Genel Ort: <b style="color:var(--t)">${overallAvg.toFixed(1)}s/g</b></div>
+      <div style="font-size:10px;color:var(--t3)">Genel Ort: <b style="color:var(--t1)">${overallAvg.toFixed(1)}s/g</b></div>
       <div style="font-size:10px;color:var(--t3)">En Verimli: <b style="color:var(--g)">${escHtml(bestMonth.label||'—')} (${(bestMonth.avg||0).toFixed(1)}s/g)</b></div>
       <div style="font-size:10px;color:var(--t3)">En Yoğun FM: <b style="color:var(--acc)">${escHtml(mostOT.label||'—')} (${(mostOT.ratio||0).toFixed(0)}%)</b></div>
     </div>
@@ -3042,11 +3053,21 @@ function renderEarnWeekly(u, y, m, d, e) {
   });
   if (!wks.length) return '';
   const maxH = Math.max(1, ...wks.map(([, h]) => h));
-  let rows = '';
+  let rows = '', totalWkEarn = 0;
   wks.forEach(([wk, h], i) => {
     const pct = maxH > 0 ? (h / maxH * 100).toFixed(1) : 0;
-    const wkEarn = h * e.hourlyRate;
-    const isOT = (d.weekTotalHrs[wk] || h) > 45;
+    const totalW = d.weekTotalHrs[wk] || h;
+    const isOT = totalW > 45;
+    /* FM oranını hesapla: hafta toplamı 45'i aşarsa, bu aya düşen FM payı */
+    let wkEarn = h * e.hourlyRate;
+    if (isOT) {
+      const otTotal = totalW - 45;
+      const monthRatio = totalW > 0 ? h / totalW : 1;
+      const monthOT = otTotal * monthRatio;
+      const monthBase = h - monthOT;
+      wkEarn = monthBase * e.hourlyRate + monthOT * e.hourlyRate * 1.5;
+    }
+    totalWkEarn += wkEarn;
     rows += `<div class="earn-wk-row">
       <span class="ewk-label">${i+1}. Hafta</span>
       <div class="ewk-bar"><div class="ewk-fill" style="width:${pct}%;background:${isOT ? 'var(--acc-grad, linear-gradient(90deg,var(--acc),#f97316))' : 'var(--pg)'}"></div></div>
@@ -3071,11 +3092,15 @@ function renderEarnShiftTypes(u, y, m, e) {
     if (!types[st.name]) types[st.name] = { icon: st.icon, days: 0, hours: 0, earn: 0 };
     types[st.name].days++;
     types[st.name].hours += h;
-    types[st.name].earn += h * e.hourlyRate;
+  }
+  /* Kazanç oranı: toplam saate göre orantılı dağıt */
+  const totalH = Object.values(types).reduce((a, v) => a + v.hours, 0);
+  if (totalH > 0) {
+    Object.values(types).forEach(v => { v.earn = (v.hours / totalH) * e.totalEarning; });
   }
   const sorted = Object.entries(types).sort((a, b) => b[1].earn - a[1].earn);
   if (!sorted.length) return '';
-  let cards = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">';
+  let cards = '<div class="earn-type-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px">';
   sorted.forEach(([name, v]) => {
     const dayAvg = v.days > 0 ? (v.hours / v.days).toFixed(1) : '0';
     cards += `<div class="earn-type-card">
@@ -3223,17 +3248,18 @@ function updSeniority() {
    CUSTOM PRESETS
 ============================================================ */
 function openCPModal() {
-  $('cpName').value = '';
-  $('cpStart').value = '22:00';
-  $('cpEnd').value = '06:00';
-  $('cpBreak').value = '30';
+  const cn = $('cpName'), cs = $('cpStart'), ce = $('cpEnd'), cb = $('cpBreak');
+  if (cn) cn.value = '';
+  if (cs) cs.value = '22:00';
+  if (ce) ce.value = '06:00';
+  if (cb) cb.value = '30';
   S.cpSelectedEmoji = '⏰';
   renderEmojiGrid();
   updCPPreview();
-  $('cpModal').classList.add('show');
+  const cm = $('cpModal'); if (cm) cm.classList.add('show');
 }
 
-function closeCPModal() { $('cpModal').classList.remove('show'); }
+function closeCPModal() { const cm = $('cpModal'); if (cm) cm.classList.remove('show'); }
 
 function renderEmojiGrid() {
   const eg = $('emojiGrid'); if (!eg) return;
@@ -3248,7 +3274,9 @@ function selectEmoji(em) {
 }
 
 function updCPPreview() {
-  const s = $('cpStart').value, e = $('cpEnd').value, b = parseInt($('cpBreak').value) || 0;
+  const csE = $('cpStart'), ceE = $('cpEnd'), cbE = $('cpBreak');
+  if (!csE || !ceE || !cbE) return;
+  const s = csE.value, e = ceE.value, b = parseInt(cbE.value) || 0;
   const p = $('cpPreview'); if (!p) return;
   if (s && e) {
     const h = calcHr(s, e, b);
@@ -3258,10 +3286,12 @@ function updCPPreview() {
 
 function saveCPModal() {
   const u = cu(); if (!u) return;
-  const name = ($('cpName').value || '').trim();
+  const cpN = $('cpName'), cpS = $('cpStart'), cpE = $('cpEnd'), cpB = $('cpBreak');
+  if (!cpN || !cpS || !cpE || !cpB) return;
+  const name = (cpN.value || '').trim();
   if (!name) { toast('Şablon adı gerekli', 'error'); return; }
-  const start = $('cpStart').value, end = $('cpEnd').value;
-  const brk = parseInt($('cpBreak').value) || 0;
+  const start = cpS.value, end = cpE.value;
+  const brk = parseInt(cpB.value) || 0;
   if (!start || !end) { toast('Saatleri girin', 'error'); return; }
   if (grossHr(start, end) > MAX_GROSS_HOURS) { toast(`${MAX_GROSS_HOURS}s aşılamaz`, 'error'); return; }
   const hrs = calcHr(start, end, brk);
@@ -3331,20 +3361,21 @@ function openWTModal(d) {
   const u = cu(); if (!u) return;
   const wt = u.weeklyTemplate || {};
   const cur = wt[d];
+  const ws = $('wtStart'), we = $('wtEnd'), wb = $('wtBreak');
   if (cur && cur.type !== 'off') {
-    $('wtStart').value = cur.start || '08:00';
-    $('wtEnd').value = cur.end || '16:00';
-    $('wtBreak').value = String(cur.break || 30);
+    if (ws) ws.value = cur.start || '08:00';
+    if (we) we.value = cur.end || '16:00';
+    if (wb) wb.value = String(cur.break || 30);
   } else {
-    $('wtStart').value = '08:00'; $('wtEnd').value = '16:00'; $('wtBreak').value = '30';
+    if (ws) ws.value = '08:00'; if (we) we.value = '16:00'; if (wb) wb.value = '30';
   }
   updWTPreview();
-  $('wtModal').classList.add('show');
+  const wm = $('wtModal'); if (wm) wm.classList.add('show');
 }
 
-function closeWTModal() { $('wtModal').classList.remove('show'); S.wtEditDay = null; }
+function closeWTModal() { const wm = $('wtModal'); if (wm) wm.classList.remove('show'); S.wtEditDay = null; }
 
-function wtSetPreset(s, e) { $('wtStart').value = s; $('wtEnd').value = e; updWTPreview(); }
+function wtSetPreset(s, e) { const ws = $('wtStart'), we = $('wtEnd'); if (ws) ws.value = s; if (we) we.value = e; updWTPreview(); }
 
 function wtSetOff() {
   const u = cu(); if (!u || S.wtEditDay === null) return;
@@ -3355,7 +3386,9 @@ function wtSetOff() {
 }
 
 function updWTPreview() {
-  const s = $('wtStart').value, e = $('wtEnd').value, b = parseInt($('wtBreak').value) || 0;
+  const wsE = $('wtStart'), weE = $('wtEnd'), wbE = $('wtBreak');
+  if (!wsE || !weE || !wbE) return;
+  const s = wsE.value, e = weE.value, b = parseInt(wbE.value) || 0;
   const p = $('wtPreview'); if (!p) return;
   if (s && e) {
     const h = calcHr(s, e, b);
@@ -3365,7 +3398,9 @@ function updWTPreview() {
 
 function saveWTDay() {
   const u = cu(); if (!u || S.wtEditDay === null) return;
-  const s = $('wtStart').value, e = $('wtEnd').value, b = parseInt($('wtBreak').value) || 0;
+  const wsE = $('wtStart'), weE = $('wtEnd'), wbE = $('wtBreak');
+  if (!wsE || !weE || !wbE) return;
+  const s = wsE.value, e = weE.value, b = parseInt(wbE.value) || 0;
   if (!s || !e) { toast('Saatleri girin', 'error'); return; }
   const hrs = calcHr(s, e, b);
   if (hrs <= 0) { toast('Geçersiz süreler', 'error'); return; }
@@ -3671,10 +3706,10 @@ let pinCallback = null, pinBuffer = '';
 
 function openPIN(title, subtitle, cb) {
   pinCallback = cb; pinBuffer = '';
-  $('pinTitle').textContent = title;
-  $('pinSubtitle').textContent = subtitle || '';
+  setTxt('pinTitle', title);
+  setTxt('pinSubtitle', subtitle || '');
   updPinDots();
-  $('pinOverlay').classList.add('show');
+  const po = $('pinOverlay'); if (po) po.classList.add('show');
 }
 
 function pinInput(n) {
@@ -3683,7 +3718,7 @@ function pinInput(n) {
   updPinDots();
   if (pinBuffer.length === 4) {
     setTimeout(() => {
-      $('pinOverlay').classList.remove('show');
+      const po = $('pinOverlay'); if (po) po.classList.remove('show');
       if (pinCallback) pinCallback(pinBuffer);
       pinCallback = null; pinBuffer = '';
     }, 200);
@@ -3691,11 +3726,11 @@ function pinInput(n) {
 }
 
 function pinClear() { if (pinBuffer.length > 0) pinBuffer = pinBuffer.slice(0, -1); updPinDots(); }
-function pinCancel() { $('pinOverlay').classList.remove('show'); pinCallback = null; pinBuffer = ''; }
+function pinCancel() { const po = $('pinOverlay'); if (po) po.classList.remove('show'); pinCallback = null; pinBuffer = ''; }
 function updPinDots() {
   const dots = $('pinDots'); if (!dots) return;
   const d = dots.children;
-  for (let i = 0; i < 4; i++) { d[i].classList.toggle('filled', i < pinBuffer.length); }
+  for (let i = 0; i < Math.min(4, d.length); i++) { d[i].classList.toggle('filled', i < pinBuffer.length); }
 }
 
 function setupPIN() {
