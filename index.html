@@ -247,6 +247,46 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .ss-tab{padding:5px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.08);background:var(--card);color:var(--t2);transition:all .2s}
 .ss-tab.active{background:var(--p4);color:var(--p3);border-color:var(--p3)}
 .ss-empty{text-align:center;padding:16px;font-size:12px;color:var(--t3);font-weight:600}
+/* Dashboard Today Widget */
+.dash-today{background:var(--pg);border-radius:var(--rad);padding:16px 18px;margin-bottom:12px;display:flex;align-items:center;gap:14px;color:#fff;position:relative;overflow:hidden}
+.dash-today::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,.06);border-radius:50%}
+.dash-today .dt-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.dash-today .dt-info{flex:1;min-width:0}
+.dash-today .dt-title{font-size:13px;font-weight:800}
+.dash-today .dt-sub{font-size:11px;opacity:.7;margin-top:2px}
+.dash-today .dt-badge{padding:4px 10px;border-radius:8px;background:rgba(255,255,255,.15);font-size:11px;font-weight:700;white-space:nowrap}
+/* Dashboard Progress */
+.dash-progress{background:var(--card);border-radius:var(--rad);padding:14px 16px;margin-bottom:12px;border:1px solid var(--b1)}
+.dash-progress .dp-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.dash-progress .dp-row:last-child{margin-bottom:0}
+.dash-progress .dp-label{font-size:10px;font-weight:700;color:var(--t3);min-width:55px;text-transform:uppercase}
+.dash-progress .dp-bar{flex:1;height:8px;border-radius:4px;background:var(--bg3);overflow:hidden;position:relative}
+.dash-progress .dp-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.dash-progress .dp-val{font-size:11px;font-weight:800;min-width:40px;text-align:right}
+/* FM Tracker */
+.fm-tracker{background:var(--card);border-radius:var(--rad);padding:16px;margin-bottom:12px;border:1px solid var(--b1)}
+.fm-tracker .fmt-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.fm-tracker .fmt-title{font-size:12px;font-weight:800;color:var(--t1);display:flex;align-items:center;gap:6px}
+.fm-tracker .fmt-title i{color:var(--acc)}
+.fm-tracker .fmt-total{font-size:18px;font-weight:900;color:var(--acc)}
+.fm-tracker .fmt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fm-tracker .fmt-item{text-align:center;padding:8px;background:var(--bg3);border-radius:8px}
+.fm-tracker .fmt-item .fv{font-size:14px;font-weight:900}
+.fm-tracker .fmt-item .fl{font-size:9px;color:var(--t3);font-weight:600;text-transform:uppercase}
+/* Last 7 Days */
+.last7{background:var(--card);border-radius:var(--rad);padding:14px 16px;margin-bottom:12px;border:1px solid var(--b1)}
+.last7 .l7-title{font-size:11px;font-weight:800;color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.last7 .l7-title i{color:var(--p);font-size:11px}
+.last7 .l7-grid{display:flex;gap:4px}
+.last7 .l7-day{flex:1;text-align:center;padding:6px 2px;border-radius:8px;background:var(--bg3);border:1.5px solid transparent;transition:all .2s}
+.last7 .l7-day.l7-today{border-color:var(--p);background:var(--p4)}
+.last7 .l7-day.l7-worked{background:rgba(52,211,153,.08);border-color:rgba(52,211,153,.15)}
+.last7 .l7-day.l7-leave{background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.15)}
+.last7 .l7-day.l7-holiday{background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.12)}
+.last7 .l7-dn{font-size:9px;font-weight:700;color:var(--t3)}
+.last7 .l7-num{font-size:12px;font-weight:900;color:var(--t1);margin:2px 0}
+.last7 .l7-hrs{font-size:9px;font-weight:700;color:var(--g)}
+.last7 .l7-ico{font-size:12px}
 /* Dashboard Mini Reports */
 .dash-reports{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
 .dash-report{background:var(--card2);border-radius:12px;padding:14px;border:1px solid var(--b1)}
@@ -783,7 +823,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v6.0 Cloud</span>
+      <span class="version">v6.1 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
@@ -821,10 +861,14 @@ tr:hover td{background:var(--bg3)}
         <div><h1>Kontrol Paneli</h1><p id="dashSub"></p></div>
         <div style="display:flex;align-items:center;gap:6px"><div id="dashStreak"></div><button class="btn btn-outline btn-sm" onclick="shareMonthReport()" title="Rapor Paylaş"><i class="fas fa-share-alt"></i></button></div>
       </div>
+      <div id="dashTodayWidget"></div>
       <div class="stats" id="statsEl"></div>
+      <div id="dashProgressBar"></div>
       <div id="dashWeekSummary"></div>
+      <div id="dashFMTracker"></div>
       <div id="dashGoal" class="goal-wrap"></div>
       <div class="year-overview-wrap" id="yearOverviewWrap"></div>
+      <div id="dashLast7Days"></div>
       <div class="grid-2">
         <div class="card">
           <div class="card-head"><h3><i class="fas fa-chart-bar"></i>Haftalık Saatler</h3><span style="font-size:10px;color:var(--t3)">Limit: 45s</span></div>
@@ -1957,7 +2001,11 @@ function renderDash() {
 
   setHtml('dashInfo', info);
 
-  // Render week summary, heatmap & goals
+  // Render dashboard widgets
+  renderDashTodayWidget();
+  renderDashProgressBar();
+  renderDashFMTracker();
+  renderDashLast7Days();
   renderDashWeekSummary();
   renderDashHeatmap();
   renderGoals();
@@ -2199,7 +2247,7 @@ function renderCal() {
       const h = calcHr(sh.start, sh.end, sh.break || 0);
       if (h > 0) { mH += h; mD++; }
       const sType = getShiftType(sh);
-      inner += `<div class="hrs-display ${h > 7.5 ? 'overtime' : ''}">${h.toFixed(1)}s</div>`;
+      inner += `<div class="hrs-display ${h > 9 ? 'overtime' : ''}">${h.toFixed(1)}s</div>`;
       inner += `<div class="shift-icon">${sType.icon}</div>`;
       inner += `<div class="shift-time">${escHtml(sh.start)}–${escHtml(sh.end)}${isNightShift(sh.start, sh.end) ? ' 🌙' : ''}</div>`;
       if (sh.note) inner += `<div class="shift-time" style="color:var(--p3);opacity:.7">📝 ${escHtml(sh.note.substring(0,20))}</div>`;
@@ -2623,6 +2671,24 @@ function applyPreset(key, el) {
   updResult();
 }
 
+/* [FIX] Haftalık FM hesabı: seçili gün dahil, o haftadaki tüm saatleri toplar */
+function getWeekOTForDay(ds, currentNet) {
+  const u = cu(); if (!u || !ds) return { ot: 0, weekTotal: 0 };
+  const d = dsToDate(ds);
+  const todayDow = d.getDay() === 0 ? 6 : d.getDay() - 1;
+  const monday = new Date(d); monday.setDate(d.getDate() - todayDow);
+  let weekTotal = 0;
+  for (let i = 0; i < 7; i++) {
+    const dd = new Date(monday); dd.setDate(monday.getDate() + i);
+    const dds = dStr(dd);
+    if (dds === ds) { weekTotal += currentNet; continue; }
+    const sh = u.shifts[dds];
+    if (sh && sh.start && sh.end) weekTotal += calcHr(sh.start, sh.end, sh.break || 0);
+  }
+  const ot = Math.max(0, weekTotal - 45);
+  return { ot, weekTotal };
+}
+
 function updResult() {
   const isEl = $('iStart'), ieEl = $('iEnd'), ibEl = $('iBreak');
   if (!isEl || !ieEl || !ibEl) return;
@@ -2632,11 +2698,13 @@ function updResult() {
   setTxt('rbGross', gross.toFixed(1) + 's');
   setTxt('rbBreak', b + 'dk');
   setTxt('rbNet', net.toFixed(1) + 's');
-  const ot = net > 7.5 ? net - 7.5 : 0;
+  /* [FIX] FM: haftalık 45s bazlı gösterim (tek vardiya değil) */
   const rbOT = $('rbOT');
   if (rbOT) {
-    rbOT.textContent = ot > 0 ? '+' + ot.toFixed(1) + 's' : '—';
-    rbOT.style.color = ot > 0 ? 'var(--acc)' : 'var(--t3)';
+    const weekOT = getWeekOTForDay(S.sd, net);
+    rbOT.textContent = weekOT.ot > 0 ? '+' + weekOT.ot.toFixed(1) + 's' : '—';
+    rbOT.style.color = weekOT.ot > 0 ? 'var(--acc)' : 'var(--t3)';
+    rbOT.title = weekOT.ot > 0 ? `Hafta toplamı: ${weekOT.weekTotal.toFixed(1)}s (45s limit)` : 'Haftalık 45s aşılmadı';
   }
 
   /* [FIX] Gece vardiyası bilgi notu */
@@ -2654,9 +2722,10 @@ function updResult() {
   if (u && u.netSalary > 0 && net > 0) {
     const hr = u.netSalary / MH;
     const isHol2 = isH(S.sd);
+    const weekOT2 = getWeekOTForDay(S.sd, net);
     let earn = 0;
     if (isHol2) earn += net * hr;
-    if (ot > 0) earn += ot * hr * 0.5;
+    if (weekOT2.ot > 0) earn += weekOT2.ot * hr * 0.5;
     ep.textContent = earn > 0 ? `💰 Tahmini ek: ~${fm(earn)}` : '';
   } else { ep.textContent = ''; }
 }
@@ -4173,6 +4242,192 @@ function renderDashHeatmap() {
 }
 
 /* ============================================================
+   DASHBOARD: TODAY WIDGET
+============================================================ */
+function renderDashTodayWidget() {
+  const el = $('dashTodayWidget'); if (!el) return;
+  const u = cu(); if (!u) { el.innerHTML = ''; return; }
+  const now = new Date();
+  if (S.cy !== now.getFullYear() || S.cm !== now.getMonth()) { el.innerHTML = ''; return; }
+  const ds = dStr(now);
+  const sh = u.shifts[ds], lv = u.leaves[ds];
+  const hol = getH(ds);
+  const dow = now.getDay();
+  const dayName = DFL[dow === 0 ? 6 : dow - 1];
+
+  // Yarının durumunu kontrol et
+  const tmr = new Date(now); tmr.setDate(now.getDate() + 1);
+  const tmrDs = dStr(tmr);
+  const tmrSh = u.shifts[tmrDs], tmrLv = u.leaves[tmrDs];
+  let tmrText = '';
+  if (tmrSh && tmrSh.start && tmrSh.end) {
+    tmrText = `Yarın: ${tmrSh.start}–${tmrSh.end}`;
+  } else if (tmrLv && tmrLv.type) {
+    const lb = {annual:'Y.İzin',weekly:'H.Tatil',sick:'Rapor',unpaid:'Ücretsiz'};
+    tmrText = `Yarın: ${lb[tmrLv.type] || 'İzin'}`;
+  } else { tmrText = 'Yarın: Plan yok'; }
+
+  let icon, title, sub, badge;
+  if (sh && sh.start && sh.end) {
+    const hrs = calcHr(sh.start, sh.end, sh.break || 0);
+    const sType = getShiftType(sh);
+    icon = sType.icon;
+    title = `${dayName} — ${sh.start} → ${sh.end}`;
+    sub = `${hrs.toFixed(1)} saat ${hol ? '(Tatil!)' : ''} · ${tmrText}`;
+    badge = `${hrs.toFixed(1)}s`;
+  } else if (lv && lv.type) {
+    const lb = {annual:'Yıllık İzin',weekly:'Hafta Tatili',sick:'Rapor',unpaid:'Ücretsiz İzin'};
+    const ic = {annual:'🏖️',weekly:'🛋️',sick:'🏥',unpaid:'⛔'};
+    icon = ic[lv.type] || '📋';
+    title = `${dayName} — ${lb[lv.type] || 'İzin'}`;
+    sub = tmrText;
+    badge = lb[lv.type] || 'İzin';
+  } else if (hol) {
+    icon = '🏛️';
+    title = `${dayName} — ${hol}`;
+    sub = `Resmi tatil · ${tmrText}`;
+    badge = 'Tatil';
+  } else {
+    icon = '📅';
+    title = `${dayName} — Kayıt yok`;
+    sub = tmrText;
+    badge = 'Boş';
+  }
+
+  el.innerHTML = `<div class="dash-today">
+    <div class="dt-icon">${icon}</div>
+    <div class="dt-info"><div class="dt-title">${escHtml(title)}</div><div class="dt-sub">${escHtml(sub)}</div></div>
+    <div class="dt-badge">${escHtml(badge)}</div>
+  </div>`;
+}
+
+/* ============================================================
+   DASHBOARD: MONTHLY PROGRESS BAR
+============================================================ */
+function renderDashProgressBar() {
+  const el = $('dashProgressBar'); if (!el) return;
+  const u = cu(); if (!u) { el.innerHTML = ''; return; }
+  const now = new Date();
+  const y = S.cy, m = S.cm;
+  const dim = new Date(y, m + 1, 0).getDate();
+  const md = getMD(y, m);
+  const isCurrent = y === now.getFullYear() && m === now.getMonth();
+  const dayOfMonth = isCurrent ? now.getDate() : dim;
+  const timePct = Math.min(100, (dayOfMonth / dim) * 100);
+
+  // Toplam iş günü sayısı (hafta içi, tatil hariç)
+  let totalWorkDays = 0;
+  for (let d = 1; d <= dim; d++) {
+    const dt = new Date(y, m, d);
+    const dow = dt.getDay();
+    const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    if (dow !== 0 && dow !== 6 && !isH(ds)) totalWorkDays++;
+  }
+  const workPct = totalWorkDays > 0 ? Math.min(100, (md.wd / totalWorkDays) * 100) : 0;
+  const remainWork = Math.max(0, totalWorkDays - md.wd);
+  const workColor = workPct >= timePct ? 'var(--g)' : workPct >= timePct * 0.7 ? 'var(--acc)' : 'var(--r)';
+
+  el.innerHTML = `<div class="dash-progress">
+    <div class="dp-row">
+      <span class="dp-label"><i class="fas fa-calendar" style="color:var(--p);margin-right:3px"></i>Ay</span>
+      <div class="dp-bar"><div class="dp-fill" style="width:${timePct}%;background:var(--p2)"></div></div>
+      <span class="dp-val" style="color:var(--p)">${dayOfMonth}/${dim}g</span>
+    </div>
+    <div class="dp-row">
+      <span class="dp-label"><i class="fas fa-briefcase" style="color:var(--g);margin-right:3px"></i>İş</span>
+      <div class="dp-bar"><div class="dp-fill" style="width:${workPct}%;background:${workColor}"></div></div>
+      <span class="dp-val" style="color:${workColor}">${md.wd}/${totalWorkDays}g</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:2px">
+      <span>${remainWork} iş günü kaldı</span>
+      <span>${md.th.toFixed(0)}s çalışıldı</span>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   DASHBOARD: FM TRACKER
+============================================================ */
+function renderDashFMTracker() {
+  const el = $('dashFMTracker'); if (!el) return;
+  const u = cu(); if (!u) { el.innerHTML = ''; return; }
+  const md = getMD(S.cy, S.cm);
+  const e = u.netSalary ? calcEarningForMonth(S.cy, S.cm, u.netSalary) : null;
+  const hr = u.netSalary > 0 ? u.netSalary / MH : 0;
+  const fmEarn = md.oh * hr * 0.5;
+  const holEarn = md.hh * hr;
+  const avgDaily = md.wd > 0 ? md.th / md.wd : 0;
+  const fmPct = md.th > 0 ? (md.oh / md.th * 100) : 0;
+
+  if (md.oh <= 0 && md.hh <= 0 && md.th <= 0) { el.innerHTML = ''; return; }
+
+  el.innerHTML = `<div class="fm-tracker">
+    <div class="fmt-head">
+      <div class="fmt-title"><i class="fas fa-fire"></i>Aylık FM & Ek Ücret</div>
+      <div class="fmt-total">${md.oh.toFixed(1)}s</div>
+    </div>
+    <div class="fmt-grid">
+      <div class="fmt-item"><div class="fv" style="color:var(--acc)">${fmPct.toFixed(1)}%</div><div class="fl">FM Oranı</div></div>
+      <div class="fmt-item"><div class="fv" style="color:var(--g)">${u.netSalary > 0 ? fm(fmEarn) : '—'}</div><div class="fl">FM Eki</div></div>
+      <div class="fmt-item"><div class="fv" style="color:var(--r)">${u.netSalary > 0 ? fm(holEarn) : '—'}</div><div class="fl">Tatil Eki</div></div>
+    </div>
+    <div style="margin-top:8px;display:flex;justify-content:space-between;font-size:10px;color:var(--t3)">
+      <span>Günlük ort: ${avgDaily.toFixed(1)}s</span>
+      <span>Tatil çalışma: ${md.hdw}g · ${md.hh.toFixed(1)}s</span>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   DASHBOARD: LAST 7 DAYS
+============================================================ */
+function renderDashLast7Days() {
+  const el = $('dashLast7Days'); if (!el) return;
+  const u = cu(); if (!u) { el.innerHTML = ''; return; }
+  const now = new Date();
+  if (S.cy !== now.getFullYear() || S.cm !== now.getMonth()) { el.innerHTML = ''; return; }
+
+  let h = '';
+  let totalH = 0, totalD = 0;
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now); d.setDate(now.getDate() - i);
+    const ds = dStr(d);
+    const sh = u.shifts[ds], lv = u.leaves[ds];
+    const hol = isH(ds);
+    const isToday = i === 0;
+    const dow = d.getDay();
+    const dayName = DTR[dow === 0 ? 6 : dow - 1];
+    let cls = 'l7-day';
+    let content = '';
+
+    if (isToday) cls += ' l7-today';
+
+    if (sh && sh.start && sh.end) {
+      const hrs = calcHr(sh.start, sh.end, sh.break || 0);
+      cls += ' l7-worked';
+      content = `<div class="l7-hrs">${hrs.toFixed(1)}s</div>`;
+      totalH += hrs; totalD++;
+    } else if (lv && lv.type) {
+      cls += ' l7-leave';
+      const ic = {annual:'🏖️',weekly:'🛋️',sick:'🏥',unpaid:'⛔'};
+      content = `<div class="l7-ico">${ic[lv.type] || '📋'}</div>`;
+    } else if (hol) {
+      cls += ' l7-holiday';
+      content = `<div class="l7-ico">🏛️</div>`;
+    } else {
+      content = `<div class="l7-ico" style="opacity:.2">·</div>`;
+    }
+
+    h += `<div class="${cls}"><div class="l7-dn">${dayName}</div><div class="l7-num">${d.getDate()}</div>${content}</div>`;
+  }
+
+  el.innerHTML = `<div class="last7">
+    <div class="l7-title"><i class="fas fa-history"></i>Son 7 Gün <span style="margin-left:auto;color:var(--t3);font-weight:600">${totalD}g · ${totalH.toFixed(1)}s</span></div>
+    <div class="l7-grid">${h}</div>
+  </div>`;
+}
+
+/* ============================================================
    GOAL TRACKING
 ============================================================ */
 function renderGoals() {
@@ -4488,24 +4743,27 @@ function showNotifications() {
 /* ============================================================
    YEAR COMPARISON STATS
 ============================================================ */
+/* [FIX] Yıl karşılaştırması: aynı dönem bazlı (Ocak-şu an) */
 function renderYearComparison() {
   const u = cu(); if (!u) return '';
   const cy = S.cy, py = cy - 1;
+  const curMonth = S.cm;
   let cyHrs = 0, pyHrs = 0, cyDays = 0, pyDays = 0;
   Object.entries(u.shifts).forEach(([k, v]) => {
     if (!v || !v.start || !v.end) return;
     const p = parseDS(k); if (!p) return;
     const hrs = calcHr(v.start, v.end, v.break || 0);
-    if (p.y === cy) { cyHrs += hrs; cyDays++; }
-    else if (p.y === py) { pyHrs += hrs; pyDays++; }
+    if (p.y === cy && p.m <= curMonth) { cyHrs += hrs; cyDays++; }
+    else if (p.y === py && p.m <= curMonth) { pyHrs += hrs; pyDays++; }
   });
   if (pyDays === 0) return '';
 
   const hrsDiff = cyHrs - pyHrs;
   const hrsIcon = hrsDiff >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
   const hrsColor = hrsDiff >= 0 ? 'var(--g)' : 'var(--r)';
+  const period = curMonth < 11 ? `Ock-${MTR[curMonth].substring(0,3)}` : 'Yıl';
 
-  return `<div class="info-row"><span class="k"><i class="fas fa-chart-line"></i>Geçen Yıl Karşılaştırma</span>
+  return `<div class="info-row"><span class="k"><i class="fas fa-chart-line"></i>${cy} vs ${py} (${period})</span>
     <span class="v" style="font-size:10px"><i class="fas ${hrsIcon}" style="color:${hrsColor}"></i> ${Math.abs(hrsDiff).toFixed(0)}s ${hrsDiff >= 0 ? 'fazla' : 'az'} (${py}: ${pyHrs.toFixed(0)}s)</span></div>`;
 }
 
@@ -4535,7 +4793,7 @@ function getMonthProjection() {
   const projected = md.th + (avgDaily * remainWorkDays);
   const projectedEarning = u.netSalary > 0 ? (projected / MH) * u.netSalary : 0;
 
-  return { projected: projected.toFixed(1), projectedEarning, remaining: remainDays };
+  return { projected: projected.toFixed(1), projectedEarning, remaining: remainWorkDays };
 }
 
 /* ============================================================
