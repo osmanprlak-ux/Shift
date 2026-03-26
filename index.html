@@ -7,7 +7,7 @@
 <script>
 // Cache buster — eski service worker'ı temizle
 (function(){
-  var CV = 'stv11';
+  var CV = 'stv12';
   if (localStorage.getItem('st_cache_ver') !== CV) {
     localStorage.setItem('st_cache_ver', CV);
     if ('serviceWorker' in navigator) {
@@ -823,7 +823,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v6.1 Cloud</span>
+      <span class="version">v6.2 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
@@ -1587,7 +1587,7 @@ function getMD(y, m) {
     }
   });
 
-  const hr = u.netSalary > 0 ? u.netSalary / MH : 0;
+  const hr = (u.netSalary > 0 && MH > 0) ? u.netSalary / MH : 0;
   // wh: dashboard haftalık chart için — bu aydaki saatler (görüntüleme amaçlı)
   const wh = weekMonthHrs;
   const r = { th, rh, oh, hh, hhOT, wd, hdw, wh, wr, ud, yau, ysd, mau, msd, hr, dim,
@@ -1609,7 +1609,7 @@ function calcEarningForMonth(y, m, ns) {
   if (!ns || ns <= 0) return null;
   const u = cu(); if (!u) return null;
   const d = getMD(y, m);
-  const dim = d.dim, dr = ns / 30, hr = ns / MH;
+  const dim = d.dim, dr = ns / 30, hr = MH > 0 ? ns / MH : 0;
   const today = new Date();
   const tY = today.getFullYear(), tM = today.getMonth(), tD = today.getDate();
   const isCur = (y === tY && m === tM);
@@ -1851,10 +1851,11 @@ function login(id) {
   const u = cu(); if (!u) return;
   u.lastLogin = new Date().toISOString();
   MH = u.monthlyHours || 225;
+  if (MH <= 0) MH = 225;
   applyTheme(u.theme || 'default');
   saveLS();
-  $('loginScreen').style.display = 'none';
-  $('mainApp').style.display = 'block';
+  const ls = $('loginScreen'); if (ls) ls.style.display = 'none';
+  const ma = $('mainApp'); if (ma) ma.style.display = 'block';
   updTop();
   invalidateMDCache();
   undoStack.length = 0;
@@ -1872,13 +1873,14 @@ function logout() {
   undoStack.length = 0;
   invalidateMDCache();
   applyTheme('default');
-  $('mainApp').style.display = 'none';
-  $('loginScreen').style.display = 'flex';
+  const ma = $('mainApp'); if (ma) ma.style.display = 'none';
+  const ls = $('loginScreen'); if (ls) ls.style.display = 'flex';
   updLogin();
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector('.nav-tab').classList.add('active');
+  const firstTab = document.querySelector('.nav-tab');
+  if (firstTab) firstTab.classList.add('active');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  $('pg-dashboard').classList.add('active');
+  const pgD = $('pg-dashboard'); if (pgD) pgD.classList.add('active');
 }
 
 function updTop() {
@@ -2590,7 +2592,7 @@ function openM(ds) {
     if (mp) applyPreset('morning', mp);
   }
   updResult();
-  $('modal').classList.add('show');
+  const modal = $('modal'); if (modal) modal.classList.add('show');
 }
 
 function renderModalPresets() {
@@ -2628,7 +2630,7 @@ function hlPreset(sh) {
   if (c) c.classList.add('active');
 }
 
-function closeM() { const m = $('modal'); if (m) m.classList.remove('show'); }
+function closeM() { const m = $('modal'); if (m) m.classList.remove('show'); S.sd = null; }
 
 function mMode(t, btn) {
   S.mt = t;
@@ -3450,7 +3452,8 @@ function sSet(k, v) {
 
 function saveNotes() {
   const u = cu(); if (!u) return;
-  u.notes = ($('userNotes').value || '').substring(0, 1000);
+  const notesEl = $('userNotes');
+  u.notes = (notesEl ? notesEl.value : '').substring(0, 1000);
   saveLS();
   toast('Notlar kaydedildi', 'success');
 }
@@ -4353,7 +4356,7 @@ function renderDashFMTracker() {
   const u = cu(); if (!u) { el.innerHTML = ''; return; }
   const md = getMD(S.cy, S.cm);
   const e = u.netSalary ? calcEarningForMonth(S.cy, S.cm, u.netSalary) : null;
-  const hr = u.netSalary > 0 ? u.netSalary / MH : 0;
+  const hr = (u.netSalary > 0 && MH > 0) ? u.netSalary / MH : 0;
   const fmEarn = md.oh * hr * 0.5;
   const holEarn = md.hh * hr;
   const avgDaily = md.wd > 0 ? md.th / md.wd : 0;
@@ -4565,15 +4568,17 @@ function initDragDrop() {
    QR CODE DATA SYNC
 ============================================================ */
 function openQR() {
-  $('qrOverlay').classList.add('show');
+  const qr = $('qrOverlay'); if (!qr) return;
+  qr.classList.add('show');
   generateQR();
 }
-function closeQR() { $('qrOverlay').classList.remove('show'); }
+function closeQR() { const qr = $('qrOverlay'); if (qr) qr.classList.remove('show'); }
 function qrMode(mode, btn) {
   btn.parentElement.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  $('qrExportPane').style.display = mode === 'export' ? '' : 'none';
-  $('qrImportPane').style.display = mode === 'import' ? '' : 'none';
+  const exp = $('qrExportPane'), imp = $('qrImportPane');
+  if (exp) exp.style.display = mode === 'export' ? '' : 'none';
+  if (imp) imp.style.display = mode === 'import' ? '' : 'none';
   if (mode === 'export') generateQR();
 }
 
@@ -4606,7 +4611,8 @@ function copyShareLink() {
 }
 
 function importFromQR() {
-  const raw = $('qrImportData').value.trim();
+  const el = $('qrImportData'); if (!el) return;
+  const raw = el.value.trim();
   if (!raw) { toast('Veri girin', 'error'); return; }
   try {
     const decoded = decodeURIComponent(atob(raw));
@@ -4642,11 +4648,11 @@ function scheduleNotifications() {
   // Check tomorrow's shift
   if (u.shifts[tmrwDs]) {
     const sh = u.shifts[tmrwDs];
-    notifications.push({ icon: 'fa-clock', text: `Yarın vardiya: ${sh.start} - ${sh.end}`, type: 'info' });
+    if (sh.start && sh.end) notifications.push({ icon: 'fa-clock', text: `Yarın vardiya: ${sh.start} - ${sh.end}`, type: 'info' });
   }
 
   // Check rest time
-  if (u.shifts[todayDs] && u.shifts[tmrwDs]) {
+  if (u.shifts[todayDs] && u.shifts[tmrwDs] && u.shifts[tmrwDs].start) {
     const rest = checkRestTime(tmrwDs, u.shifts[tmrwDs].start);
     if (rest) {
       notifications.push({ icon: 'fa-exclamation-triangle', text: `Dikkat: Dinlenme süresi ${rest.restHours}s (min ${rest.required}s)`, type: 'warning' });
@@ -4673,7 +4679,7 @@ function scheduleNotifications() {
     const p = parseDS(k);
     return p && p.y === currentYear;
   }).length;
-  const remaining = u.annualLeave - usedLeave;
+  const remaining = (u.annualLeave || 14) - usedLeave;
   if (remaining <= 3 && remaining > 0) {
     notifications.push({ icon: 'fa-umbrella-beach', text: `Yıllık izin: ${remaining} gün kaldı`, type: 'warning' });
   }
@@ -4817,13 +4823,13 @@ function installPWA() {
     deferredPrompt.userChoice.then(r => {
       if (r.outcome === 'accepted') toast('Uygulama yüklendi!', 'success');
       deferredPrompt = null;
-      $('installBanner').style.display = 'none';
+      const b = $('installBanner'); if (b) b.style.display = 'none';
     });
   }
 }
 
 function dismissInstall() {
-  $('installBanner').style.display = 'none';
+  const b = $('installBanner'); if (b) b.style.display = 'none';
   localStorage.setItem('st_install_dismissed', '1');
 }
 
