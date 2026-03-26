@@ -603,6 +603,23 @@ tr:hover td{background:var(--bg3)}
   </div>
 </div>
 
+<!-- NEW USER MODAL -->
+<div class="overlay" id="newUserModal">
+  <div class="modal" style="max-width:340px">
+    <div class="modal-top">
+      <h3><i class="fas fa-user-plus" style="color:var(--p);margin-right:6px"></i>Yeni Kullanıcı</h3>
+      <button class="modal-x" onclick="closeNewUserModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="fg"><label>Kullanıcı Adı</label><input type="text" id="newUserName" placeholder="İsim girin..." maxlength="30" autocomplete="off"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost btn-sm" onclick="closeNewUserModal()">İptal</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmNewUser()"><i class="fas fa-check"></i>Ekle</button>
+    </div>
+  </div>
+</div>
+
 <!-- WT DAY MODAL -->
 <div class="wt-modal-overlay" id="wtModal">
   <div class="wt-modal">
@@ -751,7 +768,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v5.4 Cloud</span>
+      <span class="version">v5.5 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
@@ -1277,12 +1294,6 @@ function getH(ds) {
 }
 function isH(ds) { return getH(ds) !== null; }
 
-function isWeekend(ds) {
-  const p = parseDS(ds); if (!p) return false;
-  const dow = new Date(p.y, p.m, p.d).getDay();
-  return dow === 0 || dow === 6;
-}
-
 function parseTime(ts) {
   if (!ts || typeof ts !== 'string') return null;
   const p = ts.split(':');
@@ -1608,7 +1619,8 @@ function renderActivePage() {
 
 function renderAll() {
   if (!cu()) return;
-  renderDash(); renderCal(); renderStats(); renderLeaves(); renderEarn(); loadSet(); renderYearOverview();
+  renderActivePage();
+  loadSet();
 }
 
 /* ============================================================
@@ -1671,7 +1683,7 @@ function init() {
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); return; }
     if (e.key === 'Escape') {
-      closeM(); closeWTModal(); closeCPModal();
+      closeM(); closeWTModal(); closeCPModal(); closeNewUserModal();
       const co = $('confirmOverlay'); if (co) co.classList.remove('show');
       const po = $('pinOverlay'); if (po) po.classList.remove('show');
       const qo = $('qrOverlay'); if (qo) qo.classList.remove('show');
@@ -1710,6 +1722,8 @@ function init() {
   const modalEl = $('modal'); if (modalEl) modalEl.addEventListener('click', function(e) { if (e.target === this) closeM(); });
   const wtModalEl = $('wtModal'); if (wtModalEl) wtModalEl.addEventListener('click', function(e) { if (e.target === this) closeWTModal(); });
   const cpModalEl = $('cpModal'); if (cpModalEl) cpModalEl.addEventListener('click', function(e) { if (e.target === this) closeCPModal(); });
+  const nuModalEl = $('newUserModal'); if (nuModalEl) nuModalEl.addEventListener('click', function(e) { if (e.target === this) closeNewUserModal(); });
+  const nuInput = $('newUserName'); if (nuInput) nuInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') confirmNewUser(); });
 }
 
 /* ============================================================
@@ -1748,8 +1762,9 @@ function updLogin() {
 function loginAttempt(id) {
   const u = S.u[id]; if (!u) return;
   if (u.pin) {
-    openPIN('PIN Girin', u.name, pin => {
-      if (pin === u.pin) { login(id); }
+    openPIN('PIN Girin', u.name, async pin => {
+      const h = await hashPIN(pin);
+      if (h === u.pin || pin === u.pin) { login(id); }
       else { toast('Yanlış PIN!', 'error'); }
     });
   } else { login(id); }
@@ -2935,11 +2950,14 @@ function renderLeaveTable() {
       <td>${DFL[dow===0?6:dow-1]}</td>
       <td><span class="tag tag-${tc[v.type]||'u'}">${tl[v.type]||escHtml(v.type)}</span></td>
       <td style="color:var(--t2)">${escHtml(v.note) || '—'}</td>
-      <td><button class="btn btn-danger btn-xs" onclick="delLv('${escHtml(k)}')"><i class="fas fa-trash"></i></button></td>
+      <td><button class="btn btn-danger btn-xs del-lv-btn" data-ds="${escHtml(k)}"><i class="fas fa-trash"></i></button></td>
     </tr>`;
   });
   t += '</tbody></table>';
   lt.innerHTML = t;
+  lt.querySelectorAll('.del-lv-btn').forEach(btn => {
+    btn.addEventListener('click', function() { delLv(this.dataset.ds); });
+  });
 }
 
 function delLv(k) {
@@ -3101,7 +3119,7 @@ function renderEarnShiftTypes(u, y, m, e) {
   }
   const sorted = Object.entries(types).sort((a, b) => b[1].earn - a[1].earn);
   if (!sorted.length) return '';
-  let cards = '<div class="earn-type-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px">';
+  let cards = '<div class="earn-type-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr));gap:8px">';
   sorted.forEach(([name, v]) => {
     const dayAvg = v.days > 0 ? (v.hours / v.days).toFixed(1) : '0';
     cards += `<div class="earn-type-card">
@@ -3129,7 +3147,7 @@ function renderEarnYearlyCumul(u, y, e) {
     const me = calcEarningForMonth(y, mi, u.netSalary);
     const mEarn = (me && !me.isFutureMonth) ? me.totalEarning : 0;
     cumul += mEarn;
-    months.push({ label: MTR[mi].substring(0, 3), earn: mEarn, cumul, isCurrent: mi === e.isCurrentMonth && y === new Date().getFullYear() });
+    months.push({ label: MTR[mi].substring(0, 3), earn: mEarn, cumul, isCurrent: mi === new Date().getMonth() && y === new Date().getFullYear() });
     if (cumul > maxCumul) maxCumul = cumul;
   }
   if (maxCumul === 0) return '';
@@ -3675,7 +3693,7 @@ function initSwipe() {
     if (!swiping) return; swiping = false;
     const t = e.changedTouches[0];
     const dx = t.clientX - startX, dy = t.clientY - startY;
-    if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx) * 0.7) return;
+    if (Math.abs(dx) < 100 || Math.abs(dy) > Math.abs(dx) * 0.5) return;
     const pg = document.querySelector('.page.active'); if (!pg) return;
     if (pg.id === 'pg-calendar') { chgM(dx < 0 ? 1 : -1); }
     else if (pg.id === 'pg-earnings') { chgE(dx < 0 ? 1 : -1); }
@@ -3734,11 +3752,17 @@ function updPinDots() {
   for (let i = 0; i < Math.min(4, d.length); i++) { d[i].classList.toggle('filled', i < pinBuffer.length); }
 }
 
+async function hashPIN(pin) {
+  const data = new TextEncoder().encode(pin + '_stpro_salt');
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 function setupPIN() {
   openPIN('Yeni PIN Belirleyin', 'Hesabınızı koruyun', pin1 => {
-    openPIN('PIN Tekrar', 'Doğrulama', pin2 => {
+    openPIN('PIN Tekrar', 'Doğrulama', async pin2 => {
       if (pin1 === pin2) {
-        const u = cu(); if (u) { u.pin = pin1; saveLS(); updPinStatus(); toast('PIN ayarlandı!', 'success'); }
+        const u = cu(); if (u) { u.pin = await hashPIN(pin1); saveLS(); updPinStatus(); toast('PIN ayarlandı!', 'success'); }
       } else { toast('PIN eşleşmedi!', 'error'); }
     });
   });
@@ -3746,8 +3770,9 @@ function setupPIN() {
 
 function removePIN() {
   const u = cu(); if (!u || !u.pin) return;
-  openPIN('Mevcut PIN', 'Kaldırmak için PIN girin', pin => {
-    if (pin === u.pin) { u.pin = null; saveLS(); updPinStatus(); toast('PIN kaldırıldı', 'info'); }
+  openPIN('Mevcut PIN', 'Kaldırmak için PIN girin', async pin => {
+    const h = await hashPIN(pin);
+    if (h === u.pin || pin === u.pin) { u.pin = null; saveLS(); updPinStatus(); toast('PIN kaldırıldı', 'info'); }
     else { toast('Yanlış PIN!', 'error'); }
   });
 }
@@ -3771,14 +3796,22 @@ function updPinStatus() {
    USER MANAGEMENT
 ============================================================ */
 function addNewUser() {
-  const name = prompt('Yeni kullanıcı adı:');
-  if (!name || !name.trim()) return;
+  const nm = $('newUserName'); if (nm) nm.value = '';
+  const m = $('newUserModal'); if (m) m.classList.add('show');
+  setTimeout(() => { if (nm) nm.focus(); }, 200);
+}
+function closeNewUserModal() { const m = $('newUserModal'); if (m) m.classList.remove('show'); }
+function confirmNewUser() {
+  const nm = $('newUserName'); if (!nm) return;
+  const name = (nm.value || '').trim();
+  if (!name) { toast('İsim boş olamaz', 'error'); return; }
   const id = S.nextUid++;
   S.u[id] = mkUser(id);
-  S.u[id].name = name.trim();
+  S.u[id].name = name;
   saveLS();
   updLogin();
-  toast(`${escHtml(name.trim())} eklendi`, 'success');
+  closeNewUserModal();
+  toast(`${escHtml(name)} eklendi`, 'success');
 }
 
 function deleteCurrentUser() {
@@ -4220,11 +4253,17 @@ function getMonthProjection() {
   if (today < 5) return null;
 
   const md = getMD(S.cy, S.cm);
-  if (md.th <= 0) return null;
+  if (md.th <= 0 || md.wd <= 0) return null;
 
-  const avgDaily = md.th / today;
-  const remainDays = dim - today;
-  const projected = md.th + (avgDaily * remainDays * 0.7); // conservative estimate
+  const avgDaily = md.th / md.wd;
+  let remainWorkDays = 0;
+  for (let d = today + 1; d <= dim; d++) {
+    const ds = `${S.cy}-${String(S.cm+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dt = new Date(S.cy, S.cm, d);
+    const dow = dt.getDay();
+    if (dow !== 0 && dow !== 6 && !isH(ds)) remainWorkDays++;
+  }
+  const projected = md.th + (avgDaily * remainWorkDays);
   const projectedEarning = u.netSalary > 0 ? (projected / MH) * u.netSalary : 0;
 
   return { projected: projected.toFixed(1), projectedEarning, remaining: remainDays };
