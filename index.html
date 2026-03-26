@@ -263,10 +263,11 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .earn-type-card .etc-name{font-size:10px;font-weight:700;color:var(--t2)}
 .earn-type-card .etc-detail{font-size:9px;color:var(--t3)}
 .earn-type-card .etc-val{font-size:14px;font-weight:900;color:var(--g)}
-.earn-cumul-bar{display:flex;align-items:flex-end;gap:3px;height:80px}
-.earn-cumul-col{flex:1;background:var(--pg);border-radius:4px 4px 0 0;position:relative;min-width:0;cursor:default;transition:opacity .2s}
-.earn-cumul-col:hover{opacity:.8}
+.earn-cumul-bar{display:flex;align-items:flex-end;gap:3px;height:120px}
+.earn-cumul-col{flex:1;background:var(--pg);border-radius:4px 4px 0 0;position:relative;min-width:0;cursor:default;transition:opacity .2s,transform .2s;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.earn-cumul-col:hover{opacity:.9;transform:scaleY(1.03);transform-origin:bottom}
 .earn-cumul-col .ecl{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:700;color:var(--t3);white-space:nowrap}
+.earn-cumul-col .ecv{font-size:7px;font-weight:800;color:var(--t1);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .cal-legend span{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--t2)}
 .cal-legend span i{font-size:8px}
 
@@ -481,8 +482,9 @@ tr:hover td{background:var(--bg3)}
 .sync-status span{display:none}
 .dash-reports{grid-template-columns:1fr 1fr}
 .earn-wk-row .ewk-val{min-width:50px;font-size:10px}
-.earn-cumul-bar{height:60px}
+.earn-cumul-bar{height:90px}
 .earn-cumul-col .ecl{font-size:7px}
+.earn-cumul-col .ecv{font-size:6px}
 }
 @media(max-width:480px){.content{padding:114px 8px 24px}.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.wt-grid{grid-template-columns:repeat(3,1fr)}.dash-reports{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
@@ -768,7 +770,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v5.5 Cloud</span>
+      <span class="version">v5.6 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
@@ -3155,8 +3157,11 @@ function renderEarnYearlyCumul(u, y, e) {
   months.forEach((mo, i) => {
     const h = maxCumul > 0 ? (mo.cumul / maxCumul * 100) : 0;
     const isSel = i === S.em;
-    bars += `<div class="earn-cumul-col" style="height:${Math.max(2, h)}%;background:${isSel ? 'var(--pg)' : 'rgba(255,255,255,.08)'}" title="${mo.label}: ${fm(mo.earn)} / Toplam: ${fm(mo.cumul)}">
+    const hasData = mo.earn > 0;
+    const bg = isSel ? 'var(--pg)' : hasData ? 'var(--p);opacity:.45' : 'var(--bg3);opacity:.3';
+    bars += `<div class="earn-cumul-col" style="height:${Math.max(2, h)}%;background:${bg}" title="${mo.label}: ${fm(mo.earn)} / Toplam: ${fm(mo.cumul)}">
       <span class="ecl">${mo.label}</span>
+      ${hasData ? '<span class="ecv">' + fm(mo.earn) + '</span>' : ''}
     </div>`;
   });
   const totalYear = months.reduce((a, m2) => a + m2.earn, 0);
