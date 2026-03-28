@@ -208,6 +208,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .cal-cell .num small{font-weight:500;color:var(--t3);font-size:9px}
 .cal-cell .hrs-display{font-size:16px;font-weight:900;color:var(--g);line-height:1;margin:2px 0}
 .cal-cell .hrs-display.overtime{color:var(--acc)}
+.cal-cell .hrs-display.long-shift{color:var(--acc)}
 .cal-cell .shift-time{font-size:9px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cal-cell .leave-display{margin-top:2px;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:800}
 .cal-cell .leave-display.ld-annual{color:#60a5fa}.cal-cell .leave-display.ld-weekly{color:var(--p)}.cal-cell .leave-display.ld-sick{color:#fb923c}.cal-cell .leave-display.ld-unpaid{color:#94a3b8}
@@ -823,7 +824,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v6.3 Cloud</span>
+      <span class="version">v6.4 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
@@ -1160,7 +1161,7 @@ tr:hover td{background:var(--bg3)}
 /* ============================================================
    CONSTANTS
 ============================================================ */
-const DATA_VERSION = '5.0';
+const DATA_VERSION = '5.1';
 const MTR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 /* [FIX L-01] DFS, DTR ile aynıydı — kaldırıldı, kullanımlar DTR'ye yönlendirildi */
@@ -2272,7 +2273,9 @@ function renderCal() {
       const h = calcHr(sh.start, sh.end, sh.break || 0);
       if (h > 0) { mH += h; mD++; }
       const sType = getShiftType(sh);
-      inner += `<div class="hrs-display ${h > 9 ? 'overtime' : ''}">${h.toFixed(1)}s</div>`;
+      /* [FIX L-06] FM yasal olarak 45s/hafta bazlıdır, günlük 9s sınırı yoktur.
+         CSS sınıfı 'long-shift' olarak yeniden adlandırıldı; 8.5s üstü uzun vardiya göstergesi. */
+      inner += `<div class="hrs-display ${h > 8.5 ? 'long-shift' : ''}">${h.toFixed(1)}s</div>`;
       inner += `<div class="shift-icon">${sType.icon}</div>`;
       inner += `<div class="shift-time">${escHtml(sh.start)}–${escHtml(sh.end)}${isNightShift(sh.start, sh.end) ? ' 🌙' : ''}</div>`;
       if (sh.note) inner += `<div class="shift-time" style="color:var(--p3);opacity:.7">📝 ${escHtml(sh.note.substring(0,20))}</div>`;
@@ -2748,10 +2751,15 @@ function updResult() {
     const _mh2 = (u.monthlyHours && u.monthlyHours > 0) ? u.monthlyHours : (MH || 225);
     const hr = u.netSalary / _mh2;
     const isHol2 = isH(S.sd);
-    const weekOT2 = getWeekOTForDay(S.sd, net);
+    /* [FIX L-05] Yalnızca bu vardiyaya atfedilen FM eki gösterilmeli.
+       Önceki hafta toplamını (bu gün hariç, 0 saat) alıp farkı hesapla:
+       shiftOT = max(0, (öncekiHafta+net) - 45) - max(0, öncekiHafta - 45) */
+    const prevWeek = getWeekOTForDay(S.sd, 0);
+    const weekWithShift = getWeekOTForDay(S.sd, net);
+    const shiftOT = Math.max(0, weekWithShift.ot - prevWeek.ot);
     let earn = 0;
     if (isHol2) earn += net * hr;
-    if (weekOT2.ot > 0) earn += weekOT2.ot * hr * 0.5;
+    if (shiftOT > 0) earn += shiftOT * hr * 0.5;
     ep.textContent = earn > 0 ? `💰 Tahmini ek: ~${fm(earn)}` : '';
   } else { ep.textContent = ''; }
 }
@@ -3297,10 +3305,13 @@ function renderEarnWeekly(u, y, m, d, e) {
   });
   const totalWeighted = weekData.reduce((a, w) => a + w.weighted, 0);
 
-  let rows = '';
+  /* [FIX BUG-R1] totalWkEarn forEach dışında tanımsız kalıyordu → ReferenceError.
+     Şimdi forEach içinde biriktirilip diffNote karşılaştırmasında kullanılıyor. */
+  let rows = '', totalWkEarn = 0;
   weekData.forEach(({ h, totalW, isOT, weighted, idx }) => {
     const pct = maxH > 0 ? (h / maxH * 100).toFixed(1) : 0;
     const wkEarn = totalWeighted > 0 ? (weighted / totalWeighted) * e.totalEarning : 0;
+    totalWkEarn += wkEarn;
     rows += `<div class="earn-wk-row">
       <span class="ewk-label">${idx+1}. Hafta</span>
       <div class="ewk-bar"><div class="ewk-fill" style="width:${pct}%;background:${isOT ? 'var(--acc-grad, linear-gradient(90deg,var(--acc),#f97316))' : 'var(--pg)'}"></div></div>
@@ -3477,6 +3488,11 @@ function sSet(k, v) {
     u.annualLeave = yr >= 15 ? 26 : yr >= 5 ? 20 : 14;
     const sL = $('sLeave'); if (sL) sL.value = u.annualLeave;
   }
+  /* [FIX L-04] BUG-R3 ile eklenen settingsUpdatedAt: ayar değişikliklerini zaman damgasıyla işaretle.
+     deepMergeUser bu zaman damgasını kullanarak daha yeni değişikliği (yerel/cloud) korur. */
+  const settingsKeys = ['netSalary','annualLeave','pin','weeklyTemplate','customPresets',
+    'goalHours','goalEarning','theme','monthlyHours'];
+  if (settingsKeys.includes(k)) u.settingsUpdatedAt = Date.now();
   invalidateMDCache();
   saveLS();
   updTop();
@@ -4088,7 +4104,8 @@ function removePIN() {
   }
   openPIN('Mevcut PIN', 'Kaldırmak için PIN girin', async pin => {
     const h = await hashPIN(pin);
-    if (h === u.pin || pin === u.pin) { pinAttempts = 0; u.pin = null; saveLS(); updPinStatus(); toast('PIN kaldırıldı', 'info'); }
+    /* [FIX BUG-R2] Düz metin fallback kaldırıldı — yalnızca hash eşleşmesi */
+    if (h === u.pin) { pinAttempts = 0; u.pin = null; saveLS(); updPinStatus(); toast('PIN kaldırıldı', 'info'); }
     else {
       pinAttempts++;
       if (pinAttempts >= 5) { pinLockUntil = Date.now() + 30000; pinAttempts = 0; toast('5 hatalı deneme! 30sn kilitlendi.', 'error'); }
@@ -5258,15 +5275,24 @@ function deepMergeUser(local, cloud) {
     merged.notes = cloud.notes;
   }
 
-  // Ayarları cloud'dan al (en son güncellenen kazansın)
-  if (cloud.netSalary !== undefined) merged.netSalary = cloud.netSalary;
-  if (cloud.annualLeave !== undefined) merged.annualLeave = cloud.annualLeave;
-  if (cloud.pin !== undefined) merged.pin = cloud.pin;
-  if (cloud.weeklyTemplate) merged.weeklyTemplate = cloud.weeklyTemplate;
-  if (cloud.customPresets) merged.customPresets = cloud.customPresets;
-  if (cloud.goalHours !== undefined) merged.goalHours = cloud.goalHours;
-  if (cloud.goalEarning !== undefined) merged.goalEarning = cloud.goalEarning;
-  if (cloud.theme) merged.theme = cloud.theme;
+  /* [FIX BUG-R3] Ayarlar için zaman damgası çakışma çözümü.
+     settingsUpdatedAt yoksa her iki taraf da 0 kabul edilir — cloud kazanır (geriye uyumlu).
+     Yerel daha yeni ise (çevrimdışı değişiklik) yerel korunur. */
+  const localST = merged.settingsUpdatedAt || 0;
+  const cloudST = cloud.settingsUpdatedAt || 0;
+  if (cloudST >= localST) {
+    if (cloud.netSalary !== undefined) merged.netSalary = cloud.netSalary;
+    if (cloud.annualLeave !== undefined) merged.annualLeave = cloud.annualLeave;
+    if (cloud.pin !== undefined) merged.pin = cloud.pin;
+    if (cloud.weeklyTemplate) merged.weeklyTemplate = cloud.weeklyTemplate;
+    if (cloud.customPresets) merged.customPresets = cloud.customPresets;
+    if (cloud.goalHours !== undefined) merged.goalHours = cloud.goalHours;
+    if (cloud.goalEarning !== undefined) merged.goalEarning = cloud.goalEarning;
+    if (cloud.theme) merged.theme = cloud.theme;
+    if (cloud.monthlyHours !== undefined) merged.monthlyHours = cloud.monthlyHours;
+    merged.settingsUpdatedAt = cloudST;
+  }
+  // Yerel daha yeni ise: merged zaten yerel değerleri taşıdığından değişiklik yok
 
   return merged;
 }
@@ -5333,7 +5359,9 @@ function startRealtimeSync() {
       if (!data || !data.users) return;
 
       // Başka cihazdan gelen güncellemeyi kontrol et
-      if (data.deviceId && data.deviceId !== getDeviceId()) {
+      /* [FIX BUG-R4] deviceId null/undefined olduğunda (eski kayıt, ilk sync) güncelleme atlanıyordu.
+         !data.deviceId kontrolü eklenerek deviceId'siz veriler de işlenir. */
+      if (!data.deviceId || data.deviceId !== getDeviceId()) {
         // Veri değişmiş mi kontrol et (gereksiz render'ı engelle)
         const newJson = JSON.stringify(data.users);
         if (newJson === lastSnapshotJson) return;
