@@ -2,12 +2,12 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>ShiftTrack Pro</title>
 <script>
 // Cache buster — eski service worker'ı temizle
 (function(){
-  var CV = 'stv12';
+  var CV = 'stv13';
   if (localStorage.getItem('st_cache_ver') !== CV) {
     localStorage.setItem('st_cache_ver', CV);
     if ('serviceWorker' in navigator) {
@@ -52,8 +52,8 @@ body.theme-forest{--p:#4ade80;--p2:#22c55e;--p3:#86efac;--p4:rgba(34,197,94,.12)
 body.theme-sunset{--p:#fb923c;--p2:#f97316;--p3:#fdba74;--p4:rgba(249,115,22,.12);--pg:linear-gradient(135deg,#ea580c,#f97316);--bg:#1a0f0a;--bg2:#261810;--bg3:#332117;--bg4:#40291e;--card:#261810;--card2:#332117;--glass:rgba(38,24,16,.88);--b1:#40291e;--b2:#4d3225;--t1:#faf0e8;--t2:#c49a78;--t3:#8a6a4e}
 body.theme-rose{--p:#fb7185;--p2:#f43f5e;--p3:#fda4af;--p4:rgba(244,63,94,.12);--pg:linear-gradient(135deg,#e11d48,#f43f5e);--bg:#1a0d12;--bg2:#26141b;--bg3:#331b24;--bg4:#40222d;--card:#26141b;--card2:#331b24;--glass:rgba(38,20,27,.88);--b1:#40222d;--b2:#4d2936;--t1:#fae8ed;--t2:#c4788a;--t3:#8a4e5e}
 body.theme-gold{--p:#fbbf24;--p2:#f59e0b;--p3:#fde68a;--p4:rgba(245,158,11,.12);--pg:linear-gradient(135deg,#d97706,#f59e0b);--bg:#161209;--bg2:#211b0f;--bg3:#2c2416;--bg4:#372d1d;--card:#211b0f;--card2:#2c2416;--glass:rgba(33,27,15,.88);--b1:#372d1d;--b2:#423624;--t1:#faf5e8;--t2:#c4a878;--t3:#8a7a4e}
-body.theme-light{--p:#7c3aed;--p2:#6d28d9;--p3:#5b21b6;--p4:rgba(124,58,237,.08);--pg:linear-gradient(135deg,#7c3aed,#6d28d9);--bg:#f8f7fc;--bg2:#ffffff;--bg3:#f0eef5;--bg4:#e8e5f0;--card:#ffffff;--card2:#f5f3fa;--glass:rgba(255,255,255,.92);--b1:#e2dff0;--b2:#d4d0e5;--t1:#1a1625;--t2:#6b6580;--t3:#9893a7;--acc:#d97706;--g:#059669;--r:#dc2626;--s:#0284c7;--sh1:0 2px 8px rgba(0,0,0,.06);--sh2:0 8px 24px rgba(0,0,0,.08);--sh3:0 16px 48px rgba(0,0,0,.12)}
-body.theme-light-ocean{--p:#0891b2;--p2:#0e7490;--p3:#155e75;--p4:rgba(8,145,178,.08);--pg:linear-gradient(135deg,#0891b2,#0e7490);--bg:#f0f9ff;--bg2:#ffffff;--bg3:#e0f2fe;--bg4:#bae6fd;--card:#ffffff;--card2:#f0f9ff;--glass:rgba(255,255,255,.92);--b1:#bae6fd;--b2:#7dd3fc;--t1:#0c4a6e;--t2:#0369a1;--t3:#7dd3fc;--acc:#d97706;--g:#059669;--r:#dc2626;--s:#0284c7;--sh1:0 2px 8px rgba(0,0,0,.06);--sh2:0 8px 24px rgba(0,0,0,.08);--sh3:0 16px 48px rgba(0,0,0,.12)}
+body.theme-light{--p:#7c3aed;--p2:#6d28d9;--p3:#5b21b6;--p4:rgba(124,58,237,.08);--pg:linear-gradient(135deg,#7c3aed,#6d28d9);--bg:#f8f7fc;--bg2:#ffffff;--bg3:#f0eef5;--bg4:#e8e5f0;--card:#ffffff;--card2:#f5f3fa;--glass:rgba(255,255,255,.92);--b1:#e2dff0;--b2:#d4d0e5;--t1:#1a1625;--t2:#6b6580;--t3:#78738c;--acc:#d97706;--g:#059669;--r:#dc2626;--s:#0284c7;--sh1:0 2px 8px rgba(0,0,0,.06);--sh2:0 8px 24px rgba(0,0,0,.08);--sh3:0 16px 48px rgba(0,0,0,.12)}
+body.theme-light-ocean{--p:#0891b2;--p2:#0e7490;--p3:#155e75;--p4:rgba(8,145,178,.08);--pg:linear-gradient(135deg,#0891b2,#0e7490);--bg:#f0f9ff;--bg2:#ffffff;--bg3:#e0f2fe;--bg4:#bae6fd;--card:#ffffff;--card2:#f0f9ff;--glass:rgba(255,255,255,.92);--b1:#bae6fd;--b2:#7dd3fc;--t1:#0c4a6e;--t2:#0369a1;--t3:#6b7280;--acc:#d97706;--g:#059669;--r:#dc2626;--s:#0284c7;--sh1:0 2px 8px rgba(0,0,0,.06);--sh2:0 8px 24px rgba(0,0,0,.08);--sh3:0 16px 48px rgba(0,0,0,.12)}
 html{scroll-behavior:smooth;overflow-x:hidden;width:100%;max-width:100%}
 *,*::before,*::after{box-sizing:border-box}
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;width:100%;max-width:100%;position:relative;transition:background var(--ts),color var(--ts)}
@@ -823,7 +823,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v6.2 Cloud</span>
+      <span class="version">v6.3 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
@@ -1777,6 +1777,7 @@ function init() {
   const cg = $('calGrid');
   if (cg) {
     cg.addEventListener('click', function(e) {
+      if (wasDragging) { wasDragging = false; return; }
       const c = e.target.closest('.cal-cell');
       if (!c || c.classList.contains('out')) return;
       const ds = c.dataset.date; if (!ds) return;
@@ -1838,10 +1839,18 @@ function updLogin() {
 function loginAttempt(id) {
   const u = S.u[id]; if (!u) return;
   if (u.pin) {
+    if (Date.now() < pinLockUntil) {
+      const sec = Math.ceil((pinLockUntil - Date.now()) / 1000);
+      toast(`Çok fazla hatalı deneme. ${sec}sn bekleyin.`, 'error'); return;
+    }
     openPIN('PIN Girin', u.name, async pin => {
       const h = await hashPIN(pin);
-      if (h === u.pin || pin === u.pin) { login(id); }
-      else { toast('Yanlış PIN!', 'error'); }
+      if (h === u.pin || pin === u.pin) { pinAttempts = 0; login(id); }
+      else {
+        pinAttempts++;
+        if (pinAttempts >= 5) { pinLockUntil = Date.now() + 30000; pinAttempts = 0; toast('5 hatalı deneme! 30sn kilitlendi.', 'error'); }
+        else { toast(`Yanlış PIN! (${5 - pinAttempts} hak kaldı)`, 'error'); }
+      }
     });
   } else { login(id); }
 }
@@ -2630,7 +2639,7 @@ function hlPreset(sh) {
   if (c) c.classList.add('active');
 }
 
-function closeM() { const m = $('modal'); if (m) m.classList.remove('show'); S.sd = null; }
+function closeM() { const m = $('modal'); if (m) m.classList.remove('show'); S.sd = null; const ep = document.getElementById('noteEmojiPicker'); if (ep) ep.remove(); }
 
 function mMode(t, btn) {
   S.mt = t;
@@ -3205,7 +3214,7 @@ function renderEarn() {
       cls += hrs > 7.5 ? ' edg-ot' : ' edg-worked';
     } else if (lv && lv.type) { cls += ' edg-leave'; }
     else if (hol2) { cls += ' edg-hol'; }
-    else { const dt = new Date(y, m, d2); const dow = dt.getDay(); if (dow===0||dow===6) cls += ' edg-leave'; else cls += ' edg-absent'; }
+    else { const dt = new Date(y, m, d2); const dow = dt.getDay(); if (dow===0||dow===6) cls += ' edg-hol'; else cls += ' edg-absent'; }
     dgHtml += `<div class="${cls}" ${isToday ? 'style="outline:2px solid var(--p);outline-offset:1px"' : ''}>${title}</div>`;
   }
   dgHtml += '</div>';
@@ -3279,9 +3288,10 @@ function renderEarnWeekly(u, y, m, d, e) {
       <span class="ewk-val" style="color:var(--g)">${fm(wkEarn)}</span>
     </div>`;
   });
+  const diffNote = Math.abs(totalWkEarn - e.totalEarning) > 1 ? `<div style="font-size:10px;color:var(--t3);margin-top:6px;font-style:italic"><i class="fas fa-info-circle" style="margin-right:3px"></i>Haftalık kırılım tahminidir; kesin toplam yukarıdaki hesaplamadır.</div>` : '';
   return `<div class="earn-section">
     <h3><i class="fas fa-calendar-week"></i>Haftalık Kazanç Dağılımı</h3>
-    ${rows}
+    ${rows}${diffNote}
   </div>`;
 }
 
@@ -3663,10 +3673,10 @@ function applyWeeklyTemplate() {
       let dow = dt.getDay(); dow = dow === 0 ? 6 : dow - 1;
       const conf = wt[dow];
       if (isH(ds)) continue;
-      if (!conf || conf.type === 'off') {
-        if (dow >= 5) {
-          u.leaves[ds] = { type:'weekly', note:'Şablon', updatedAt:Date.now() };
-        }
+      if (!conf) continue; // Şablonda tanımsız gün → atla
+      if (conf.type === 'off') {
+        // Sadece şablonda açıkça "off" olarak tanımlanmış günlere izin ekle
+        u.leaves[ds] = { type:'weekly', note:'Şablon', updatedAt:Date.now() };
         continue;
       }
       u.shifts[ds] = { start:conf.start, end:conf.end, break:conf.break || 30, updatedAt:Date.now() };
@@ -3992,7 +4002,7 @@ function getDayOfWeekStats() {
 /* ============================================================
    PIN SYSTEM
 ============================================================ */
-let pinCallback = null, pinBuffer = '';
+let pinCallback = null, pinBuffer = '', pinAttempts = 0, pinLockUntil = 0;
 
 function openPIN(title, subtitle, cb) {
   pinCallback = cb; pinBuffer = '';
@@ -4041,10 +4051,18 @@ function setupPIN() {
 
 function removePIN() {
   const u = cu(); if (!u || !u.pin) return;
+  if (Date.now() < pinLockUntil) {
+    const sec = Math.ceil((pinLockUntil - Date.now()) / 1000);
+    toast(`Çok fazla hatalı deneme. ${sec}sn bekleyin.`, 'error'); return;
+  }
   openPIN('Mevcut PIN', 'Kaldırmak için PIN girin', async pin => {
     const h = await hashPIN(pin);
-    if (h === u.pin || pin === u.pin) { u.pin = null; saveLS(); updPinStatus(); toast('PIN kaldırıldı', 'info'); }
-    else { toast('Yanlış PIN!', 'error'); }
+    if (h === u.pin || pin === u.pin) { pinAttempts = 0; u.pin = null; saveLS(); updPinStatus(); toast('PIN kaldırıldı', 'info'); }
+    else {
+      pinAttempts++;
+      if (pinAttempts >= 5) { pinLockUntil = Date.now() + 30000; pinAttempts = 0; toast('5 hatalı deneme! 30sn kilitlendi.', 'error'); }
+      else { toast(`Yanlış PIN! (${5 - pinAttempts} hak kaldı)`, 'error'); }
+    }
   });
 }
 
@@ -4231,7 +4249,7 @@ function renderDashHeatmap() {
     let cls = 'hm-cell';
     if (isToday) cls += ' hm-today';
     if (lv && lv.type) {
-      cls += lv.type === 'annual' || lv.type === 'unpaid' ? ' hm-leave' : ' hm-holiday';
+      cls += lv.type === 'sick' ? ' hm-holiday' : ' hm-leave';
     } else if (sh && sh.start) {
       const hrs = calcHr(sh.start, sh.end, sh.break || 0);
       cls += hrs > 10 ? ' hm-4' : hrs > 8 ? ' hm-3' : hrs > 4 ? ' hm-2' : ' hm-1';
@@ -4508,6 +4526,7 @@ function checkHolidayWork(ds) {
    DRAG & DROP
 ============================================================ */
 let dragData = null;
+let wasDragging = false;
 
 function initDragDrop() {
   const cg = $('calGrid'); if (!cg) return;
@@ -4517,6 +4536,7 @@ function initDragDrop() {
     const ds = cell.dataset.date; if (!ds) return;
     const u = cu(); if (!u || !u.shifts[ds]) { e.preventDefault(); return; }
     dragData = { date: ds, shift: JSON.parse(JSON.stringify(u.shifts[ds])) };
+    wasDragging = true;
     cell.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', ds);
@@ -4718,7 +4738,7 @@ function schedulePushReminder() {
     pushReminderTimer = setTimeout(() => {
       new Notification('ShiftTrack Pro', {
         body: `Yarın vardiya: ${sh.start} - ${sh.end}`,
-        icon: 'icons/icon-192.png',
+        icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%238b5cf6'/><text x='96' y='130' font-size='100' text-anchor='middle' fill='white'>⏰</text></svg>",
         tag: 'shift-reminder'
       });
     }, delay);
@@ -4880,12 +4900,13 @@ function initFirebase() {
         } else {
           // Giriş yapılmamış — auth ekranını göster
           const skipped = localStorage.getItem('st_auth_skipped');
+          const asEl = $('authScreen'), lsEl = $('loginScreen');
           if (skipped) {
-            $('authScreen').style.display = 'none';
-            $('loginScreen').style.display = 'flex';
+            if (asEl) asEl.style.display = 'none';
+            if (lsEl) lsEl.style.display = 'flex';
           } else {
-            $('authScreen').style.display = 'flex';
-            $('loginScreen').style.display = 'none';
+            if (asEl) asEl.style.display = 'flex';
+            if (lsEl) lsEl.style.display = 'none';
           }
           updSyncUI();
           updCloudAccountUI();
@@ -4893,8 +4914,9 @@ function initFirebase() {
       } catch(e) {
         console.error('Auth state hatası:', e);
         // Hata olursa loginScreen'i göster
-        $('authScreen').style.display = 'none';
-        $('loginScreen').style.display = 'flex';
+        const asEl = $('authScreen'), lsEl = $('loginScreen');
+        if (asEl) asEl.style.display = 'none';
+        if (lsEl) lsEl.style.display = 'flex';
         updLogin();
       }
     });
@@ -4906,30 +4928,30 @@ function initFirebase() {
 
 // Auth tab switch
 function authTab(tab, btn) {
-  btn.parentElement.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  $('authLoginPane').style.display = tab === 'login' ? '' : 'none';
-  $('authRegisterPane').style.display = tab === 'register' ? '' : 'none';
+  if (btn && btn.parentElement) btn.parentElement.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const lp = $('authLoginPane'); if (lp) lp.style.display = tab === 'login' ? '' : 'none';
+  const rp = $('authRegisterPane'); if (rp) rp.style.display = tab === 'register' ? '' : 'none';
   hideAuthMessages();
 }
 
 function hideAuthMessages() {
-  $('authError').style.display = 'none';
-  $('authSuccess').style.display = 'none';
+  const ae = $('authError'); if (ae) ae.style.display = 'none';
+  const as = $('authSuccess'); if (as) as.style.display = 'none';
 }
 
 function showAuthError(msg) {
-  const el = $('authError');
+  const el = $('authError'); if (!el) return;
   el.textContent = msg;
   el.style.display = 'block';
-  $('authSuccess').style.display = 'none';
+  const as = $('authSuccess'); if (as) as.style.display = 'none';
 }
 
 function showAuthSuccess(msg) {
-  const el = $('authSuccess');
+  const el = $('authSuccess'); if (!el) return;
   el.textContent = msg;
   el.style.display = 'block';
-  $('authError').style.display = 'none';
+  const ae = $('authError'); if (ae) ae.style.display = 'none';
 }
 
 const FIREBASE_ERROR_TR = {
@@ -4950,9 +4972,11 @@ function fbErrMsg(err) {
 // Register
 function firebaseRegister() {
   hideAuthMessages();
-  const email = $('authRegEmail').value.trim();
-  const pass = $('authRegPass').value;
-  const pass2 = $('authRegPass2').value;
+  const emailEl = $('authRegEmail'), passEl = $('authRegPass'), pass2El = $('authRegPass2');
+  if (!emailEl || !passEl || !pass2El) return;
+  const email = emailEl.value.trim();
+  const pass = passEl.value;
+  const pass2 = pass2El.value;
 
   if (!email) { showAuthError('E-posta girin'); return; }
   if (!pass || pass.length < 6) { showAuthError('Şifre en az 6 karakter olmalı'); return; }
@@ -4979,8 +5003,10 @@ function firebaseRegister() {
 // Login
 function firebaseLogin() {
   hideAuthMessages();
-  const email = $('authEmail').value.trim();
-  const pass = $('authPass').value;
+  const emailEl = $('authEmail'), passEl = $('authPass');
+  if (!emailEl || !passEl) return;
+  const email = emailEl.value.trim();
+  const pass = passEl.value;
 
   if (!email) { showAuthError('E-posta girin'); return; }
   if (!pass) { showAuthError('Şifre girin'); return; }
@@ -5002,11 +5028,14 @@ function firebaseLogin() {
 
 // Password reset
 function firebaseResetPass() {
-  const email = $('authEmail').value.trim() || $('authRegEmail').value.trim();
+  const emailEl = $('authEmail'), regEmailEl = $('authRegEmail');
+  const email = (emailEl ? emailEl.value.trim() : '') || (regEmailEl ? regEmailEl.value.trim() : '');
   if (!email) { showAuthError('Önce e-posta adresinizi girin'); return; }
+  const linkWrap = $('authResetLink'), link = linkWrap ? linkWrap.querySelector('a') : null;
+  if (link) { link.style.pointerEvents = 'none'; link.style.opacity = '0.5'; link.textContent = 'Gönderiliyor...'; }
   fbAuth.sendPasswordResetEmail(email)
-    .then(() => showAuthSuccess('Şifre sıfırlama e-postası gönderildi!'))
-    .catch(err => showAuthError(fbErrMsg(err)));
+    .then(() => { showAuthSuccess('Şifre sıfırlama e-postası gönderildi!'); if (link) { link.style.pointerEvents = ''; link.style.opacity = ''; link.textContent = 'Şifremi Unuttum'; } })
+    .catch(err => { showAuthError(fbErrMsg(err)); if (link) { link.style.pointerEvents = ''; link.style.opacity = ''; link.textContent = 'Şifremi Unuttum'; } });
 }
 
 // Logout from Firebase
@@ -5028,8 +5057,8 @@ function firebaseLogout() {
 
 // Skip auth — offline only
 function enterAppAfterAuth() {
-  $('authScreen').style.display = 'none';
-  $('loginScreen').style.display = 'flex';
+  const as = $('authScreen'); if (as) as.style.display = 'none';
+  const ls = $('loginScreen'); if (ls) ls.style.display = 'flex';
   loadLS();
   applyTheme('default');
   updLogin();
@@ -5041,8 +5070,8 @@ function enterAppAfterAuth() {
 
 function skipAuth() {
   localStorage.setItem('st_auth_skipped', '1');
-  $('authScreen').style.display = 'none';
-  $('loginScreen').style.display = 'flex';
+  const as = $('authScreen'); if (as) as.style.display = 'none';
+  const ls = $('loginScreen'); if (ls) ls.style.display = 'flex';
   updSyncUI();
 }
 
@@ -5050,9 +5079,9 @@ function skipAuth() {
 function showAuthScreen() {
   localStorage.removeItem('st_auth_skipped');
   if (fbAuth && fbUser) return; // zaten giriş yapılmış
-  $('authScreen').style.display = 'flex';
-  $('mainApp').style.display = 'none';
-  $('loginScreen').style.display = 'none';
+  const as = $('authScreen'); if (as) as.style.display = 'flex';
+  const ma = $('mainApp'); if (ma) ma.style.display = 'none';
+  const ls = $('loginScreen'); if (ls) ls.style.display = 'none';
   hideAuthMessages();
 }
 
@@ -5102,7 +5131,7 @@ function pushToCloud(callback) {
 
 // Deep merge — iki kullanıcı verisini birleştirir (shift, leave, note seviyesinde)
 function deepMergeUser(local, cloud) {
-  const merged = Object.assign(mkUser(local ? local.id : cloud.id), local || {});
+  const merged = Object.assign(mkUser(0), local || {});
   if (!cloud) return merged;
 
   // Silme kayıtlarını birleştir (her iki taraftan en yeni silme zamanını al)
