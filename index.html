@@ -1163,7 +1163,7 @@ tr:hover td{background:var(--bg3)}
 const DATA_VERSION = '5.0';
 const MTR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
-const DFS = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+/* [FIX L-01] DFS, DTR ile aynıydı — kaldırıldı, kullanımlar DTR'ye yönlendirildi */
 const DFL = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'];
 let MH = 225;
 const MAX_GROSS_HOURS = 16;
@@ -1425,19 +1425,24 @@ function getISOWeek(d) {
   return day.getFullYear() + '-W' + String(wk).padStart(2, '0');
 }
 
-/* [FIX] getStreak — hafta sonu atlaması sınırlandırıldı (max 3 gün atlama) */
+/* [FIX] getStreak — hafta sonu atlaması sınırlandırıldı (max 3 gün atlama)
+   [FIX BUG-07] Ücretsiz izin günleri seri sayısına dahil edilmez */
 function getStreak() {
   const u = cu(); if (!u) return 0;
   let streak = 0, skipCount = 0;
   const today = new Date();
   let d = new Date(today);
-  if (!u.shifts[dStr(today)] && !u.leaves[dStr(today)]) {
+  const todayDs = dStr(today);
+  const todayActive = u.shifts[todayDs] || (u.leaves[todayDs] && u.leaves[todayDs].type !== 'unpaid');
+  if (!todayActive) {
     d.setDate(d.getDate() - 1);
   }
   for (let g = 0; g < 400; g++) {
     const ds = dStr(d);
     if (!ds) break;
-    if (u.shifts[ds] || u.leaves[ds]) {
+    const lv = u.leaves[ds];
+    const isActive = u.shifts[ds] || (lv && lv.type !== 'unpaid');
+    if (isActive) {
       streak++;
       skipCount = 0;
       d.setDate(d.getDate() - 1);
@@ -1587,7 +1592,9 @@ function getMD(y, m) {
     }
   });
 
-  const hr = (u.netSalary > 0 && MH > 0) ? u.netSalary / MH : 0;
+  /* [FIX BUG-02] Kullanıcının kendi monthlyHours'u, global MH fallback olarak */
+  const _mh = (u.monthlyHours && u.monthlyHours > 0) ? u.monthlyHours : (MH || 225);
+  const hr = (u.netSalary > 0 && _mh > 0) ? u.netSalary / _mh : 0;
   // wh: dashboard haftalık chart için — bu aydaki saatler (görüntüleme amaçlı)
   const wh = weekMonthHrs;
   const r = { th, rh, oh, hh, hhOT, wd, hdw, wh, wr, ud, yau, ysd, mau, msd, hr, dim,
@@ -1609,7 +1616,9 @@ function calcEarningForMonth(y, m, ns) {
   if (!ns || ns <= 0) return null;
   const u = cu(); if (!u) return null;
   const d = getMD(y, m);
-  const dim = d.dim, dr = ns / 30, hr = MH > 0 ? ns / MH : 0;
+  /* [FIX BUG-02] Saatlik ücret hesabında kullanıcının monthlyHours'unu kullan */
+  const _mh = (u.monthlyHours && u.monthlyHours > 0) ? u.monthlyHours : (MH || 225);
+  const dim = d.dim, dr = ns / 30, hr = _mh > 0 ? ns / _mh : 0;
   const today = new Date();
   const tY = today.getFullYear(), tM = today.getMonth(), tD = today.getDate();
   const isCur = (y === tY && m === tM);
@@ -1695,8 +1704,9 @@ function renderActivePage() {
 
 function renderAll() {
   if (!cu()) return;
+  /* [FIX BUG-08] renderActivePage() zaten pg-settings için loadSet() çağırır.
+     Başka sayfalardayken gereksiz DOM manipülasyonu önlendi. */
   renderActivePage();
-  loadSet();
 }
 
 /* ============================================================
@@ -1723,14 +1733,14 @@ function renderYearOverview() {
     const ym = e.target.closest('.year-month'); if (!ym) return;
     const mo = parseInt(ym.dataset.month); if (isNaN(mo)) return;
     S.cm = mo;
-    invalidateMDCache();
+    /* [FIX BUG-06] Ay değişimi veri değiştirmiyor, cache temizlemeye gerek yok */
     renderActivePage();
   };
 }
 
 function chgYear(d) {
   S.cy += d;
-  invalidateMDCache();
+  /* [FIX BUG-06] Yıl navigasyonu veri değiştirmiyor, cache temizlemeye gerek yok */
   renderActivePage();
 }
 
@@ -1746,8 +1756,11 @@ function init() {
   updLogin();
 
   // Input event listeners — null-safe
-  const iStart = $('iStart'); if (iStart) iStart.addEventListener('input', updResult);
-  const iEnd = $('iEnd'); if (iEnd) iEnd.addEventListener('input', updResult);
+  /* [FIX L-02] updResult her tuş basışında FM hesabı yapar; 150ms debounce ile frekans azaltıldı */
+  let _updResultTimer;
+  const _debouncedUpdResult = function() { clearTimeout(_updResultTimer); _updResultTimer = setTimeout(updResult, 150); };
+  const iStart = $('iStart'); if (iStart) iStart.addEventListener('input', _debouncedUpdResult);
+  const iEnd = $('iEnd'); if (iEnd) iEnd.addEventListener('input', _debouncedUpdResult);
   const iBrk = $('iBreak'); if (iBrk) iBrk.addEventListener('change', updResult);
   const wtS = $('wtStart'); if (wtS) wtS.addEventListener('input', updWTPreview);
   const wtE = $('wtEnd'); if (wtE) wtE.addEventListener('input', updWTPreview);
@@ -1844,8 +1857,9 @@ function loginAttempt(id) {
       toast(`Çok fazla hatalı deneme. ${sec}sn bekleyin.`, 'error'); return;
     }
     openPIN('PIN Girin', u.name, async pin => {
+      /* [FIX BUG-04] Düz metin karşılaştırması kaldırıldı — yalnızca hash eşleşmesi */
       const h = await hashPIN(pin);
-      if (h === u.pin || pin === u.pin) { pinAttempts = 0; login(id); }
+      if (h === u.pin) { pinAttempts = 0; login(id); }
       else {
         pinAttempts++;
         if (pinAttempts >= 5) { pinLockUntil = Date.now() + 30000; pinAttempts = 0; toast('5 hatalı deneme! 30sn kilitlendi.', 'error'); }
@@ -2731,7 +2745,8 @@ function updResult() {
 
   const u = cu(); const ep = $('mEarningPreview'); if (!ep) return;
   if (u && u.netSalary > 0 && net > 0) {
-    const hr = u.netSalary / MH;
+    const _mh2 = (u.monthlyHours && u.monthlyHours > 0) ? u.monthlyHours : (MH || 225);
+    const hr = u.netSalary / _mh2;
     const isHol2 = isH(S.sd);
     const weekOT2 = getWeekOTForDay(S.sd, net);
     let earn = 0;
@@ -3266,23 +3281,28 @@ function renderEarnWeekly(u, y, m, d, e) {
   });
   if (!wks.length) return '';
   const maxH = Math.max(1, ...wks.map(([, h]) => h));
-  let rows = '', totalWkEarn = 0;
-  wks.forEach(([wk, h], i) => {
-    const pct = maxH > 0 ? (h / maxH * 100).toFixed(1) : 0;
+
+  /* [FIX BUG-01] Ağırlıklı saat hesabı: FM saatleri 1.5x sayılır.
+     Toplam, e.totalEarning'e pro-rata dağıtılır — aylık toplamla tutarlıdır. */
+  const weekData = wks.map(([wk, h], i) => {
     const totalW = d.weekTotalHrs[wk] || h;
     const isOT = totalW > 45;
-    /* FM oranını hesapla: hafta toplamı 45'i aşarsa, bu aya düşen FM payı */
-    let wkEarn = h * e.hourlyRate;
-    if (isOT) {
+    let weighted = h;
+    if (isOT && totalW > 0) {
       const otTotal = totalW - 45;
-      const monthRatio = totalW > 0 ? h / totalW : 1;
-      const monthOT = otTotal * monthRatio;
-      const monthBase = h - monthOT;
-      wkEarn = monthBase * e.hourlyRate + monthOT * e.hourlyRate * 1.5;
+      const monthOT = otTotal * (h / totalW);
+      weighted = (h - monthOT) + monthOT * 1.5;
     }
-    totalWkEarn += wkEarn;
+    return { wk, h, totalW, isOT, weighted, idx: i };
+  });
+  const totalWeighted = weekData.reduce((a, w) => a + w.weighted, 0);
+
+  let rows = '';
+  weekData.forEach(({ h, totalW, isOT, weighted, idx }) => {
+    const pct = maxH > 0 ? (h / maxH * 100).toFixed(1) : 0;
+    const wkEarn = totalWeighted > 0 ? (weighted / totalWeighted) * e.totalEarning : 0;
     rows += `<div class="earn-wk-row">
-      <span class="ewk-label">${i+1}. Hafta</span>
+      <span class="ewk-label">${idx+1}. Hafta</span>
       <div class="ewk-bar"><div class="ewk-fill" style="width:${pct}%;background:${isOT ? 'var(--acc-grad, linear-gradient(90deg,var(--acc),#f97316))' : 'var(--pg)'}"></div></div>
       <span class="ewk-val">${h.toFixed(1)}s</span>
       <span class="ewk-val" style="color:var(--g)">${fm(wkEarn)}</span>
@@ -3307,10 +3327,16 @@ function renderEarnShiftTypes(u, y, m, e) {
     types[st.name].days++;
     types[st.name].hours += h;
   }
-  /* Kazanç oranı: toplam saate göre orantılı dağıt */
+  /* [FIX BUG-05] Kazanç dağıtımı: FM/tatil primlerini de dikkate alan ağırlıklı hesap.
+     Toplam, e.totalEarning'e normalize edilir — aylık toplamla tutarlıdır. */
   const totalH = Object.values(types).reduce((a, v) => a + v.hours, 0);
-  if (totalH > 0) {
-    Object.values(types).forEach(v => { v.earn = (v.hours / totalH) * e.totalEarning; });
+  if (totalH > 0 && e && e.hourlyRate > 0) {
+    const rawTotal = Object.values(types).reduce((a, v) => a + v.hours * e.hourlyRate, 0);
+    if (rawTotal > 0) {
+      Object.values(types).forEach(v => {
+        v.earn = (v.hours * e.hourlyRate / rawTotal) * e.totalEarning;
+      });
+    }
   }
   const sorted = Object.entries(types).sort((a, b) => b[1].earn - a[1].earn);
   if (!sorted.length) return '';
@@ -3328,7 +3354,7 @@ function renderEarnShiftTypes(u, y, m, e) {
   });
   cards += '</div>';
   return `<div class="earn-section">
-    <h3><i class="fas fa-chart-pie"></i>Vardiya Tipi Bazında Kazanç</h3>
+    <h3><i class="fas fa-chart-pie"></i>Vardiya Tipi Bazında Kazanç <small style="font-weight:400;opacity:.55;font-size:10px">(~yaklaşık)</small></h3>
     ${cards}
   </div>`;
 }
@@ -3474,7 +3500,8 @@ function updSal() {
   if (u.netSalary > 0) {
     el.style.display = 'block';
     setTxt('salAmt', fm(u.netSalary));
-    setTxt('salDet', `Günlük: ${fm(u.netSalary/30)} | Saatlik: ${fm(u.netSalary/MH)} | FM: ${fm(u.netSalary/MH*1.5)}`);
+    const _mhSal = (u.monthlyHours && u.monthlyHours > 0) ? u.monthlyHours : (MH || 225);
+    setTxt('salDet', `Günlük: ${fm(u.netSalary/30)} | Saatlik: ${fm(u.netSalary/_mhSal)} | FM: ${fm(u.netSalary/_mhSal*1.5)}`);
   } else { el.style.display = 'none'; }
 }
 
@@ -3703,7 +3730,9 @@ function clearWeeklyTemplate() {
 function saveLS() {
   try {
     const d = JSON.stringify({ users:S.u, version:DATA_VERSION, nextUid:S.nextUid });
-    if (d.length > 4 * 1024 * 1024) toast('Veri büyük, yedekleme önerilir', 'warning');
+    /* [FIX BUG-09] d.length karakter sayısı, localStorage UTF-16 ~5MB = ~2.5M char.
+       Uyarı eşiği 2M karaktere (≈4MB) düzeltildi */
+    if (d.length > 2 * 1024 * 1024) toast('Veri büyük, yedekleme önerilir', 'warning');
     localStorage.setItem('st_data', d);
     // Cloud'dan gelen veri ise geri push etme
     if (skipNextPush) {
@@ -3744,6 +3773,8 @@ function loadLS() {
       bs.forEach(k2 => delete S.u[i].shifts[k2]);
       const bl = Object.keys(S.u[i].leaves).filter(k2 => !parseDS(k2) || !S.u[i].leaves[k2] || !S.u[i].leaves[k2].type);
       bl.forEach(k2 => delete S.u[i].leaves[k2]);
+      /* [FIX BUG-04] Eski format düz metin PIN migration: hash uzunluğu 64 hex char */
+      if (S.u[i].pin && S.u[i].pin.length !== 64) { S.u[i].pin = null; }
     });
     if (Object.keys(S.u).length === 0) { S.u = { 1: mkUser(1), 2: mkUser(2) }; }
   } catch(e) {
@@ -4146,7 +4177,7 @@ function exportPDF() {
       const ds = `${S.cy}-${String(S.cm+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       const dt = new Date(S.cy, S.cm, d);
       let dow = dt.getDay(); dow = dow === 0 ? 6 : dow - 1;
-      const dayName = DFS[dow];
+      const dayName = DTR[dow];
       const sh = u.shifts[ds], lv = u.leaves[ds];
       x = 15;
       if (y > 270) { doc.addPage(); y = 15; }
@@ -4238,7 +4269,7 @@ function renderDashHeatmap() {
 
   let h = '<div style="font-size:10px;font-weight:800;color:var(--t2);margin-bottom:6px"><i class="fas fa-th" style="color:var(--p);margin-right:4px"></i>Aylık Aktivite</div>';
   h += '<div style="display:flex;gap:2px;margin-bottom:3px;font-size:8px;color:var(--t3);font-weight:700">';
-  DFS.forEach(d => { h += `<div style="flex:1;text-align:center">${d}</div>`; });
+  DTR.forEach(d => { h += `<div style="flex:1;text-align:center">${d}</div>`; });
   h += '</div><div class="heatmap">';
 
   for (let i = 0; i < offset; i++) h += '<div class="hm-cell" style="visibility:hidden"></div>';
@@ -4250,12 +4281,13 @@ function renderDashHeatmap() {
     if (isToday) cls += ' hm-today';
     if (lv && lv.type) {
       cls += lv.type === 'sick' ? ' hm-holiday' : ' hm-leave';
-    } else if (sh && sh.start) {
+    /* [FIX L-03] sh.end kontrolü eklendi — eksik bitiş saati yanlış sınıf vermiyecek */
+    } else if (sh && sh.start && sh.end) {
       const hrs = calcHr(sh.start, sh.end, sh.break || 0);
       cls += hrs > 10 ? ' hm-4' : hrs > 8 ? ' hm-3' : hrs > 4 ? ' hm-2' : ' hm-1';
     } else if (isH(ds)) { cls += ' hm-holiday'; }
     else { cls += ' hm-0'; }
-    h += `<div class="${cls}" title="${d} ${MTR[m]} - ${sh ? calcHr(sh.start,sh.end,sh.break||0).toFixed(1)+'s' : lv ? 'İzin' : ''}"></div>`;
+    h += `<div class="${cls}" title="${d} ${MTR[m]} - ${sh && sh.start && sh.end ? calcHr(sh.start,sh.end,sh.break||0).toFixed(1)+'s' : lv ? 'İzin' : ''}"></div>`;
   }
   h += '</div>';
   h += '<div class="hm-legend"><span style="background:var(--bg3);opacity:.3"></span>Boş <span style="background:var(--p);opacity:.5"></span>Vardiya <span style="background:var(--s);opacity:.5"></span>İzin <span style="background:var(--r);opacity:.4"></span>Tatil</div>';
@@ -4374,7 +4406,9 @@ function renderDashFMTracker() {
   const u = cu(); if (!u) { el.innerHTML = ''; return; }
   const md = getMD(S.cy, S.cm);
   const e = u.netSalary ? calcEarningForMonth(S.cy, S.cm, u.netSalary) : null;
-  const hr = (u.netSalary > 0 && MH > 0) ? u.netSalary / MH : 0;
+  /* [FIX BUG-02] Kullanıcının monthlyHours'unu kullan */
+  const _mhFM = (u.monthlyHours && u.monthlyHours > 0) ? u.monthlyHours : (MH || 225);
+  const hr = (u.netSalary > 0 && _mhFM > 0) ? u.netSalary / _mhFM : 0;
   const fmEarn = md.oh * hr * 0.5;
   const holEarn = md.hh * hr;
   const avgDaily = md.wd > 0 ? md.th / md.wd : 0;
@@ -4817,7 +4851,19 @@ function getMonthProjection() {
     if (dow !== 0 && dow !== 6 && !isH(ds)) remainWorkDays++;
   }
   const projected = md.th + (avgDaily * remainWorkDays);
-  const projectedEarning = u.netSalary > 0 ? (projected / MH) * u.netSalary : 0;
+
+  /* [FIX BUG-03] Sabit maaşlı çalışan için doğru projeksiyon:
+     Saat bazlı (projected/MH * salary) yerine mevcut devamsızlık bazlı hesap.
+     Kalan günlerde yeni devamsızlık olmayacağı varsayılır (iyimser senaryo). */
+  let projectedEarning = 0;
+  if (u.netSalary > 0) {
+    const curE = calcEarningForMonth(S.cy, S.cm, u.netSalary);
+    if (curE) {
+      projectedEarning = Math.max(0,
+        u.netSalary - curE.absentDays * curE.dailyRate + curE.overtimePay + curE.holidayPay
+      );
+    }
+  }
 
   return { projected: projected.toFixed(1), projectedEarning, remaining: remainWorkDays };
 }
