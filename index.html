@@ -1839,10 +1839,18 @@ function updLogin() {
 function loginAttempt(id) {
   const u = S.u[id]; if (!u) return;
   if (u.pin) {
+    if (Date.now() < pinLockUntil) {
+      const sec = Math.ceil((pinLockUntil - Date.now()) / 1000);
+      toast(`Çok fazla hatalı deneme. ${sec}sn bekleyin.`, 'error'); return;
+    }
     openPIN('PIN Girin', u.name, async pin => {
       const h = await hashPIN(pin);
-      if (h === u.pin || pin === u.pin) { login(id); }
-      else { toast('Yanlış PIN!', 'error'); }
+      if (h === u.pin || pin === u.pin) { pinAttempts = 0; login(id); }
+      else {
+        pinAttempts++;
+        if (pinAttempts >= 5) { pinLockUntil = Date.now() + 30000; pinAttempts = 0; toast('5 hatalı deneme! 30sn kilitlendi.', 'error'); }
+        else { toast(`Yanlış PIN! (${5 - pinAttempts} hak kaldı)`, 'error'); }
+      }
     });
   } else { login(id); }
 }
@@ -3994,7 +4002,7 @@ function getDayOfWeekStats() {
 /* ============================================================
    PIN SYSTEM
 ============================================================ */
-let pinCallback = null, pinBuffer = '';
+let pinCallback = null, pinBuffer = '', pinAttempts = 0, pinLockUntil = 0;
 
 function openPIN(title, subtitle, cb) {
   pinCallback = cb; pinBuffer = '';
@@ -4043,10 +4051,18 @@ function setupPIN() {
 
 function removePIN() {
   const u = cu(); if (!u || !u.pin) return;
+  if (Date.now() < pinLockUntil) {
+    const sec = Math.ceil((pinLockUntil - Date.now()) / 1000);
+    toast(`Çok fazla hatalı deneme. ${sec}sn bekleyin.`, 'error'); return;
+  }
   openPIN('Mevcut PIN', 'Kaldırmak için PIN girin', async pin => {
     const h = await hashPIN(pin);
-    if (h === u.pin || pin === u.pin) { u.pin = null; saveLS(); updPinStatus(); toast('PIN kaldırıldı', 'info'); }
-    else { toast('Yanlış PIN!', 'error'); }
+    if (h === u.pin || pin === u.pin) { pinAttempts = 0; u.pin = null; saveLS(); updPinStatus(); toast('PIN kaldırıldı', 'info'); }
+    else {
+      pinAttempts++;
+      if (pinAttempts >= 5) { pinLockUntil = Date.now() + 30000; pinAttempts = 0; toast('5 hatalı deneme! 30sn kilitlendi.', 'error'); }
+      else { toast(`Yanlış PIN! (${5 - pinAttempts} hak kaldı)`, 'error'); }
+    }
   });
 }
 
@@ -5015,9 +5031,11 @@ function firebaseResetPass() {
   const emailEl = $('authEmail'), regEmailEl = $('authRegEmail');
   const email = (emailEl ? emailEl.value.trim() : '') || (regEmailEl ? regEmailEl.value.trim() : '');
   if (!email) { showAuthError('Önce e-posta adresinizi girin'); return; }
+  const linkWrap = $('authResetLink'), link = linkWrap ? linkWrap.querySelector('a') : null;
+  if (link) { link.style.pointerEvents = 'none'; link.style.opacity = '0.5'; link.textContent = 'Gönderiliyor...'; }
   fbAuth.sendPasswordResetEmail(email)
-    .then(() => showAuthSuccess('Şifre sıfırlama e-postası gönderildi!'))
-    .catch(err => showAuthError(fbErrMsg(err)));
+    .then(() => { showAuthSuccess('Şifre sıfırlama e-postası gönderildi!'); if (link) { link.style.pointerEvents = ''; link.style.opacity = ''; link.textContent = 'Şifremi Unuttum'; } })
+    .catch(err => { showAuthError(fbErrMsg(err)); if (link) { link.style.pointerEvents = ''; link.style.opacity = ''; link.textContent = 'Şifremi Unuttum'; } });
 }
 
 // Logout from Firebase
