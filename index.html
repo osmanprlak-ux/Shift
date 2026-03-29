@@ -35,6 +35,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -543,6 +544,58 @@ tr:hover td{background:var(--bg3)}
 @media(max-width:480px){.content{padding:114px 8px 24px}.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.wt-grid{grid-template-columns:repeat(3,1fr)}.dash-reports{grid-template-columns:1fr}.login-brand h1{font-size:26px}.login-brand{margin-bottom:28px}.login-card{width:160px;padding:24px 14px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
+/* ===== EVRAKLARIM ===== */
+.docs-hero{background:var(--pg);border-radius:var(--rad2);padding:20px;margin-bottom:16px;color:#fff;position:relative;overflow:hidden}
+.docs-hero::after{content:'📁';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:56px;opacity:.25}
+.docs-hero h2{font-size:18px;font-weight:900;margin-bottom:4px}
+.docs-hero p{font-size:12px;opacity:.8}
+.doc-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.doc-cat{padding:5px 12px;border-radius:50px;border:1px solid var(--b1);background:var(--bg3);font-size:11px;font-weight:700;color:var(--t2);cursor:pointer;transition:all .2s;white-space:nowrap}
+.doc-cat.active,.doc-cat:hover{background:var(--p4);border-color:var(--p);color:var(--p)}
+.docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(160px,100%),1fr));gap:10px;margin-bottom:16px}
+.doc-card{background:var(--card);border:1px solid var(--b1);border-radius:var(--rad);overflow:hidden;transition:all .25s;position:relative}
+.doc-card:hover{border-color:var(--p);box-shadow:0 4px 16px rgba(139,92,246,.15)}
+.doc-thumb{height:110px;background:var(--bg3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.doc-thumb img{width:100%;height:100%;object-fit:cover}
+.doc-thumb .doc-type-icon{font-size:40px;line-height:1}
+.doc-thumb .doc-cat-badge{position:absolute;top:6px;left:6px;padding:2px 7px;border-radius:50px;font-size:9px;font-weight:800;background:rgba(0,0,0,.55);color:#fff;backdrop-filter:blur(4px)}
+.doc-info{padding:8px 10px}
+.doc-name{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-meta{font-size:10px;color:var(--t3);margin-bottom:8px}
+.doc-actions{display:flex;gap:4px}
+.doc-actions button{flex:1;padding:5px 0;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:3px}
+.doc-btn-view{background:var(--p4);color:var(--p)}
+.doc-btn-view:hover{background:rgba(139,92,246,.22)}
+.doc-btn-wa{background:rgba(34,197,94,.12);color:#22c55e}
+.doc-btn-wa:hover{background:rgba(34,197,94,.22)}
+.doc-btn-del{background:rgba(248,113,113,.1);color:var(--r)}
+.doc-btn-del:hover{background:rgba(248,113,113,.2)}
+.docs-add-btn{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 70px);right:16px;width:52px;height:52px;border-radius:50%;background:var(--pg);color:#fff;border:none;font-size:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(139,92,246,.5);cursor:pointer;z-index:90;transition:transform .2s}
+.docs-add-btn:hover{transform:scale(1.1)}
+/* Upload modal */
+#docUploadModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:2000;padding:16px;align-items:flex-end;justify-content:center}
+#docUploadModal.show{display:flex}
+.doc-upload-box{background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px;animation:slideUp .3s cubic-bezier(.16,1,.3,1);max-height:85vh;overflow-y:auto}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.doc-upload-box h3{font-size:16px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.doc-drop-zone{border:2px dashed var(--b2);border-radius:12px;padding:28px 16px;text-align:center;cursor:pointer;transition:all .25s;margin-bottom:14px;background:var(--bg3)}
+.doc-drop-zone.drag-over,.doc-drop-zone:hover{border-color:var(--p);background:var(--p4)}
+.doc-drop-zone .dz-icon{font-size:36px;margin-bottom:8px}
+.doc-drop-zone p{font-size:13px;font-weight:700;color:var(--t2);margin-bottom:4px}
+.doc-drop-zone small{font-size:11px;color:var(--t3)}
+.doc-preview-wrap{margin-bottom:14px;display:none}
+.doc-preview-wrap img{width:100%;max-height:200px;object-fit:contain;border-radius:10px;background:var(--bg3)}
+.doc-preview-wrap .pdf-prev{background:var(--bg3);border-radius:10px;padding:24px;text-align:center;font-size:40px}
+.upload-progress{height:4px;background:var(--bg3);border-radius:2px;margin-bottom:14px;overflow:hidden;display:none}
+.upload-progress-bar{height:100%;background:var(--pg);border-radius:2px;transition:width .3s;width:0%}
+/* Doc viewer overlay */
+#docViewer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(12px);z-index:3000;flex-direction:column;align-items:center;justify-content:center}
+#docViewer.show{display:flex}
+#docViewer img{max-width:95vw;max-height:80vh;border-radius:10px;object-fit:contain}
+.dv-bar{position:fixed;top:0;left:0;right:0;padding:12px 16px;display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.5)}
+.dv-name{font-size:14px;font-weight:700;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:480px){.docs-grid{grid-template-columns:repeat(2,1fr)}.doc-thumb{height:90px}}
+
 /* HEATMAP MINI CALENDAR */
 .heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
 .hm-cell{aspect-ratio:1;border-radius:3px;min-width:0;position:relative;cursor:default}
@@ -776,6 +829,53 @@ tr:hover td{background:var(--bg3)}
   </div>
 </div>
 
+<!-- DOCUMENT UPLOAD MODAL -->
+<div id="docUploadModal" onclick="if(event.target===this)closeDocUpload()">
+  <div class="doc-upload-box">
+    <h3><i class="fas fa-cloud-upload-alt" style="color:var(--p)"></i>Belge Ekle</h3>
+    <div class="doc-drop-zone" id="docDropZone" onclick="$('docFileInput').click()" ondragover="docDragOver(event)" ondragleave="docDragLeave(event)" ondrop="docDrop(event)">
+      <div class="dz-icon">📎</div>
+      <p>Fotoğraf veya PDF seçin</p>
+      <small>JPG, PNG, PDF · Maks. 5 MB</small>
+    </div>
+    <input type="file" id="docFileInput" accept="image/*,.pdf" style="display:none" onchange="docFileSelected(this)">
+    <div class="doc-preview-wrap" id="docPreviewWrap">
+      <div id="docPreviewContent"></div>
+    </div>
+    <div class="upload-progress" id="uploadProgress"><div class="upload-progress-bar" id="uploadProgressBar"></div></div>
+    <div class="fg" style="margin-bottom:10px">
+      <label class="fl">Belge Adı</label>
+      <input type="text" id="docNameInput" placeholder="örn. Hijyen Sertifikası 2025" maxlength="60">
+    </div>
+    <div class="fg" style="margin-bottom:14px">
+      <label class="fl">Kategori</label>
+      <select id="docCatSelect">
+        <option value="hygiene">🧼 Hijyen Belgesi</option>
+        <option value="mastery">🏆 Ustalık Belgesi</option>
+        <option value="passport">📘 Pasaport</option>
+        <option value="id">🪪 Kimlik / Nüfus Cüzdanı</option>
+        <option value="certificate">📜 Sertifika</option>
+        <option value="resume">📋 Özgeçmiş</option>
+        <option value="other">📄 Diğer</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline" style="flex:1" onclick="closeDocUpload()">İptal</button>
+      <button class="btn btn-primary" style="flex:2" id="docSaveBtn" onclick="saveDocument()"><i class="fas fa-save"></i>Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- DOC VIEWER -->
+<div id="docViewer" onclick="closeDocViewer()">
+  <div class="dv-bar" onclick="event.stopPropagation()">
+    <span class="dv-name" id="dvName"></span>
+    <button class="btn btn-soft btn-xs" id="dvWaBtn" onclick="shareDocWA(currentViewDoc)"><i class="fab fa-whatsapp"></i>WhatsApp</button>
+    <button class="btn btn-outline btn-xs" onclick="closeDocViewer()"><i class="fas fa-times"></i></button>
+  </div>
+  <div id="dvContent" onclick="event.stopPropagation()"></div>
+</div>
+
 <!-- INSTALL BANNER -->
 <div class="install-banner" id="installBanner">
   <i class="fas fa-download"></i>
@@ -824,7 +924,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v6.4 Cloud</span>
+      <span class="version">v6.5 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
@@ -853,6 +953,7 @@ tr:hover td{background:var(--bg3)}
     <button class="nav-tab" onclick="go('leaves',this)"><i class="fas fa-umbrella-beach"></i><span>İzinler</span></button>
     <button class="nav-tab" onclick="go('earnings',this)"><i class="fas fa-wallet"></i><span>Kazanç</span></button>
     <button class="nav-tab" onclick="go('settings',this)"><i class="fas fa-cog"></i><span>Ayarlar</span></button>
+    <button class="nav-tab" onclick="go('documents',this)"><i class="fas fa-folder-open"></i><span>Evrak</span></button>
   </nav>
   <main class="content">
 
@@ -1091,6 +1192,17 @@ tr:hover td{background:var(--bg3)}
       </div>
     </div>
 
+    <!-- EVRAKLARIM -->
+    <div class="page" id="pg-documents">
+      <div class="docs-hero">
+        <h2><i class="fas fa-folder-open" style="margin-right:8px"></i>Evraklarım</h2>
+        <p>Belgelerinizi güvenle saklayın, WhatsApp ile anında paylaşın</p>
+      </div>
+      <div class="doc-cats" id="docCatFilter"></div>
+      <div id="docsContent"></div>
+      <button class="docs-add-btn" onclick="openDocUpload()" title="Belge Ekle"><i class="fas fa-plus"></i></button>
+    </div>
+
   </main>
 </div>
 
@@ -1161,7 +1273,7 @@ tr:hover td{background:var(--bg3)}
 /* ============================================================
    CONSTANTS
 ============================================================ */
-const DATA_VERSION = '5.1';
+const DATA_VERSION = '5.2';
 const MTR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 /* [FIX L-01] DFS, DTR ile aynıydı — kaldırıldı, kullanımlar DTR'ye yönlendirildi */
@@ -1240,7 +1352,8 @@ function mkUser(i) {
     goalHours: 0,
     goalEarning: 0,
     pin: null,
-    autoTheme: false
+    autoTheme: false,
+    documents: []
   };
 }
 
@@ -1700,6 +1813,7 @@ function renderActivePage() {
     case 'pg-leaves': renderLeaves(); break;
     case 'pg-earnings': renderEarn(); break;
     case 'pg-settings': loadSet(); break;
+    case 'pg-documents': renderDocs(); break;
   }
 }
 
@@ -3780,6 +3894,7 @@ function loadLS() {
       if (typeof S.u[i].deletedShifts !== 'object' || !S.u[i].deletedShifts) S.u[i].deletedShifts = {};
       if (typeof S.u[i].deletedLeaves !== 'object' || !S.u[i].deletedLeaves) S.u[i].deletedLeaves = {};
       if (!Array.isArray(S.u[i].customPresets)) S.u[i].customPresets = [];
+      if (!Array.isArray(S.u[i].documents)) S.u[i].documents = [];
       S.u[i].netSalary = parseFloat(S.u[i].netSalary) || 0;
       S.u[i].annualLeave = parseInt(S.u[i].annualLeave) || 14;
       if (typeof S.u[i].notes !== 'string') S.u[i].notes = '';
@@ -3830,6 +3945,7 @@ function importD(e) {
         if (typeof S.u[i].deletedShifts !== 'object' || !S.u[i].deletedShifts) S.u[i].deletedShifts = {};
         if (typeof S.u[i].deletedLeaves !== 'object' || !S.u[i].deletedLeaves) S.u[i].deletedLeaves = {};
         if (!Array.isArray(S.u[i].customPresets)) S.u[i].customPresets = [];
+      if (!Array.isArray(S.u[i].documents)) S.u[i].documents = [];
         S.u[i].netSalary = parseFloat(S.u[i].netSalary) || 0;
         S.u[i].notes = typeof S.u[i].notes === 'string' ? S.u[i].notes : '';
       });
@@ -4932,7 +5048,7 @@ const FIREBASE_CONFIG = {
   measurementId: "G-3REEMPWMP9"
 };
 
-let fbApp = null, fbAuth = null, fbDb = null, fbUser = null;
+let fbApp = null, fbAuth = null, fbDb = null, fbUser = null, fbStorage = null;
 let syncInProgress = false, lastSyncTime = 0;
 let skipNextPush = false; // cloud'dan gelen veriyi geri push etmeyi engeller
 const SYNC_DEBOUNCE = 3000; // 3 saniye debounce
@@ -4947,6 +5063,7 @@ function initFirebase() {
     fbApp = firebase.initializeApp(FIREBASE_CONFIG);
     fbAuth = firebase.auth();
     fbDb = firebase.firestore();
+    fbStorage = firebase.storage();
 
     // Offline persistence
     fbDb.enablePersistence({ synchronizeTabs: true }).catch(err => {
@@ -5275,6 +5392,19 @@ function deepMergeUser(local, cloud) {
     merged.notes = cloud.notes;
   }
 
+  // Documents merge — id bazında birleştir; cloud'daki yeni belgeleri ekle
+  if (!Array.isArray(merged.documents)) merged.documents = [];
+  if (Array.isArray(cloud.documents)) {
+    const localIds = new Set(merged.documents.map(d => d.id));
+    cloud.documents.forEach(cd => {
+      if (!cd || !cd.id) return;
+      if (!localIds.has(cd.id)) {
+        merged.documents.push(cd);  // cloud'da var, yerelde yok → ekle
+      }
+      // Yerelde varsa dokunma (kullanıcının kendi cihazındaki hali daha güvenilir)
+    });
+  }
+
   /* [FIX BUG-R3] Ayarlar için zaman damgası çakışma çözümü.
      settingsUpdatedAt yoksa her iki taraf da 0 kabul edilir — cloud kazanır (geriye uyumlu).
      Yerel daha yeni ise (çevrimdışı değişiklik) yerel korunur. */
@@ -5525,6 +5655,284 @@ if (window.matchMedia) {
       saveLS();
     }
   });
+}
+
+/* ============================================================
+   EVRAKLARIM — DOCUMENT PORTFOLIO
+============================================================ */
+const DOC_CATS = {
+  hygiene:     { label: 'Hijyen Belgesi',        icon: '🧼', color: '#22c55e' },
+  mastery:     { label: 'Ustalık Belgesi',        icon: '🏆', color: '#f59e0b' },
+  passport:    { label: 'Pasaport',               icon: '📘', color: '#3b82f6' },
+  id:          { label: 'Kimlik',                 icon: '🪪', color: '#8b5cf6' },
+  certificate: { label: 'Sertifika',              icon: '📜', color: '#ec4899' },
+  resume:      { label: 'Özgeçmiş',               icon: '📋', color: '#06b6d4' },
+  other:       { label: 'Diğer',                  icon: '📄', color: '#6b7280' }
+};
+
+let currentDocFile = null;  // seçilen File nesnesi
+let currentViewDoc = null;  // görüntülenen doc metadatası
+let docFilterCat = 'all';
+
+function renderDocs() {
+  const u = cu(); if (!u) return;
+  if (!Array.isArray(u.documents)) u.documents = [];
+
+  // Kategori filtre butonları
+  const catEl = $('docCatFilter');
+  if (catEl) {
+    let catH = `<button class="doc-cat ${docFilterCat==='all'?'active':''}" onclick="filterDocs('all',this)">Tümü (${u.documents.length})</button>`;
+    Object.entries(DOC_CATS).forEach(([k, v]) => {
+      const cnt = u.documents.filter(d => d.category === k).length;
+      if (cnt) catH += `<button class="doc-cat ${docFilterCat===k?'active':''}" onclick="filterDocs('${k}',this)">${v.icon} ${v.label} (${cnt})</button>`;
+    });
+    catEl.innerHTML = catH;
+  }
+
+  const el = $('docsContent'); if (!el) return;
+  const docs = docFilterCat === 'all' ? u.documents : u.documents.filter(d => d.category === docFilterCat);
+
+  if (!fbUser) {
+    el.innerHTML = `<div class="hint" style="margin-bottom:14px"><i class="fas fa-cloud"></i><span>Belge yüklemek için <b>Bulut Hesabı</b> bağlayın (Ayarlar → Bulut Hesabı).</span></div>`;
+  }
+
+  if (!docs.length) {
+    el.innerHTML = (el.innerHTML || '') + `<div class="empty"><i class="fas fa-folder-open" style="font-size:36px;color:var(--t3)"></i><p style="margin-top:8px">Belge yok<br><small style="font-size:11px;color:var(--t3)">Sağ alttaki + butonundan ekleyin</small></p></div>`;
+    return;
+  }
+
+  let h = '<div class="docs-grid">';
+  docs.slice().reverse().forEach(doc => { h += buildDocCard(doc); });
+  h += '</div>';
+  el.innerHTML = (fbUser ? '' : el.innerHTML) + h;
+
+  // Kart butonlarına event listener
+  el.querySelectorAll('[data-doc-view]').forEach(btn => {
+    btn.addEventListener('click', () => viewDocument(btn.dataset.docView));
+  });
+  el.querySelectorAll('[data-doc-wa]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const doc = (cu().documents||[]).find(d => d.id === btn.dataset.docWa);
+      if (doc) shareDocWA(doc);
+    });
+  });
+  el.querySelectorAll('[data-doc-del]').forEach(btn => {
+    btn.addEventListener('click', () => deleteDocument(btn.dataset.docDel));
+  });
+}
+
+function buildDocCard(doc) {
+  const cat = DOC_CATS[doc.category] || DOC_CATS.other;
+  const isImg = doc.mimeType && doc.mimeType.startsWith('image/');
+  const dateStr = doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'}) : '—';
+  const sizeStr = doc.fileSize ? (doc.fileSize > 1024*1024 ? (doc.fileSize/1024/1024).toFixed(1)+'MB' : Math.round(doc.fileSize/1024)+'KB') : '';
+  const thumb = isImg && doc.url
+    ? `<img src="${escHtml(doc.url)}" alt="${escHtml(doc.name)}" loading="lazy">`
+    : `<div class="doc-type-icon">${doc.mimeType==='application/pdf'?'📄':cat.icon}</div>`;
+  return `<div class="doc-card">
+    <div class="doc-thumb">
+      ${thumb}
+      <span class="doc-cat-badge">${cat.icon} ${escHtml(cat.label)}</span>
+    </div>
+    <div class="doc-info">
+      <div class="doc-name" title="${escHtml(doc.name)}">${escHtml(doc.name)}</div>
+      <div class="doc-meta">${dateStr}${sizeStr?' · '+sizeStr:''}</div>
+      <div class="doc-actions">
+        <button class="doc-btn-view" data-doc-view="${escHtml(doc.id)}" title="Görüntüle"><i class="fas fa-eye"></i></button>
+        <button class="doc-btn-wa" data-doc-wa="${escHtml(doc.id)}" title="WhatsApp ile paylaş"><i class="fab fa-whatsapp"></i></button>
+        <button class="doc-btn-del" data-doc-del="${escHtml(doc.id)}" title="Sil"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function filterDocs(cat, btn) {
+  docFilterCat = cat;
+  document.querySelectorAll('.doc-cat').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const el = $('docsContent'); if (el) el.innerHTML = '';
+  renderDocs();
+}
+
+/* ---- UPLOAD MODAL ---- */
+function openDocUpload() {
+  currentDocFile = null;
+  const inp = $('docFileInput'); if (inp) inp.value = '';
+  const pw = $('docPreviewWrap'); if (pw) pw.style.display = 'none';
+  const ni = $('docNameInput'); if (ni) ni.value = '';
+  const prog = $('uploadProgress'); if (prog) prog.style.display = 'none';
+  const btn = $('docSaveBtn'); if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>Kaydet'; }
+  const m = $('docUploadModal'); if (m) m.classList.add('show');
+}
+
+function closeDocUpload() {
+  const m = $('docUploadModal'); if (m) m.classList.remove('show');
+  currentDocFile = null;
+}
+
+function docDragOver(e) { e.preventDefault(); $('docDropZone').classList.add('drag-over'); }
+function docDragLeave(e) { $('docDropZone').classList.remove('drag-over'); }
+function docDrop(e) {
+  e.preventDefault(); $('docDropZone').classList.remove('drag-over');
+  const f = e.dataTransfer.files[0]; if (f) handleDocFile(f);
+}
+function docFileSelected(inp) { const f = inp.files[0]; if (f) handleDocFile(f); }
+
+function handleDocFile(file) {
+  if (file.size > 5 * 1024 * 1024) { toast('Dosya 5MB sınırını aşıyor', 'error'); return; }
+  const allowed = ['image/jpeg','image/png','image/webp','image/heic','application/pdf'];
+  if (!allowed.includes(file.type) && !file.name.toLowerCase().endsWith('.pdf')) {
+    toast('Yalnızca JPG, PNG, WEBP veya PDF', 'error'); return;
+  }
+  currentDocFile = file;
+  // Varsayılan isim
+  const ni = $('docNameInput');
+  if (ni && !ni.value) ni.value = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g,' ');
+  // Önizleme
+  const pw = $('docPreviewWrap'), pc = $('docPreviewContent');
+  if (pw && pc) {
+    pw.style.display = 'block';
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e2 => { pc.innerHTML = `<img src="${e2.target.result}" alt="Önizleme">`; };
+      reader.readAsDataURL(file);
+    } else {
+      pc.innerHTML = `<div class="pdf-prev">📄<br><small style="font-size:11px;color:var(--t3)">${escHtml(file.name)}</small></div>`;
+    }
+  }
+}
+
+async function saveDocument() {
+  const u = cu(); if (!u) return;
+  const ni = $('docNameInput'), cs = $('docCatSelect'), btn = $('docSaveBtn');
+  const name = (ni ? ni.value.trim() : '');
+  if (!name) { toast('Belge adı girin', 'error'); return; }
+  if (!currentDocFile) { toast('Dosya seçin', 'error'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>Yükleniyor...';
+
+  const docId = 'doc_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
+  const cat = cs ? cs.value : 'other';
+  let url = null;
+
+  if (fbStorage && fbUser) {
+    // Firebase Storage'a yükle
+    try {
+      const prog = $('uploadProgress'), bar = $('uploadProgressBar');
+      if (prog) prog.style.display = 'block';
+      const ref = fbStorage.ref(`docs/${fbUser.uid}/${docId}`);
+      const task = ref.put(currentDocFile);
+      task.on('state_changed', snap => {
+        const pct = (snap.bytesTransferred / snap.totalBytes * 100).toFixed(0);
+        if (bar) bar.style.width = pct + '%';
+      });
+      const snap = await task;
+      url = await snap.ref.getDownloadURL();
+    } catch(e) {
+      console.error('Storage yükleme hatası:', e);
+      toast('Yükleme hatası: ' + (e.message || 'Bilinmeyen'), 'error');
+      btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>Kaydet';
+      return;
+    }
+  } else {
+    // Firebase yoksa base64 olarak localStorage'a (küçük dosyalar)
+    if (currentDocFile.size > 512 * 1024) {
+      toast('Bulut hesabı olmadan maks. 512KB yüklenebilir', 'error');
+      btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>Kaydet';
+      return;
+    }
+    url = await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = e2 => resolve(e2.target.result);
+      reader.readAsDataURL(currentDocFile);
+    });
+  }
+
+  if (!Array.isArray(u.documents)) u.documents = [];
+  u.documents.push({
+    id: docId,
+    name,
+    category: cat,
+    url,
+    fileName: currentDocFile.name,
+    mimeType: currentDocFile.type || 'application/octet-stream',
+    fileSize: currentDocFile.size,
+    uploadedAt: Date.now(),
+    storedInCloud: !!(fbStorage && fbUser)
+  });
+
+  saveLS();
+  closeDocUpload();
+  renderDocs();
+  toast(`"${escHtml(name)}" eklendi`, 'success');
+}
+
+/* ---- DELETE ---- */
+function deleteDocument(docId) {
+  const u = cu(); if (!u || !Array.isArray(u.documents)) return;
+  const doc = u.documents.find(d => d.id === docId); if (!doc) return;
+  showConfirm('Belgeyi Sil', `"${escHtml(doc.name)}" silinecek. Geri alınamaz.`, async () => {
+    // Firebase Storage'dan da sil
+    if (doc.storedInCloud && fbStorage && fbUser) {
+      try { await fbStorage.ref(`docs/${fbUser.uid}/${docId}`).delete(); } catch(e) {}
+    }
+    u.documents = u.documents.filter(d => d.id !== docId);
+    saveLS();
+    renderDocs();
+    toast('Belge silindi', 'info');
+  });
+}
+
+/* ---- VIEW ---- */
+function viewDocument(docId) {
+  const u = cu(); if (!u) return;
+  const doc = (u.documents||[]).find(d => d.id === docId); if (!doc) return;
+  currentViewDoc = doc;
+  const v = $('docViewer'), dvN = $('dvName'), dvc = $('dvContent');
+  if (!v || !dvN || !dvc) return;
+  dvN.textContent = doc.name;
+  const isImg = doc.mimeType && doc.mimeType.startsWith('image/');
+  if (isImg) {
+    dvc.innerHTML = `<img src="${escHtml(doc.url)}" alt="${escHtml(doc.name)}">`;
+  } else if (doc.mimeType === 'application/pdf' && doc.url && !doc.url.startsWith('data:')) {
+    dvc.innerHTML = `<div style="color:#fff;text-align:center;padding:20px">
+      <div style="font-size:60px;margin-bottom:12px">📄</div>
+      <p style="font-size:14px;margin-bottom:14px">${escHtml(doc.name)}</p>
+      <a href="${escHtml(doc.url)}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i>Yeni Sekmede Aç</a>
+    </div>`;
+  } else {
+    dvc.innerHTML = `<div style="color:#fff;text-align:center;padding:20px">
+      <div style="font-size:60px;margin-bottom:12px">${(DOC_CATS[doc.category]||DOC_CATS.other).icon}</div>
+      <p style="font-size:14px">${escHtml(doc.name)}</p>
+    </div>`;
+  }
+  v.classList.add('show');
+}
+
+function closeDocViewer() {
+  const v = $('docViewer'); if (v) v.classList.remove('show');
+  currentViewDoc = null;
+}
+
+/* ---- WHATSAPP SHARE ---- */
+function shareDocWA(doc) {
+  if (!doc) return;
+  const cat = DOC_CATS[doc.category] || DOC_CATS.other;
+  const u = cu();
+  let text = `${cat.icon} *${doc.name}*\n`;
+  if (u) text += `👤 ${u.name}\n`;
+  text += `📅 ${new Date(doc.uploadedAt).toLocaleDateString('tr-TR')}\n`;
+  if (doc.url && !doc.url.startsWith('data:')) {
+    text += `🔗 ${doc.url}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  } else if (doc.url && doc.url.startsWith('data:')) {
+    // Base64 belgeler için sadece metin paylaş
+    text += `(Belge uygulamada kayıtlı — bulut hesabı bağlayarak bağlantı alın)`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  } else {
+    toast('Paylaşılabilir bağlantı yok', 'error');
+  }
 }
 
 init();
