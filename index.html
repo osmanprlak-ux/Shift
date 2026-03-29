@@ -3894,6 +3894,7 @@ function loadLS() {
       if (typeof S.u[i].leaves !== 'object' || !S.u[i].leaves) S.u[i].leaves = {};
       if (typeof S.u[i].deletedShifts !== 'object' || !S.u[i].deletedShifts) S.u[i].deletedShifts = {};
       if (typeof S.u[i].deletedLeaves !== 'object' || !S.u[i].deletedLeaves) S.u[i].deletedLeaves = {};
+      if (typeof S.u[i].deletedDocs !== 'object' || !S.u[i].deletedDocs) S.u[i].deletedDocs = {};
       if (!Array.isArray(S.u[i].customPresets)) S.u[i].customPresets = [];
       if (!Array.isArray(S.u[i].documents)) S.u[i].documents = [];
       S.u[i].netSalary = parseFloat(S.u[i].netSalary) || 0;
@@ -3945,8 +3946,9 @@ function importD(e) {
         if (typeof S.u[i].leaves !== 'object') S.u[i].leaves = {};
         if (typeof S.u[i].deletedShifts !== 'object' || !S.u[i].deletedShifts) S.u[i].deletedShifts = {};
         if (typeof S.u[i].deletedLeaves !== 'object' || !S.u[i].deletedLeaves) S.u[i].deletedLeaves = {};
+        if (typeof S.u[i].deletedDocs !== 'object' || !S.u[i].deletedDocs) S.u[i].deletedDocs = {};
         if (!Array.isArray(S.u[i].customPresets)) S.u[i].customPresets = [];
-      if (!Array.isArray(S.u[i].documents)) S.u[i].documents = [];
+        if (!Array.isArray(S.u[i].documents)) S.u[i].documents = [];
         S.u[i].netSalary = parseFloat(S.u[i].netSalary) || 0;
         S.u[i].notes = typeof S.u[i].notes === 'string' ? S.u[i].notes : '';
       });
@@ -5988,7 +5990,8 @@ function viewDocument(docId) {
     dvc.innerHTML = `<div style="color:#fff;text-align:center;padding:40px"><i class="fas fa-spinner fa-spin" style="font-size:32px"></i><p style="margin-top:12px;font-size:14px">Yükleniyor...</p></div>`;
     v.classList.add('show');
     if (fbDb && fbUser) {
-      fbDb.collection('userData').doc(fbUser.uid).collection('docs').doc(docId).get().then(snap => {
+      fbDb.collection('userData').doc(fbUser.uid)
+        .collection('users').doc(String(S.cu)).collection('docs').doc(docId).get().then(snap => {
         if (snap.exists) {
           const cd = snap.data();
           doc.url = cd.url;
