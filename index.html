@@ -5756,6 +5756,8 @@ function renderDocs() {
   }
 
   const el = $('docsContent'); if (!el) return;
+  el.innerHTML = ''; // Her render'da temizle
+
   const docs = docFilterCat === 'all' ? u.documents : u.documents.filter(d => d.category === docFilterCat);
 
   if (!fbUser) {
@@ -5763,14 +5765,14 @@ function renderDocs() {
   }
 
   if (!docs.length) {
-    el.innerHTML = (el.innerHTML || '') + `<div class="empty"><i class="fas fa-folder-open" style="font-size:36px;color:var(--t3)"></i><p style="margin-top:8px">Belge yok<br><small style="font-size:11px;color:var(--t3)">Sağ alttaki + butonundan ekleyin</small></p></div>`;
+    el.innerHTML += `<div class="empty"><i class="fas fa-folder-open" style="font-size:36px;color:var(--t3)"></i><p style="margin-top:8px">Belge yok<br><small style="font-size:11px;color:var(--t3)">Sağ alttaki + butonundan ekleyin</small></p></div>`;
     return;
   }
 
   let h = '<div class="docs-grid">';
   docs.slice().reverse().forEach(doc => { h += buildDocCard(doc); });
   h += '</div>';
-  el.innerHTML = (fbUser ? '' : el.innerHTML) + h;
+  el.innerHTML += h;
 
   // Kart butonlarına event listener
   el.querySelectorAll('[data-doc-view]').forEach(btn => {
