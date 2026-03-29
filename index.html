@@ -924,7 +924,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v6.6 Cloud</span>
+      <span class="version">v6.7 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
@@ -1273,7 +1273,7 @@ tr:hover td{background:var(--bg3)}
 /* ============================================================
    CONSTANTS
 ============================================================ */
-const DATA_VERSION = '5.3';
+const DATA_VERSION = '5.4';
 const MTR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 /* [FIX L-01] DFS, DTR ile aynıydı — kaldırıldı, kullanımlar DTR'ye yönlendirildi */
@@ -1353,7 +1353,8 @@ function mkUser(i) {
     goalEarning: 0,
     pin: null,
     autoTheme: false,
-    documents: []
+    documents: [],
+    deletedDocs: {}
   };
 }
 
@@ -5247,35 +5248,42 @@ function enterAppAfterAuth() {
   try { pullFromCloud(() => { loadLS(); updLogin(); loadCloudDocs(); }); } catch(e) {}
 }
 
-/* Firestore sub-collection'dan belgeleri yükle */
+/* Firestore sub-collection'dan belgeleri yükle — her app kullanıcısı için ayrı */
 async function loadCloudDocs() {
   if (!fbDb || !fbUser) return;
-  const u = cu(); if (!u) return;
-  try {
-    const snap = await fbDb.collection('userData').doc(fbUser.uid).collection('docs').get();
-    if (snap.empty) return;
-    if (!Array.isArray(u.documents)) u.documents = [];
-    let changed = false;
-    snap.forEach(docSnap => {
-      const cd = docSnap.data();
-      if (!cd || !cd.id) return;
-      const existing = u.documents.find(d => d.id === cd.id);
-      if (!existing) {
-        u.documents.push(cd); // Yeni belge — ekle
-        changed = true;
-      } else if (!existing.url && cd.url) {
-        existing.url = cd.url; // URL eksikse tamamla
-        changed = true;
-      }
-    });
-    if (changed) {
-      saveLS();
-      // Belgeler sayfası açıksa yenile
-      const activePage = document.querySelector('.page.active');
-      if (activePage && activePage.id === 'pg-documents') renderDocs();
+  let changed = false;
+  // Tüm app kullanıcıları için yükle
+  for (const idxStr of Object.keys(S.u)) {
+    const idx = parseInt(idxStr);
+    const u = S.u[idx]; if (!u) continue;
+    try {
+      const snap = await fbDb.collection('userData').doc(fbUser.uid)
+        .collection('users').doc(String(idx)).collection('docs').get();
+      if (snap.empty) continue;
+      if (!Array.isArray(u.documents)) u.documents = [];
+      if (!u.deletedDocs) u.deletedDocs = {};
+      snap.forEach(docSnap => {
+        const cd = docSnap.data();
+        if (!cd || !cd.id) return;
+        // Silinmiş ise ekleme
+        if (u.deletedDocs[cd.id]) return;
+        const existing = u.documents.find(d => d.id === cd.id);
+        if (!existing) {
+          u.documents.push(cd);
+          changed = true;
+        } else if (!existing.url && cd.url) {
+          existing.url = cd.url;
+          changed = true;
+        }
+      });
+    } catch(e) {
+      console.warn(`Kullanıcı ${idx} belgeleri yüklenemedi:`, e);
     }
-  } catch(e) {
-    console.warn('Bulut belgeler yüklenemedi:', e);
+  }
+  if (changed) {
+    saveLS();
+    const activePage = document.querySelector('.page.active');
+    if (activePage && activePage.id === 'pg-documents') renderDocs();
   }
 }
 
@@ -5439,15 +5447,23 @@ function deepMergeUser(local, cloud) {
     merged.notes = cloud.notes;
   }
 
+  // deletedDocs merge — her iki taraftan silinenleri birleştir
+  if (!merged.deletedDocs) merged.deletedDocs = {};
+  const cloudDeletedDocs = cloud.deletedDocs || {};
+  Object.keys(cloudDeletedDocs).forEach(id => {
+    merged.deletedDocs[id] = Math.max(merged.deletedDocs[id] || 0, cloudDeletedDocs[id]);
+  });
+
   // Documents — belgeler artık Firestore sub-collection'da saklanır (loadCloudDocs ile yüklenir)
-  // Sadece yerel listeyi koru, cloud.documents'ten metadata merge et (url olmadan)
+  // Sadece yerel listeyi koru; silinmiş olanları filtrele
   if (!Array.isArray(merged.documents)) merged.documents = [];
+  merged.documents = merged.documents.filter(d => !merged.deletedDocs[d.id]);
   if (Array.isArray(cloud.documents)) {
     const localIds = new Set(merged.documents.map(d => d.id));
     cloud.documents.forEach(cd => {
       if (!cd || !cd.id) return;
+      if (merged.deletedDocs[cd.id]) return; // Silinmiş — ekleme
       if (!localIds.has(cd.id)) {
-        // Metadata olarak ekle — url loadCloudDocs ile doldurulur
         const meta = Object.assign({}, cd);
         delete meta.url;
         merged.documents.push(meta);
@@ -5915,10 +5931,11 @@ async function saveDocument() {
     uploadedAt: Date.now()
   };
 
-  // Bulut varsa Firestore sub-collection'a kaydet
+  // Bulut varsa kullanıcıya özel Firestore sub-collection'a kaydet
   if (fbDb && fbUser) {
     try {
-      await fbDb.collection('userData').doc(fbUser.uid).collection('docs').doc(docId).set(docData);
+      await fbDb.collection('userData').doc(fbUser.uid)
+        .collection('users').doc(String(S.cu)).collection('docs').doc(docId).set(docData);
     } catch(e) {
       console.warn('Belge buluta kaydedilemedi (yerel olarak saklanıyor):', e);
     }
@@ -5938,14 +5955,20 @@ function deleteDocument(docId) {
   const u = cu(); if (!u || !Array.isArray(u.documents)) return;
   const doc = u.documents.find(d => d.id === docId); if (!doc) return;
   showConfirm('Belgeyi Sil', `"${escHtml(doc.name)}" silinecek. Geri alınamaz.`, async () => {
-    // Firestore sub-collection'dan da sil
-    if (fbDb && fbUser) {
-      try { await fbDb.collection('userData').doc(fbUser.uid).collection('docs').doc(docId).delete(); } catch(e) {}
-    }
+    // Silme kaydını tut (yeniden yüklemede geri gelmesini engeller)
+    if (!u.deletedDocs) u.deletedDocs = {};
+    u.deletedDocs[docId] = Date.now();
+    // Yerel listeden kaldır
     u.documents = u.documents.filter(d => d.id !== docId);
     saveLS();
     renderDocs();
     toast('Belge silindi', 'info');
+    // Firestore sub-collection'dan da sil (arka planda)
+    if (fbDb && fbUser) {
+      fbDb.collection('userData').doc(fbUser.uid)
+        .collection('users').doc(String(S.cu)).collection('docs').doc(docId).delete()
+        .catch(e => console.warn('Firestore belge silinemedi:', e));
+    }
   });
 }
 
