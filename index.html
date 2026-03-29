@@ -5307,7 +5307,11 @@ function pushToCloud(callback) {
   setSyncState('syncing');
 
   // Belge base64 URL'lerini ana Firestore dokümanına dahil etme (1MB limitini aşmamak için)
-  const usersForCloud = S.u.map(u => {
+  // S.u bir object (numeric key'li), array değil — Object.keys ile dönüştür
+  const usersForCloud = {};
+  Object.keys(S.u).forEach(k => {
+    const u = S.u[k];
+    if (!u) { usersForCloud[k] = u; return; }
     const uc = Object.assign({}, u);
     if (Array.isArray(uc.documents)) {
       uc.documents = uc.documents.map(d => {
@@ -5316,7 +5320,7 @@ function pushToCloud(callback) {
         return dm;
       });
     }
-    return uc;
+    usersForCloud[k] = uc;
   });
   const data = {
     users: usersForCloud,
