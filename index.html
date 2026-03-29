@@ -35,7 +35,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -925,7 +924,7 @@ tr:hover td{background:var(--bg3)}
       <div class="icon"><i class="fas fa-clock"></i></div>
       <h1>ShiftTrack Pro</h1>
       <p>Akıllı Vardiya &amp; Kazanç Yönetimi</p>
-      <span class="version">v6.5 Cloud</span>
+      <span class="version">v6.6 Cloud</span>
     </div>
     <div class="login-cards" id="loginCards"></div>
   </div>
@@ -1274,7 +1273,7 @@ tr:hover td{background:var(--bg3)}
 /* ============================================================
    CONSTANTS
 ============================================================ */
-const DATA_VERSION = '5.2';
+const DATA_VERSION = '5.3';
 const MTR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const DTR = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
 /* [FIX L-01] DFS, DTR ile aynıydı — kaldırıldı, kullanımlar DTR'ye yönlendirildi */
@@ -5049,7 +5048,7 @@ const FIREBASE_CONFIG = {
   measurementId: "G-3REEMPWMP9"
 };
 
-let fbApp = null, fbAuth = null, fbDb = null, fbUser = null, fbStorage = null;
+let fbApp = null, fbAuth = null, fbDb = null, fbUser = null;
 let syncInProgress = false, lastSyncTime = 0;
 let skipNextPush = false; // cloud'dan gelen veriyi geri push etmeyi engeller
 const SYNC_DEBOUNCE = 3000; // 3 saniye debounce
@@ -5064,7 +5063,6 @@ function initFirebase() {
     fbApp = firebase.initializeApp(FIREBASE_CONFIG);
     fbAuth = firebase.auth();
     fbDb = firebase.firestore();
-    fbStorage = firebase.storage();
 
     // Offline persistence
     fbDb.enablePersistence({ synchronizeTabs: true }).catch(err => {
@@ -5246,7 +5244,34 @@ function enterAppAfterAuth() {
   updSyncUI();
   updCloudAccountUI();
   // Buluttan veri çek — arka planda
-  try { pullFromCloud(() => { loadLS(); updLogin(); }); } catch(e) {}
+  try { pullFromCloud(() => { loadLS(); updLogin(); loadCloudDocs(); }); } catch(e) {}
+}
+
+/* Firestore sub-collection'dan belgeleri yükle */
+async function loadCloudDocs() {
+  if (!fbDb || !fbUser) return;
+  const u = cu(); if (!u) return;
+  try {
+    const snap = await fbDb.collection('userData').doc(fbUser.uid).collection('docs').get();
+    if (snap.empty) return;
+    if (!Array.isArray(u.documents)) u.documents = [];
+    let changed = false;
+    snap.forEach(docSnap => {
+      const cd = docSnap.data();
+      if (!cd || !cd.id) return;
+      const existing = u.documents.find(d => d.id === cd.id);
+      if (!existing) {
+        u.documents.push(cd); // Yeni belge — ekle
+        changed = true;
+      } else if (!existing.url && cd.url) {
+        existing.url = cd.url; // URL eksikse tamamla
+        changed = true;
+      }
+    });
+    if (changed) { saveLS(); renderActivePage(); }
+  } catch(e) {
+    console.warn('Bulut belgeler yüklenemedi:', e);
+  }
 }
 
 function skipAuth() {
@@ -5276,8 +5301,20 @@ function pushToCloud(callback) {
   syncInProgress = true;
   setSyncState('syncing');
 
+  // Belge base64 URL'lerini ana Firestore dokümanına dahil etme (1MB limitini aşmamak için)
+  const usersForCloud = S.u.map(u => {
+    const uc = Object.assign({}, u);
+    if (Array.isArray(uc.documents)) {
+      uc.documents = uc.documents.map(d => {
+        const dm = Object.assign({}, d);
+        delete dm.url; // base64 datası sub-collection'da saklanır
+        return dm;
+      });
+    }
+    return uc;
+  });
   const data = {
-    users: S.u,
+    users: usersForCloud,
     version: DATA_VERSION,
     nextUid: S.nextUid,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -5393,16 +5430,19 @@ function deepMergeUser(local, cloud) {
     merged.notes = cloud.notes;
   }
 
-  // Documents merge — id bazında birleştir; cloud'daki yeni belgeleri ekle
+  // Documents — belgeler artık Firestore sub-collection'da saklanır (loadCloudDocs ile yüklenir)
+  // Sadece yerel listeyi koru, cloud.documents'ten metadata merge et (url olmadan)
   if (!Array.isArray(merged.documents)) merged.documents = [];
   if (Array.isArray(cloud.documents)) {
     const localIds = new Set(merged.documents.map(d => d.id));
     cloud.documents.forEach(cd => {
       if (!cd || !cd.id) return;
       if (!localIds.has(cd.id)) {
-        merged.documents.push(cd);  // cloud'da var, yerelde yok → ekle
+        // Metadata olarak ekle — url loadCloudDocs ile doldurulur
+        const meta = Object.assign({}, cd);
+        delete meta.url;
+        merged.documents.push(meta);
       }
-      // Yerelde varsa dokunma (kullanıcının kendi cihazındaki hali daha güvenilir)
     });
   }
 
@@ -5791,7 +5831,7 @@ function hideDocError() { const el = $('docErrorMsg'); if (el) el.style.display 
 
 function handleDocFile(file) {
   hideDocError();
-  if (file.size > 5 * 1024 * 1024) { showDocError('Dosya 5MB sınırını aşıyor (' + (file.size/1024/1024).toFixed(1) + 'MB)'); return; }
+  if (file.size > 700 * 1024) { showDocError('Dosya 700KB sınırını aşıyor (' + (file.size/1024).toFixed(0) + 'KB). Lütfen daha küçük bir dosya seçin.'); return; }
   // MIME type bazı tarayıcılarda boş gelebilir — uzantıyı da kontrol et
   const ext = file.name.split('.').pop().toLowerCase();
   const allowedExts = ['jpg','jpeg','png','webp','heic','heif','pdf'];
@@ -5825,72 +5865,58 @@ async function saveDocument() {
   if (!name) { showDocError('Belge adı boş olamaz'); return; }
   if (!currentDocFile) { showDocError('Lütfen bir dosya seçin'); return; }
 
+  // Boyut limiti: 700KB (Firestore doküman 1MB sınırı için güvenli)
+  if (currentDocFile.size > 700 * 1024) {
+    showDocError('Dosya 700KB sınırını aşıyor (' + (currentDocFile.size/1024).toFixed(0) + 'KB). Lütfen daha küçük bir dosya seçin.');
+    return;
+  }
+
   btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>Yükleniyor...';
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>Kaydediliyor...';
 
   const docId = 'doc_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
   const cat = cs ? cs.value : 'other';
-  let url = null;
+  const ext = currentDocFile.name.split('.').pop().toLowerCase();
+  const mimeMap = { jpg:'image/jpeg', jpeg:'image/jpeg', png:'image/png', webp:'image/webp', pdf:'application/pdf', heic:'image/heic', heif:'image/heif' };
+  const mimeType = currentDocFile.type || mimeMap[ext] || 'application/octet-stream';
 
-  if (fbStorage && fbUser) {
-    // Firebase Storage'a yükle
-    try {
-      const prog = $('uploadProgress'), bar = $('uploadProgressBar');
-      if (prog) prog.style.display = 'block';
-      const ext = currentDocFile.name.split('.').pop().toLowerCase();
-      const mimeMap = { jpg:'image/jpeg', jpeg:'image/jpeg', png:'image/png', webp:'image/webp', pdf:'application/pdf', heic:'image/heic', heif:'image/heif' };
-      const contentType = currentDocFile.type || mimeMap[ext] || 'application/octet-stream';
-      const ref = fbStorage.ref(`docs/${fbUser.uid}/${docId}.${ext}`);
-      const task = ref.put(currentDocFile, { contentType });
-      task.on('state_changed', snap => {
-        const pct = (snap.bytesTransferred / snap.totalBytes * 100).toFixed(0);
-        if (bar) bar.style.width = pct + '%';
-      });
-      const snap = await task;
-      url = await snap.ref.getDownloadURL();
-    } catch(e) {
-      console.error('Storage yükleme hatası:', e);
-      // Hata koduna göre Türkçe açıklama
-      const errMap = {
-        'storage/unauthorized': 'Firebase Storage izin hatası — Storage kurallarını güncelleyin.',
-        'storage/canceled': 'Yükleme iptal edildi.',
-        'storage/unknown': 'Firebase Storage kuralları yüklemeyi engelliyor. Firebase Console → Storage → Rules bölümünden kuralları yayınlayın.',
-        'storage/retry-limit-exceeded': 'Bağlantı zaman aşımı. İnternet bağlantınızı kontrol edip tekrar deneyin.',
-        'storage/quota-exceeded': 'Firebase Storage kotası aşıldı.',
-        'storage/unauthenticated': 'Oturum süresi dolmuş. Çıkış yapıp tekrar giriş yapın.',
-      };
-      const msg = errMap[e.code] || ('Yükleme hatası: ' + (e.message || e.code || 'Bilinmeyen'));
-      showDocError(msg);
-      const prog = $('uploadProgress'); if (prog) prog.style.display = 'none';
-      btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>Kaydet';
-      return;
-    }
-  } else {
-    // Firebase yoksa base64 olarak localStorage'a (küçük dosyalar)
-    if (currentDocFile.size > 512 * 1024) {
-      showDocError('Bulut hesabı olmadan maks. 512KB yüklenebilir. Ayarlar → Bulut Hesabı Bağla.');
-      btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>Kaydet';
-      return;
-    }
-    url = await new Promise(resolve => {
+  // Dosyayı base64'e çevir
+  let url;
+  try {
+    url = await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = e2 => resolve(e2.target.result);
+      reader.onerror = () => reject(new Error('Dosya okunamadı'));
       reader.readAsDataURL(currentDocFile);
     });
+  } catch(e) {
+    showDocError('Dosya okunamadı: ' + e.message);
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>Kaydet';
+    return;
   }
 
-  if (!Array.isArray(u.documents)) u.documents = [];
-  u.documents.push({
+  const docData = {
     id: docId,
     name,
     category: cat,
     url,
     fileName: currentDocFile.name,
-    mimeType: currentDocFile.type || 'application/octet-stream',
+    mimeType,
     fileSize: currentDocFile.size,
-    uploadedAt: Date.now(),
-    storedInCloud: !!(fbStorage && fbUser)
-  });
+    uploadedAt: Date.now()
+  };
+
+  // Bulut varsa Firestore sub-collection'a kaydet
+  if (fbDb && fbUser) {
+    try {
+      await fbDb.collection('userData').doc(fbUser.uid).collection('docs').doc(docId).set(docData);
+    } catch(e) {
+      console.warn('Belge buluta kaydedilemedi (yerel olarak saklanıyor):', e);
+    }
+  }
+
+  if (!Array.isArray(u.documents)) u.documents = [];
+  u.documents.push(docData);
 
   saveLS();
   closeDocUpload();
@@ -5903,9 +5929,9 @@ function deleteDocument(docId) {
   const u = cu(); if (!u || !Array.isArray(u.documents)) return;
   const doc = u.documents.find(d => d.id === docId); if (!doc) return;
   showConfirm('Belgeyi Sil', `"${escHtml(doc.name)}" silinecek. Geri alınamaz.`, async () => {
-    // Firebase Storage'dan da sil
-    if (doc.storedInCloud && fbStorage && fbUser) {
-      try { await fbStorage.ref(`docs/${fbUser.uid}/${docId}`).delete(); } catch(e) {}
+    // Firestore sub-collection'dan da sil
+    if (fbDb && fbUser) {
+      try { await fbDb.collection('userData').doc(fbUser.uid).collection('docs').doc(docId).delete(); } catch(e) {}
     }
     u.documents = u.documents.filter(d => d.id !== docId);
     saveLS();
