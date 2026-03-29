@@ -5852,11 +5852,12 @@ async function saveDocument() {
       console.error('Storage yükleme hatası:', e);
       // Hata koduna göre Türkçe açıklama
       const errMap = {
-        'storage/unauthorized': 'Firebase Storage erişim izni yok. Konsol\'dan Storage kurallarını güncelleyin.',
+        'storage/unauthorized': 'Firebase Storage izin hatası — Storage kurallarını güncelleyin.',
         'storage/canceled': 'Yükleme iptal edildi.',
-        'storage/unknown': 'Bilinmeyen Storage hatası. İnternet bağlantınızı kontrol edin.',
-        'storage/retry-limit-exceeded': 'Bağlantı zaman aşımı. Tekrar deneyin.',
+        'storage/unknown': 'Firebase Storage kuralları yüklemeyi engelliyor. Firebase Console → Storage → Rules bölümünden kuralları yayınlayın.',
+        'storage/retry-limit-exceeded': 'Bağlantı zaman aşımı. İnternet bağlantınızı kontrol edip tekrar deneyin.',
         'storage/quota-exceeded': 'Firebase Storage kotası aşıldı.',
+        'storage/unauthenticated': 'Oturum süresi dolmuş. Çıkış yapıp tekrar giriş yapın.',
       };
       const msg = errMap[e.code] || ('Yükleme hatası: ' + (e.message || e.code || 'Bilinmeyen'));
       showDocError(msg);
