@@ -61,7 +61,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--p2);border-radius:10px}
 
 /* TOAST */
-.toast-container{position:fixed;top:70px;right:16px;z-index:2000;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast-container{position:fixed;top:70px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
 .toast{padding:12px 18px;border-radius:12px;background:var(--card);border:1px solid var(--b1);box-shadow:var(--sh3);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;animation:toastIn .4s cubic-bezier(.16,1,.3,1);pointer-events:auto;backdrop-filter:blur(16px);max-width:340px;transition:opacity .3s,transform .3s}
 .toast.toast-out{opacity:0;transform:translateX(60px) scale(.9)}
 .toast i{font-size:16px;flex-shrink:0}
@@ -859,6 +859,7 @@ tr:hover td{background:var(--bg3)}
         <option value="other">📄 Diğer</option>
       </select>
     </div>
+    <div id="docErrorMsg" style="display:none;padding:10px 12px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:10px;font-size:12px;color:var(--r);margin-bottom:12px;word-break:break-word"></div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-outline" style="flex:1" onclick="closeDocUpload()">İptal</button>
       <button class="btn btn-primary" style="flex:2" id="docSaveBtn" onclick="saveDocument()"><i class="fas fa-save"></i>Kaydet</button>
@@ -5760,8 +5761,10 @@ function openDocUpload() {
   const inp = $('docFileInput'); if (inp) inp.value = '';
   const pw = $('docPreviewWrap'); if (pw) pw.style.display = 'none';
   const ni = $('docNameInput'); if (ni) ni.value = '';
-  const prog = $('uploadProgress'); if (prog) prog.style.display = 'none';
+  const prog = $('uploadProgress'); if (prog) { prog.style.display = 'none'; }
+  const bar = $('uploadProgressBar'); if (bar) bar.style.width = '0%';
   const btn = $('docSaveBtn'); if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>Kaydet'; }
+  hideDocError();
   const m = $('docUploadModal'); if (m) m.classList.add('show');
 }
 
@@ -5778,11 +5781,23 @@ function docDrop(e) {
 }
 function docFileSelected(inp) { const f = inp.files[0]; if (f) handleDocFile(f); }
 
+function showDocError(msg) {
+  const el = $('docErrorMsg');
+  if (!el) { toast(msg, 'error'); return; }
+  el.innerHTML = '<i class="fas fa-exclamation-circle" style="margin-right:6px"></i>' + escHtml(msg);
+  el.style.display = 'block';
+}
+function hideDocError() { const el = $('docErrorMsg'); if (el) el.style.display = 'none'; }
+
 function handleDocFile(file) {
-  if (file.size > 5 * 1024 * 1024) { toast('Dosya 5MB sınırını aşıyor', 'error'); return; }
-  const allowed = ['image/jpeg','image/png','image/webp','image/heic','application/pdf'];
-  if (!allowed.includes(file.type) && !file.name.toLowerCase().endsWith('.pdf')) {
-    toast('Yalnızca JPG, PNG, WEBP veya PDF', 'error'); return;
+  hideDocError();
+  if (file.size > 5 * 1024 * 1024) { showDocError('Dosya 5MB sınırını aşıyor (' + (file.size/1024/1024).toFixed(1) + 'MB)'); return; }
+  // MIME type bazı tarayıcılarda boş gelebilir — uzantıyı da kontrol et
+  const ext = file.name.split('.').pop().toLowerCase();
+  const allowedExts = ['jpg','jpeg','png','webp','heic','heif','pdf'];
+  const allowedMimes = ['image/jpeg','image/png','image/webp','image/heic','image/heif','application/pdf',''];
+  if (!allowedExts.includes(ext) && !allowedMimes.includes(file.type)) {
+    showDocError('Desteklenmeyen dosya türü. JPG, PNG, WEBP veya PDF yükleyin.'); return;
   }
   currentDocFile = file;
   // Varsayılan isim
@@ -5805,9 +5820,10 @@ function handleDocFile(file) {
 async function saveDocument() {
   const u = cu(); if (!u) return;
   const ni = $('docNameInput'), cs = $('docCatSelect'), btn = $('docSaveBtn');
+  hideDocError();
   const name = (ni ? ni.value.trim() : '');
-  if (!name) { toast('Belge adı girin', 'error'); return; }
-  if (!currentDocFile) { toast('Dosya seçin', 'error'); return; }
+  if (!name) { showDocError('Belge adı boş olamaz'); return; }
+  if (!currentDocFile) { showDocError('Lütfen bir dosya seçin'); return; }
 
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>Yükleniyor...';
@@ -5821,8 +5837,11 @@ async function saveDocument() {
     try {
       const prog = $('uploadProgress'), bar = $('uploadProgressBar');
       if (prog) prog.style.display = 'block';
-      const ref = fbStorage.ref(`docs/${fbUser.uid}/${docId}`);
-      const task = ref.put(currentDocFile);
+      const ext = currentDocFile.name.split('.').pop().toLowerCase();
+      const mimeMap = { jpg:'image/jpeg', jpeg:'image/jpeg', png:'image/png', webp:'image/webp', pdf:'application/pdf', heic:'image/heic', heif:'image/heif' };
+      const contentType = currentDocFile.type || mimeMap[ext] || 'application/octet-stream';
+      const ref = fbStorage.ref(`docs/${fbUser.uid}/${docId}.${ext}`);
+      const task = ref.put(currentDocFile, { contentType });
       task.on('state_changed', snap => {
         const pct = (snap.bytesTransferred / snap.totalBytes * 100).toFixed(0);
         if (bar) bar.style.width = pct + '%';
@@ -5831,14 +5850,24 @@ async function saveDocument() {
       url = await snap.ref.getDownloadURL();
     } catch(e) {
       console.error('Storage yükleme hatası:', e);
-      toast('Yükleme hatası: ' + (e.message || 'Bilinmeyen'), 'error');
+      // Hata koduna göre Türkçe açıklama
+      const errMap = {
+        'storage/unauthorized': 'Firebase Storage erişim izni yok. Konsol\'dan Storage kurallarını güncelleyin.',
+        'storage/canceled': 'Yükleme iptal edildi.',
+        'storage/unknown': 'Bilinmeyen Storage hatası. İnternet bağlantınızı kontrol edin.',
+        'storage/retry-limit-exceeded': 'Bağlantı zaman aşımı. Tekrar deneyin.',
+        'storage/quota-exceeded': 'Firebase Storage kotası aşıldı.',
+      };
+      const msg = errMap[e.code] || ('Yükleme hatası: ' + (e.message || e.code || 'Bilinmeyen'));
+      showDocError(msg);
+      const prog = $('uploadProgress'); if (prog) prog.style.display = 'none';
       btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>Kaydet';
       return;
     }
   } else {
     // Firebase yoksa base64 olarak localStorage'a (küçük dosyalar)
     if (currentDocFile.size > 512 * 1024) {
-      toast('Bulut hesabı olmadan maks. 512KB yüklenebilir', 'error');
+      showDocError('Bulut hesabı olmadan maks. 512KB yüklenebilir. Ayarlar → Bulut Hesabı Bağla.');
       btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>Kaydet';
       return;
     }
