@@ -88,7 +88,7 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 #loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--bg) 0%,var(--bg2) 40%,var(--bg4) 100%);position:relative;overflow:hidden}
 #loginScreen::before{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,var(--p4),transparent 70%);top:-150px;right:-80px;border-radius:50%;animation:p1 8s ease-in-out infinite}
 @keyframes p1{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.3);opacity:.8}}
-.login-container{position:relative;z-index:2;text-align:center;animation:rise .8s cubic-bezier(.16,1,.3,1)}
+.login-container{position:relative;z-index:2;text-align:center;animation:rise .8s cubic-bezier(.16,1,.3,1);width:100%;max-width:860px;padding:24px 16px;box-sizing:border-box}
 @keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
 .login-brand{margin-bottom:44px}
 .login-brand .icon{width:68px;height:68px;background:var(--p4);border:1px solid rgba(255,255,255,.08);border-radius:20px;display:inline-flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:14px;color:var(--p)}
@@ -540,7 +540,7 @@ tr:hover td{background:var(--bg3)}
 .earn-cumul-col .ecl{font-size:7px}
 .earn-cumul-col .ecv{font-size:6px}
 }
-@media(max-width:480px){.content{padding:114px 8px 24px}.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.wt-grid{grid-template-columns:repeat(3,1fr)}.dash-reports{grid-template-columns:1fr}}
+@media(max-width:480px){.content{padding:114px 8px 24px}.stats{grid-template-columns:1fr}.lt-row{grid-template-columns:1fr}.year-overview{grid-template-columns:repeat(4,1fr)}.wt-grid{grid-template-columns:repeat(3,1fr)}.dash-reports{grid-template-columns:1fr}.login-brand h1{font-size:26px}.login-brand{margin-bottom:28px}.login-card{width:160px;padding:24px 14px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
 /* HEATMAP MINI CALENDAR */
